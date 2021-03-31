@@ -1,9 +1,3 @@
-/*jshint esversion: 6 */
-
-let chart, stats;
-let inside_points, total_points;
-let ctx, canvas;
-
 class Sketch {
   constructor(canvas, ctx, fps) {
     this.canvas = canvas;
@@ -34,7 +28,7 @@ class Sketch {
     let diff;
     diff = performance.now() - this.then;
     if (diff < this.fps_interval) {
-    // not enough time has passed, so we request next frame and give up on this render
+      // not enough time has passed, so we request next frame and give up on this render
       return;
     }
     // updated last frame rendered time
@@ -56,10 +50,21 @@ class Sketch {
   }
 
   setup() {
-    // this is ran once
+    // ran once
+    this.background("white");
   }
 
   draw() {
-    // this is ran continuously
+    // ran continuosly
   }
 }
+
+
+$(document).ready(() => {
+  canvas = $("#sketch")[0];
+  if (canvas.getContext) {
+    ctx = canvas.getContext("2d", { alpha: false });
+    s = new Sketch(canvas, ctx);
+    s.run();
+  }
+});
