@@ -6,6 +6,8 @@ class Sketch {
 
     // init variables
     this._frameCount = 0;
+    this._frameRate = 0;
+    this._fpsBuffer = new Array(0);
     this._width = this._canvas.width;
     this._height = this._canvas.height;
 
@@ -39,10 +41,16 @@ class Sketch {
       // not enough time has passed, so we request next frame and give up on this render
       return;
     }
-    // update frame count
-    this._frameCount++;
     // updated last frame rendered time
     this.then = performance.now();
+    // compute frame rate
+    // update frame count
+    this._frameCount++;
+    // update fpsBuffer
+    this._fpsBuffer.unshift(1000 / diff);
+    this._fpsBuffer = this._fpsBuffer.splice(0, 30);
+    // calculate average fps
+    this._frameRate = this._fpsBuffer.reduce((a, b) => a + b, 0) / this._fpsBuffer.length;
     // now draw
     this._ctx.save();
     this.draw();
@@ -55,6 +63,17 @@ class Sketch {
 
   keyDown(e) {
 
+  }
+
+  saveAsImage(title) {
+    let container;
+    container = document.createElement("a");
+    container.download = title + ".png";
+    container.href = this.canvas.toDataURL("image/png");
+    document.body.appendChild(container);
+
+    container.click();
+    document.body.removeChild(container);
   }
 
   background(color) {
