@@ -78,7 +78,7 @@ class Sketch {
 }
 
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   // page loaded
   let canvas, ctx, s;
   canvas = document.querySelector("#sketch");
