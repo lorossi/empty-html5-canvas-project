@@ -2,15 +2,18 @@ class Sketch {
   constructor(canvas, ctx, fps) {
     this._canvas = canvas;
     this._ctx = ctx;
-    this.setFps(fps);
+    this._setFps(fps);
 
     // init variables
     this._frameCount = 0;
     this._width = this._canvas.width;
     this._height = this._canvas.height;
+
+    // start sketch
+    this._run();
   }
 
-  setFps(fps) {
+  _setFps(fps) {
     // set fps
     this._fps = fps || 60;
     // keep track of time to handle fps
@@ -19,7 +22,7 @@ class Sketch {
     this._fps_interval = 1 / this._fps;
   }
 
-  run() {
+  _run() {
     // bootstrap the sketch
     this.setup();
     // anti alias
@@ -46,6 +49,14 @@ class Sketch {
     this._ctx.restore();
   }
 
+  click(e) {
+
+  }
+
+  keyDown(e) {
+
+  }
+
   background(color) {
     // reset background
     // reset canvas
@@ -67,11 +78,21 @@ class Sketch {
 }
 
 
-$(document).ready(() => {
-  canvas = $("#sketch")[0];
+document.addEventListener('DOMContentLoaded', () => {
+  // page loaded
+  let canvas, ctx, s;
+  canvas = document.querySelector("#sketch");
+  // inject canvas in page
   if (canvas.getContext) {
     ctx = canvas.getContext("2d", { alpha: false });
     s = new Sketch(canvas, ctx);
-    s.run();
   }
+
+  canvas.addEventListener("click", (e) => {
+    s.click(e);
+  });
+
+  document.addEventListener('keydown', (e) => {
+    s.keyDown(e);
+  });
 });
