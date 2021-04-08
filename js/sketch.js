@@ -1,8 +1,8 @@
 class Sketch {
-  constructor(canvas, ctx, fps) {
+  constructor(canvas, ctx, fps = 60) {
     this._canvas = canvas;
     this._ctx = ctx;
-    this._setFps(fps);
+    this._fps = fps;
 
     // init variables
     this._frameCount = 0;
@@ -12,12 +12,11 @@ class Sketch {
     this._height = this._canvas.height;
 
     // start sketch
+    this._setFps();
     this._run();
   }
 
-  _setFps(fps) {
-    // set fps
-    this._fps = fps || 60;
+  _setFps() {
     // keep track of time to handle fps
     this.then = performance.now();
     // time between frames
