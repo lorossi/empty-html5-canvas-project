@@ -60,7 +60,7 @@ class Sketch {
 
   }
 
-  keyDown(e) {
+  keydown(e) {
 
   }
 
@@ -106,11 +106,6 @@ document.addEventListener("DOMContentLoaded", () => {
     s = new Sketch(canvas, ctx);
   }
 
-  canvas.addEventListener("click", (e) => {
-    s.click(e);
-  });
-
-  document.addEventListener('keydown', (e) => {
-    s.keyDown(e);
-  });
+  canvas.addEventListener("click", e => s.click(e));
+  document.addEventListener("keydown", e => s.keydown(e));
 });
