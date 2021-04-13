@@ -15,7 +15,7 @@ body *, body {
 
 #sketch {
   height: 95vh;
-  width: 95vw;
+  width: 95vh;
 
   touch-action: none;
 }
@@ -28,5 +28,8 @@ body *, body {
 }
 
 @media only screen and (max-width: 600px) {
-  
+  #sketch {
+    height: 95vw;
+    width: 95vw;
+  }
 }

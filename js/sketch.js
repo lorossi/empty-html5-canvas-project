@@ -77,33 +77,19 @@ class Sketch {
 
   click(e) {
     //const coords = this._calculate_press_coords(e);
-    //this.addGravity(coords.x, coords.y);
   }
 
   mousedown(e) {
     this._mouse_pressed = true;
-
-    if (!this._draw_mode) {
-      const coords = this._calculate_press_coords(e);
-      this.addGravity(coords.x, coords.y);
-    }
   }
 
   mouseup(e) {
     this._mouse_pressed = false;
-    this.removeGravity();
   }
 
   mousemove(e) {
     if (this._mouse_pressed) {
-      const coords = this._calculate_press_coords(e);
-      if (this._draw_mode) {
 
-        console.log("a");
-      }
-      else {
-        this.addGravity(coords.x, coords.y);
-      }
     }
   }
 
