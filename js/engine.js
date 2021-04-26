@@ -149,17 +149,14 @@ class Engine {
 
   preload() {
     // ran once
-    preload();
   }
 
   setup() {
     // ran once
-    setup();
   }
 
   draw() {
     // ran continuosly
-    draw(this._ctx);
   }
 }
 
