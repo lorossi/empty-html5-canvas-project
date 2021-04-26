@@ -139,12 +139,13 @@ class Engine {
 
   background(color) {
     // reset background
+    this._ctx.save();
     // reset canvas
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
-    this._ctx.restore();
     // set background
     this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
+    this._ctx.restore();
   }
 
   preload() {
