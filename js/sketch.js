@@ -1,4 +1,8 @@
 class Sketch extends Engine {
+  preload() {
+
+  }
+
   setup() {
 
   }
