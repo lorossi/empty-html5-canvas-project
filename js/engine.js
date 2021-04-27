@@ -8,10 +8,7 @@ class Engine {
     this._frameCount = 0;
     this._frameRate = 0;
     this._noLoop = false;
-    this._fpsBuffer = new Array(0);
-    this._width = this._canvas.width;
-    this._height = this._canvas.height;
-
+    this._fpsBuffer = new Array(0).fill(this._fps);
     // start sketch
     this._setFps();
     this._run();
@@ -159,6 +156,31 @@ class Engine {
   draw() {
     // ran continuosly
   }
+
+  get ctx() {
+    return this._ctx;
+  }
+
+  get frameCount() {
+    return this._frameCount;
+  }
+
+  get frameRate() {
+    return this._frameRate;
+  }
+
+  set frameRate(f) {
+    this._setFps(f);
+  }
+
+  get width() {
+    return this._canvas.width;
+  }
+
+  get height() {
+    return this._canvas.height;
+  }
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
