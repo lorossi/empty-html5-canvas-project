@@ -57,7 +57,7 @@ class Engine {
     this._frameRate = this._fpsBuffer.reduce((a, b) => a + b, 0) / this._fpsBuffer.length;
   }
 
-  calculate_press_coords(e) {
+  calculatePressCoords(e) {
     // calculate size ratio
     const boundingBox = this._canvas.getBoundingClientRect();
     const ratio = Math.min(boundingBox.width, boundingBox.height) / this._canvas.getAttribute("width");
@@ -73,7 +73,14 @@ class Engine {
       const ty = (e.touches[0].pageY - boundingBox.top) / ratio;
       return { x: tx, y: ty };
     }
+  }
 
+  getPressedKey(e) {
+    return {
+      key: e.key,
+      keyCode: e.keyCode,
+      type: e.type,
+    };
   }
 
   loop() {
@@ -85,7 +92,7 @@ class Engine {
   }
 
   click(e) {
-    //const coords = this._calculate_press_coords(e);
+    //const coords = this._calculatePressCoords(e);
   }
 
   mousedown(e) {
@@ -116,6 +123,7 @@ class Engine {
 
   keydown(e) {
     //console.log({ code: e.code });
+    this.getPressedKey(e);
   }
 
   saveFrame() {
