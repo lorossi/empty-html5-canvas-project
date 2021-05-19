@@ -250,3 +250,26 @@ class Color {
     this._b = s;
   }
 }
+
+class Point {
+  constructor(x, y) {
+    this._x = x;
+    this._y = y;
+  }
+
+  get x() {
+    return this._x;
+  }
+
+  set x(nx) {
+    this._x = nx;
+  }
+
+  get y() {
+    return this._y;
+  }
+
+  set y(ny) {
+    this._y = ny;
+  }
+}
