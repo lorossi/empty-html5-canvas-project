@@ -32,6 +32,11 @@ and some internal functions:
   - `this.keydown()` regarding keyboard interactions
   - All these functions have an optional parameter `e` that will contain the touch event (and it's needed in order to know which key has been pressed or where the mouse event happened)
 
+Furthermore, two additional classes are included:
+
+- `Color` that supports RGB-RGBa colors in a handy way
+- `Point` that supports simple 2D points
+
 ## Credits
 
 This project is distributed under Attribution 4.0 International (CC BY 4.0) license.
