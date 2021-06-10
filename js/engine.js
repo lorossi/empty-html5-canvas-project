@@ -162,7 +162,7 @@ class Engine {
   }
 
   draw() {
-    // ran continuosly
+    // ran continuously
   }
 
   get ctx() {
@@ -205,7 +205,7 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mousedown", e => s.mousedown(e));
   canvas.addEventListener("mouseup", e => s.mouseup(e));
   canvas.addEventListener("mousemove", e => s.mousemove(e));
-  // touchscreen event listensers
+  // touchscreen event listeners
   canvas.addEventListener("touchstart", e => s.touchdown(e));
   canvas.addEventListener("touchend", e => s.touchup(e));
   canvas.addEventListener("touchmove", e => s.touchmove(e));

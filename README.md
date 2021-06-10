@@ -14,7 +14,7 @@ All you have to do is write your code inside the `sketch.js` file. Inside you wi
 
 - `preload()` it's run only once. You should put there anything that you want to configure and never touch again
 - `setup()` it's run once, but I do recommend putting in there every part of your code that you might need to re-initialize
-- `draw()` it's run continuosly, at a certain set frame rate.
+- `draw()` it's run continuously, at a certain set frame rate.
 
 You also have access to some internal variables:
 
@@ -26,7 +26,7 @@ and some internal functions:
 
 - `this.noLoop()` and `this.loop()` that will stop and restart the draw function
 - `this.calculatePressCoords()` that accepts the event from the mouse/touch screen interaction as a parameter and returns the coordinates relative to the canvas
-- `this.calculatePressCoords()` that accepts the event from the keyboad interaction ad a parameter and returns the pressed key and some infos about the type of keystroke
+- `this.calculatePressCoords()` that accepts the event from the keyboard interaction ad a parameter and returns the pressed key and some infos about the type of keystroke
 - a lot of event handlers:
   - `this.click()`,  `this.mouseup()`, `this.mousedown()`, `this.mousemove()`, regarding the mouse and the touch screen interactions
   - `this.keydown()` regarding keyboard interactions
