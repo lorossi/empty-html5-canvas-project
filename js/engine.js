@@ -1,3 +1,8 @@
+/*
+  HTML canvas simple engine. GitHub repo and some basic documentation: https://github.com/lorossi/empty-html5-canvas-project
+  Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
+*/
+
 class Engine {
   constructor(canvas, ctx, fps = 60) {
     this._canvas = canvas;
