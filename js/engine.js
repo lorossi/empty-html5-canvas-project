@@ -219,19 +219,116 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 class Color {
-  constructor(r, g, b, a = 1) {
+  constructor(r = 0, g = 0, b = 0, a = 1) {
     this._r = r;
     this._g = g;
     this._b = b;
     this._a = a;
+
+    this._h = undefined;
+    this._s = undefined;
+    this._l = undefined;
+    this._toHsl();
   }
 
-  get alpha() {
-    return this._a;
+  fromHSL(h, s, l) {
+    this._h = h;
+    this._s = s;
+    this._l = l;
+
+    this._toRgb();
   }
 
-  set alpha(a) {
-    this._a = a;
+  fromRGB(r, g, b) {
+    this._r = r;
+    this._g = g;
+    this._b = b;
+
+    this._toHsl();
+  }
+
+  _toHsl() {
+    const r = this._r / 255;
+    const g = this._g / 255;
+    const b = this._b / 255;
+
+    let max = Math.max(r, g, b), min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max == min) {
+      h = s = 0; // achromatic
+    } else {
+      let d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+        case g: h = (b - r) / d + 2; break;
+        case b: h = (r - g) / d + 4; break;
+      }
+      h /= 6;
+    }
+
+    this._h = Math.floor(h * 360);
+    this._s = Math.floor(s * 100);
+    this._l = Math.floor(l * 100);
+  }
+
+  _toRgb() {
+    if (this._s == 0) {
+      this._r = this._l;
+      this._g = this._l;
+      this._b = this._l;
+    } else {
+      const hueToRgb = (p, q, t) => {
+        if (t < 0) t += 1;
+        if (t > 1) t -= 1;
+        if (t < 1 / 6) return p + (q - p) * 6 * t;
+        if (t < 1 / 2) return q;
+        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+        return p;
+      };
+
+      let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+      let p = 2 * l - q;
+      r = Math.floor(hueToRgb(p, q, h + 1 / 3) * 255);
+      g = Math.floor(hueToRgb(p, q, h) * 255);
+      b = Math.floor(hueToRgb(p, q, h - 1 / 3) * 255);
+    }
+  }
+
+  _toHex(dec) {
+    dec = Math.floor(dec);
+    return dec.toString(16).padStart(2, 0).toUpperCase();
+  }
+
+  _toDec(hex) {
+    return parseInt(hex, 16);
+  }
+
+  _clamp(value, min, max) {
+    return Math.min(Math.max(min, value), max);
+  }
+
+  _wrap(value, min, max) {
+    while (value > max) value -= max - min;
+    while (value < min) value += max - min;
+    return value;
+  }
+
+  set hex(h) {
+    this._r = this._toDec(h.slice(1, 3));
+    this._g = this._toDec(h.slice(3, 5));
+    this._b = this._toDec(h.slice(5, 7));
+
+    const a = parseInt(h.slice(7, 9), 16);
+    if (isNaN(a)) this._a = 1;
+    else this._a = a;
+
+    this._toHsl();
+  }
+
+  get hex() {
+    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(this._a)}`;
   }
 
   get rgb() {
@@ -242,19 +339,83 @@ class Color {
     return `rgba(${this._r}, ${this._g}, ${this._b}, ${this._a})`;
   }
 
-  get channel() {
-    return {
-      monochromatic: this._r == this._g && this._g == this._b,
-      channel: this._r,
-    };
+  get hsl() {
+    return `hsl(${this._h}, ${this._s}%, ${this._l}%)`;
   }
 
-  set channel(s) {
+  get hsla() {
+    return `hsla(${this._h}, ${this._s}%, ${this._l}%, ${this._a})`;
+  }
+
+  get r() {
+    return this._r;
+  }
+
+  set r(x) {
+    this._r = this._clamp(x, 0, 255);
+  }
+
+  get g() {
+    return this._g;
+  }
+
+  set g(x) {
+    this._g = this._clamp(x, 0, 255);
+  }
+
+  get b() {
+    return this._b;
+  }
+
+  set b(x) {
+    this._b = this._clamp(x, 0, 255);
+  }
+
+  get a() {
+    return this._a;
+  }
+
+  set a(x) {
+    this._b = this._clamp(x, 0, 1);
+  }
+
+  get h() {
+    return this._h;
+  }
+
+  set h(x) {
+    this._h = this._wrap(x, 0, 360);
+  }
+
+  get s() {
+    return this._s;
+  }
+
+  set s(x) {
+    this._s = this._clamp(x, 0, 100);
+  }
+
+  get l() {
+    return this._l;
+  }
+
+  set l(x) {
+    this._l = this._clamp(x, 0, 255);
+  }
+
+  get monochrome() {
+    if (this._r == this._g && this._g == this._b) return this._r;
+    else return false;
+  }
+
+  set monochrome(s) {
     this._r = s;
     this._g = s;
     this._b = s;
+    this._toHsl();
   }
 }
+
 
 class Point {
   constructor(x, y) {
