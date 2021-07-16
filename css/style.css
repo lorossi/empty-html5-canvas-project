@@ -63,6 +63,6 @@ a:visited, a:active {
   }
 
   .footer {
-    justify-content: center;
+    justify-content: space-around;
   }
 }
