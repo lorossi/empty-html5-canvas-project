@@ -216,19 +216,34 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("touchmove", e => s.touchmove(e));
   // keyboard event listeners
   document.addEventListener("keydown", e => s.keydown(e));
+  // DOM event listener
+  const download_button = document.querySelector("#download");
+  download_button.addEventListener("click", e => s.download(e));
 });
 
 class Color {
-  constructor(r = 0, g = 0, b = 0, a = 1) {
-    this._r = r;
-    this._g = g;
-    this._b = b;
-    this._a = a;
+  constructor(a = 0, b = 0, c = 0, d = 0, rgb = true) {
+    if (rgb) {
+      this._r = a;
+      this._g = b;
+      this._b = c;
+      this._a = d;
 
-    this._h = undefined;
-    this._s = undefined;
-    this._l = undefined;
-    this._toHsl();
+      this._h = undefined;
+      this._s = undefined;
+      this._l = undefined;
+      this._toHsl();
+    } else {
+      this._h = a;
+      this._s = b;
+      this._l = c;
+      this._a = d;
+
+      this._r = undefined;
+      this._g = undefined;
+      this._b = undefined;
+      this._toRgb();
+    }
   }
 
   fromHSL(h, s, l) {
@@ -288,14 +303,20 @@ class Color {
         return p;
       };
 
+      const l = this._l / 100;
+      const h = this._h / 360;
+      const s = this._s / 100;
+
       let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       let p = 2 * l - q;
-      r = Math.floor(hueToRgb(p, q, h + 1 / 3) * 255);
-      g = Math.floor(hueToRgb(p, q, h) * 255);
-      b = Math.floor(hueToRgb(p, q, h - 1 / 3) * 255);
+
+      this._r = Math.floor(hueToRgb(p, q, h + 1 / 3) * 255);
+      this._g = Math.floor(hueToRgb(p, q, h) * 255);
+      this._b = Math.floor(hueToRgb(p, q, h - 1 / 3) * 255);
     }
   }
 
+  // internal functions
   _toHex(dec) {
     dec = Math.floor(dec);
     return dec.toString(16).padStart(2, 0).toUpperCase();
@@ -315,6 +336,7 @@ class Color {
     return value;
   }
 
+  // setters and getters
   set hex(h) {
     this._r = this._toDec(h.slice(1, 3));
     this._g = this._toDec(h.slice(3, 5));
@@ -352,7 +374,8 @@ class Color {
   }
 
   set r(x) {
-    this._r = this._clamp(x, 0, 255);
+    this._r = Math.floor(this._clamp(x, 0, 255));
+    this._toHsl();
   }
 
   get g() {
@@ -360,7 +383,8 @@ class Color {
   }
 
   set g(x) {
-    this._g = this._clamp(x, 0, 255);
+    this._g = Math.floor(this._clamp(x, 0, 255));
+    this._toHsl();
   }
 
   get b() {
@@ -368,7 +392,8 @@ class Color {
   }
 
   set b(x) {
-    this._b = this._clamp(x, 0, 255);
+    this._b = Math.floor(this._clamp(x, 0, 255));
+    this._toHsl();
   }
 
   get a() {
@@ -376,7 +401,7 @@ class Color {
   }
 
   set a(x) {
-    this._b = this._clamp(x, 0, 1);
+    this._a = this._clamp(x, 0, 1);
   }
 
   get h() {
@@ -384,7 +409,8 @@ class Color {
   }
 
   set h(x) {
-    this._h = this._wrap(x, 0, 360);
+    this._h = Math.floor(this._wrap(x, 0, 360));
+    this._toRgb();
   }
 
   get s() {
@@ -392,7 +418,8 @@ class Color {
   }
 
   set s(x) {
-    this._s = this._clamp(x, 0, 100);
+    this._s = Math.floor(this._clamp(x, 0, 100));
+    this._toRgb();
   }
 
   get l() {
@@ -400,7 +427,8 @@ class Color {
   }
 
   set l(x) {
-    this._l = this._clamp(x, 0, 255);
+    this._l = Math.floor(this._clamp(x, 0, 255));
+    this._toRgb();
   }
 
   get monochrome() {
@@ -415,7 +443,6 @@ class Color {
     this._toHsl();
   }
 }
-
 
 class Point {
   constructor(x, y) {
