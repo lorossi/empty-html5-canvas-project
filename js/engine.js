@@ -1,9 +1,18 @@
-/*
-  HTML canvas simple engine. GitHub repo and some basic documentation: https://github.com/lorossi/empty-html5-canvas-project
-  Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
-*/
+/**
+ * HTML canvas simple engine. 
+ * GitHub repo and documentation: https://github.com/lorossi/empty-html5-canvas-project
+ * @author Lorenzo Rossi <mail@lorenzoros.si>
+ * @license Attribution 4.0 International (CC BY 4.0)
+ */
 
+/** Class containing the main engine running a canvas */
 class Engine {
+  /**
+   * Create the engine controlling a canvas
+   * @param {Object} canvas DOM element containing the canvas 
+   * @param {Object} ctx Drawing context of the canvas
+   * @param {Number} [fps=60] Frames per second 
+   */
   constructor(canvas, ctx, fps = 60) {
     this._canvas = canvas;
     this._ctx = ctx;
@@ -19,21 +28,33 @@ class Engine {
     this._run();
   }
 
+  /** 
+   * Sets the fps for the current sketch
+   * @private
+   */
   _setFps() {
     // keep track of time to handle fps
-    this.then = performance.now();
+    this._then = performance.now();
     // time between frames
     this._fps_interval = 1 / this._fps;
   }
 
+  /**
+   * Starts the sketch
+   * @private
+   */
   _run() {
-    // bootstrap the sketch
     this.preload();
     this.setup();
     // anti alias
     this._ctx.imageSmoothingQuality = "high";
     this._timeDraw();
   }
+
+  /**
+   * Handles time update
+   * @private 
+   */
 
   _timeDraw() {
     // request another frame
@@ -42,13 +63,13 @@ class Engine {
     if (this._noLoop) return;
 
     let diff;
-    diff = performance.now() - this.then;
+    diff = performance.now() - this._then;
     if (diff < this._fps_interval) {
       // not enough time has passed, so we request next frame and give up on this render
       return;
     }
     // updated last frame rendered time
-    this.then = performance.now();
+    this._then = performance.now();
     // now draw
     this._ctx.save();
     this.draw();
@@ -62,6 +83,11 @@ class Engine {
     this._frameRate = this._fpsBuffer.reduce((a, b) => a + b, 0) / this._fpsBuffer.length;
   }
 
+  /**
+   * Returns the coordinates corresponding to a mouse/touch event
+   * @param {Object} e event
+   * @returns {Point} x,y coordinates
+   */
   calculatePressCoords(e) {
     // calculate size ratio
     const boundingBox = this._canvas.getBoundingClientRect();
@@ -71,15 +97,21 @@ class Engine {
       // we're dealing with a mouse
       const mx = (e.pageX - boundingBox.left) / ratio;
       const my = (e.pageY - boundingBox.top) / ratio;
-      return { x: mx, y: my };
+      return new Point(mx, my);
     } else {
       // we're dealing with a touchscreen
       const tx = (e.touches[0].pageX - boundingBox.left) / ratio;
       const ty = (e.touches[0].pageY - boundingBox.top) / ratio;
-      return { x: tx, y: ty };
+      return new Point(tx, ty);
     }
   }
 
+
+  /**
+   * Returns the pressed key
+   * @param {Object} e event
+   * @returns {Object} Pressed key information
+   */
   getPressedKey(e) {
     return {
       key: e.key,
@@ -88,55 +120,96 @@ class Engine {
     };
   }
 
+  /**
+   * Starts looping the script
+   */
   loop() {
     this._noLoop = false;
   }
 
+  /**
+   * Stops looping the script
+   */
   noLoop() {
     this._noLoop = true;
   }
 
+  /**
+   * Callback for mouse click/touchscreen tap
+   * @param {Object} e event 
+   */
   click(e) {
-    //const coords = this._calculatePressCoords(e);
+
   }
 
+  /**
+   * Callback for mouse down
+   * @param {Object} event 
+   */
   mousedown(e) {
     this._mouse_pressed = true;
   }
 
+  /**
+   * Callback for mouse up
+   * @param {Object} event 
+   */
   mouseup(e) {
     this._mouse_pressed = false;
   }
 
+  /**
+   * Callback for moved mouse
+   * @param {Object} e event 
+   */
   mousemove(e) {
     if (this._mouse_pressed) {
 
     }
   }
 
+  /**
+   * Callback for screen tap press
+   * @param {Object} e event 
+   * @private
+   */
   touchdown(e) {
     this.mousedown(e);
   }
 
+  /**
+   * Callback for screen tap up
+   * @param {Object} e event
+   * @private
+   */
   touchup(e) {
     this.mouseup(e);
   }
 
+  /**
+   * Callback for touch moved
+   * @param {Object} e event
+   * @private
+   */
   touchmove(e) {
     this.mousemove(e);
   }
 
+  /**
+   * Callback for key pressed event
+   * @param {Object} e event
+  */
   keydown(e) {
-    //console.log({ code: e.code });
-    this.getPressedKey(e);
   }
 
-  saveFrame() {
-    const title = "frame-" + this._frameCount.toString().padStart(6, 0);
-    this.saveAsImage(title);
-  }
+  /**
+   * Save current frame
+   * @param {String} [title] The image filename (optional).
+   */
+  saveFrame(title) {
+    if (title === undefined)
+      title = "frame-" + this._frameCount.toString().padStart(6, 0);
 
-  saveAsImage(title) {
     let container;
     container = document.createElement("a");
     container.download = title + ".png";
@@ -147,6 +220,10 @@ class Engine {
     document.body.removeChild(container);
   }
 
+  /**
+   * Set the background color for the canvas
+   * @param {String} color 
+   */
   background(color) {
     // reset background
     this._ctx.save();
@@ -158,38 +235,66 @@ class Engine {
     this._ctx.restore();
   }
 
+  /**
+   * Function ran once, before the sketch is actually loaded
+   */
   preload() {
-    // ran once
   }
 
+  /**
+   * Function ran once
+   */
   setup() {
-    // ran once
   }
 
+  /** 
+   * Main sketch function, will be run continuously
+   */
   draw() {
-    // ran continuously
   }
 
+  /**
+   * Get the current drawing context
+   * @returns {Object} The current drawing context
+   */
   get ctx() {
     return this._ctx;
   }
 
+  /**
+   * Get the count of frames since the start
+   * @returns {Number} The number of total frames
+   */
   get frameCount() {
     return this._frameCount;
   }
 
+  /**
+   * Get the current framerate as frames per second (fps)
+   * @returns {Number} The current fps
+   */
   get frameRate() {
     return this._frameRate;
   }
 
+  /**
+   * Set a framerate
+   * @param {Number} f The desired framerate
+   */
   set frameRate(f) {
     this._setFps(f);
   }
 
+  /**
+   * Get the drawing area width
+   */
   get width() {
     return this._canvas.width;
   }
 
+  /**
+   * Get the drawing area height
+   */
   get height() {
     return this._canvas.height;
   }
@@ -218,8 +323,18 @@ document.addEventListener("DOMContentLoaded", () => {
   document.addEventListener("keydown", e => s.keydown(e));
 });
 
+/** Class containing colors, either RGB or HSL */
 class Color {
-  constructor(a = 0, b = 0, c = 0, d = 0, rgb = true) {
+  /**
+   * Create a color by setting the value of its channels.
+   * Can be either RGB or HSL
+   * @param {Number} [a=0] The value of the first channel (red for RGB, hue for HSL)
+   * @param {Number} [b=0] The value of the second channel (green for RGB, saturation for HSL)
+   * @param {Number} [c=0] The value of the third channel (blue for RGB, lighting for HSL)
+   * @param {Number} [d=1] The value of the alpha channel
+   * @param {Boolean} [rgb=true] If true, color will be interpreted as RGB. Otherwise, it will be interpreted as HSL
+   */
+  constructor(a = 0, b = 0, c = 0, d = 1, rgb = true) {
     if (rgb) {
       this._r = a;
       this._g = b;
@@ -243,6 +358,12 @@ class Color {
     }
   }
 
+  /**
+   * Sets a color hue, saturation and lighting values
+   * @param {Number} h Color hue
+   * @param {Number} s Color saturation
+   * @param {Number} l Color lighting
+   */
   fromHSL(h, s, l) {
     this._h = h;
     this._s = s;
@@ -251,6 +372,12 @@ class Color {
     this._toRgb();
   }
 
+  /**
+   * Sets a color red, green and blue channels values
+   * @param {Number} r Red value
+   * @param {Number} g Green value
+   * @param {Number} b Blue value
+   */
   fromRGB(r, g, b) {
     this._r = r;
     this._g = g;
@@ -259,6 +386,10 @@ class Color {
     this._toHsl();
   }
 
+  /**
+   * Converts a color from RGB to HSL
+   * @private
+   */
   _toHsl() {
     const r = this._r / 255;
     const g = this._g / 255;
@@ -285,6 +416,10 @@ class Color {
     this._l = Math.floor(l * 100);
   }
 
+  /**
+   * Converts a color from HSL to RGB
+   * @private
+   */
   _toRgb() {
     if (this._s == 0) {
       this._r = this._l;
@@ -313,27 +448,49 @@ class Color {
     }
   }
 
-  // internal functions
+  /** 
+   * Get the hexadecimal representation of a decimal number
+   * @param {Number} dec The decimal number
+   * @private
+   */
   _toHex(dec) {
     dec = Math.floor(dec);
     return dec.toString(16).padStart(2, 0).toUpperCase();
   }
 
+  /**
+   * Get the decimal representation of a hexadecimal number
+   * @param {Number} hex The hexadecimal number
+   * @private
+   */
   _toDec(hex) {
     return parseInt(hex, 16);
   }
 
+  /**
+   * Clamps a value between an interval 
+   * @param {Number} value 
+   * @param {Number} min 
+   * @param {Number} max 
+   * @returns {Number}
+   */
   _clamp(value, min, max) {
     return Math.min(Math.max(min, value), max);
   }
 
+  /**
+   * Wraps a value into an interval
+   * @param {Number} value
+   * @param {Number} min
+   * @param {Number} max
+   * @returns {Number}
+   */
   _wrap(value, min, max) {
     while (value > max) value -= max - min;
     while (value < min) value += max - min;
     return value;
   }
 
-  // setters and getters
   set hex(h) {
     this._r = this._toDec(h.slice(1, 3));
     this._g = this._toDec(h.slice(3, 5));
@@ -441,7 +598,13 @@ class Color {
   }
 }
 
+/** Class containing a simple 2D point */
 class Point {
+  /**
+   * Create a point by its coordinates
+   * @param {Number} x x-coordinate
+   * @param {Number} y y-coordinate
+   */
   constructor(x, y) {
     this._x = x;
     this._y = y;
