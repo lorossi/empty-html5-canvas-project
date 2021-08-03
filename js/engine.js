@@ -316,9 +316,9 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mouseup", e => s.mouseup(e));
   canvas.addEventListener("mousemove", e => s.mousemove(e));
   // touchscreen event listeners
-  canvas.addEventListener("touchstart", e => s.touchdown(e));
-  canvas.addEventListener("touchend", e => s.touchup(e));
-  canvas.addEventListener("touchmove", e => s.touchmove(e));
+  canvas.addEventListener("touchstart", e => s.touchdown(e), { passive: true });
+  canvas.addEventListener("touchend", e => s.touchup(e), { passive: true });
+  canvas.addEventListener("touchmove", e => s.touchmove(e), { passive: true });
   // keyboard event listeners
   document.addEventListener("keydown", e => s.keydown(e));
 });
