@@ -20,11 +20,11 @@ class Engine {
 
     // init variables
     this._frameCount = 0;
-    this._frameRate = 0;
+    this._frameRateBuffer = 0;
     this._noLoop = false;
-    this._fpsBuffer = new Array(0).fill(this._fps);
+    this._tolerance = 0.1;
     // start sketch
-    this._setFps();
+    this._setFps(this._fps);
     this._run();
   }
 
@@ -32,9 +32,11 @@ class Engine {
    * Sets the fps for the current sketch
    * @private
    */
-  _setFps() {
+  _setFps(fps) {
     // keep track of time to handle fps
     this._then = performance.now();
+    // save fps value
+    this._fps = fps;
     // time between frames
     this._fps_interval = 1 / this._fps;
   }
@@ -62,25 +64,23 @@ class Engine {
 
     if (this._noLoop) return;
 
-    let diff;
-    diff = performance.now() - this._then;
-    if (diff < this._fps_interval) {
-      // not enough time has passed, so we request next frame and give up on this render
-      return;
+    // time calculations
+    const now = performance.now();
+    const diff = (now - this._then) / 1000;
+    // is it time to draw the next frame?
+    if (diff > this._fps_interval - this._tolerance) {
+      // now draw
+      this._ctx.save();
+      this.draw();
+      this._ctx.restore();
+      // update frame count
+      this._frameCount++;
+      // updated last frame rendered time
+      this._then = now - (diff % this._fps_interval);
+      // update framerate getter
+      this._frameRateBuffer = 1 / diff;
     }
-    // updated last frame rendered time
-    this._then = performance.now();
-    // now draw
-    this._ctx.save();
-    this.draw();
-    this._ctx.restore();
-    // update frame count
-    this._frameCount++;
-    // update fpsBuffer
-    this._fpsBuffer.unshift(1000 / diff);
-    this._fpsBuffer = this._fpsBuffer.splice(0, 30);
-    // calculate average fps
-    this._frameRate = this._fpsBuffer.reduce((a, b) => a + b, 0) / this._fpsBuffer.length;
+
   }
 
   /**
@@ -274,7 +274,7 @@ class Engine {
    * @returns {Number} The current fps
    */
   get frameRate() {
-    return this._frameRate;
+    return this._frameRateBuffer;
   }
 
   /**
