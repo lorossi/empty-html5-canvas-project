@@ -20,9 +20,9 @@ class Engine {
 
     // init variables
     this._frameCount = 0;
-    this._frameRateBuffer = 0;
+    this._actualFrameRate = 0;
+    this._frame_adjustment = 0;
     this._noLoop = false;
-    this._tolerance = 0.1;
     // start sketch
     this._setFps(this._fps);
     this._run();
@@ -58,29 +58,44 @@ class Engine {
    * @private 
    */
 
-  _timeDraw() {
-    // request another frame
-    window.requestAnimationFrame(this._timeDraw.bind(this));
-
-    if (this._noLoop) return;
-
-    // time calculations
-    const now = performance.now();
-    const diff = (now - this._then) / 1000;
-    // is it time to draw the next frame?
-    if (diff > this._fps_interval - this._tolerance) {
-      // now draw
-      this._ctx.save();
-      this.draw();
-      this._ctx.restore();
-      // update frame count
-      this._frameCount++;
-      // updated last frame rendered time
-      this._then = now - (diff % this._fps_interval);
-      // update framerate getter
-      this._frameRateBuffer = 1 / diff;
+  _timeDraw(timestamp) {
+    if (timestamp == undefined) {
+      // request another frame
+      window.requestAnimationFrame(this._timeDraw.bind(this));
+      return;
     }
 
+    if (this._then == undefined) {
+      this._then = timestamp;
+      // request another frame
+      window.requestAnimationFrame(this._timeDraw.bind(this));
+      return;
+    }
+
+    // time calculations
+    const diff = (timestamp - this._then) / 1000;
+    // is it time to draw the next frame?
+    if (diff < this._fps_interval - this._frame_adjustment || this._noLoop) {
+      // request another frame
+      window.requestAnimationFrame(this._timeDraw.bind(this));
+      return;
+    }
+
+    // now draw
+    this._ctx.save();
+    this.draw();
+    this._ctx.restore();
+    // update frame count
+    this._frameCount++;
+    // updated last frame rendered time
+    this._then = timestamp - (diff % this._fps_interval);
+    // update framerate getter
+    this._actualFrameRate = 1 / diff;
+
+    this._frame_adjustment = (diff - this._fps_interval) / 50;
+
+    // request another frame
+    window.requestAnimationFrame(this._timeDraw.bind(this));
   }
 
   /**
@@ -274,7 +289,7 @@ class Engine {
    * @returns {Number} The current fps
    */
   get frameRate() {
-    return this._frameRateBuffer;
+    return this._actualFrameRate;
   }
 
   /**
