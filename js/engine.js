@@ -217,7 +217,7 @@ class Engine {
 
   /**
    * Set the background color for the canvas
-   * @param {String} color
+   * @param {String | Number} color
    */
   background(color) {
     // reset background
