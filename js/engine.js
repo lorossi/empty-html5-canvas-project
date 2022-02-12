@@ -1,5 +1,5 @@
 /**
- * HTML canvas simple engine. 
+ * HTML canvas simple engine.
  * GitHub repo and documentation: https://github.com/lorossi/empty-html5-canvas-project
  * @author Lorenzo Rossi <mail@lorenzoros.si>
  * @license Attribution 4.0 International (CC BY 4.0)
@@ -9,9 +9,9 @@
 class Engine {
   /**
    * Create the engine controlling a canvas
-   * @param {Object} canvas DOM element containing the canvas 
+   * @param {Object} canvas DOM element containing the canvas
    * @param {Object} ctx Drawing context of the canvas
-   * @param {Number} [fps=60] Frames per second 
+   * @param {Number} [fps=60] Frames per second
    */
   constructor(canvas, ctx, fps = 60) {
     this._canvas = canvas;
@@ -28,7 +28,7 @@ class Engine {
     this._run();
   }
 
-  /** 
+  /**
    * Sets the fps for the current sketch
    * @private
    */
@@ -55,22 +55,19 @@ class Engine {
 
   /**
    * Handles time update
-   * @private 
+   * @private
    */
 
   _timeDraw() {
     window.requestAnimationFrame(this._timeDraw.bind(this));
 
-    if (!this._then)
-      this._then = performance.now();
-
+    if (!this._then) this._then = performance.now();
 
     // time calculations
     const now = performance.now();
     const diff = now - this._then;
     // is it time to draw the next frame?
-    if (diff < this._fps_interval || this._noLoop)
-      return;
+    if (diff < this._fps_interval || this._noLoop) return;
 
     // now draw
     this._ctx.save();
@@ -92,7 +89,9 @@ class Engine {
   calculatePressCoords(e) {
     // calculate size ratio
     const boundingBox = this._canvas.getBoundingClientRect();
-    const ratio = Math.min(boundingBox.width, boundingBox.height) / this._canvas.getAttribute("width");
+    const ratio =
+      Math.min(boundingBox.width, boundingBox.height) /
+      this._canvas.getAttribute("width");
     // calculate real mouse/touch position
     if (!e.touches) {
       // we're dealing with a mouse
@@ -106,7 +105,6 @@ class Engine {
       return new Point(tx, ty);
     }
   }
-
 
   /**
    * Returns the pressed key
@@ -137,15 +135,13 @@ class Engine {
 
   /**
    * Callback for mouse click/touchscreen tap
-   * @param {Object} e event 
+   * @param {Object} e event
    */
-  click(e) {
-
-  }
+  click(e) {}
 
   /**
    * Callback for mouse down
-   * @param {Object} event 
+   * @param {Object} event
    */
   mousedown(e) {
     this._mouse_pressed = true;
@@ -153,7 +149,7 @@ class Engine {
 
   /**
    * Callback for mouse up
-   * @param {Object} event 
+   * @param {Object} event
    */
   mouseup(e) {
     this._mouse_pressed = false;
@@ -161,17 +157,16 @@ class Engine {
 
   /**
    * Callback for moved mouse
-   * @param {Object} e event 
+   * @param {Object} e event
    */
   mousemove(e) {
     if (this._mouse_pressed) {
-
     }
   }
 
   /**
    * Callback for screen tap press
-   * @param {Object} e event 
+   * @param {Object} e event
    * @private
    */
   touchdown(e) {
@@ -199,9 +194,8 @@ class Engine {
   /**
    * Callback for key pressed event
    * @param {Object} e event
-  */
-  keydown(e) {
-  }
+   */
+  keydown(e) {}
 
   /**
    * Save current frame
@@ -223,7 +217,7 @@ class Engine {
 
   /**
    * Set the background color for the canvas
-   * @param {String} color 
+   * @param {String} color
    */
   background(color) {
     // reset background
@@ -239,20 +233,17 @@ class Engine {
   /**
    * Function ran once, before the sketch is actually loaded
    */
-  preload() {
-  }
+  preload() {}
 
   /**
    * Function ran once
    */
-  setup() {
-  }
+  setup() {}
 
-  /** 
+  /**
    * Main sketch function, will be run continuously
    */
-  draw() {
-  }
+  draw() {}
 
   /**
    * Get the current drawing context
@@ -312,16 +303,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // mouse event listeners
-  canvas.addEventListener("click", e => s.click(e));
-  canvas.addEventListener("mousedown", e => s.mousedown(e));
-  canvas.addEventListener("mouseup", e => s.mouseup(e));
-  canvas.addEventListener("mousemove", e => s.mousemove(e));
+  canvas.addEventListener("click", (e) => s.click(e));
+  canvas.addEventListener("mousedown", (e) => s.mousedown(e));
+  canvas.addEventListener("mouseup", (e) => s.mouseup(e));
+  canvas.addEventListener("mousemove", (e) => s.mousemove(e));
   // touchscreen event listeners
-  canvas.addEventListener("touchstart", e => s.touchdown(e), { passive: true });
-  canvas.addEventListener("touchend", e => s.touchup(e), { passive: true });
-  canvas.addEventListener("touchmove", e => s.touchmove(e), { passive: true });
+  canvas.addEventListener("touchstart", (e) => s.touchdown(e), {
+    passive: true,
+  });
+  canvas.addEventListener("touchend", (e) => s.touchup(e), { passive: true });
+  canvas.addEventListener("touchmove", (e) => s.touchmove(e), {
+    passive: true,
+  });
   // keyboard event listeners
-  document.addEventListener("keydown", e => s.keydown(e));
+  document.addEventListener("keydown", (e) => s.keydown(e));
 });
 
 /** Class containing colors, either RGB or HSL */
@@ -396,8 +391,11 @@ class Color {
     const g = this._g / 255;
     const b = this._b / 255;
 
-    let max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h, s, l = (max + min) / 2;
+    let max = Math.max(r, g, b),
+      min = Math.min(r, g, b);
+    let h,
+      s,
+      l = (max + min) / 2;
 
     if (max == min) {
       h = s = 0; // achromatic
@@ -405,9 +403,15 @@ class Color {
       let d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
       switch (max) {
-        case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-        case g: h = (b - r) / d + 2; break;
-        case b: h = (r - g) / d + 4; break;
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+        case g:
+          h = (b - r) / d + 2;
+          break;
+        case b:
+          h = (r - g) / d + 4;
+          break;
       }
       h /= 6;
     }
@@ -449,7 +453,7 @@ class Color {
     }
   }
 
-  /** 
+  /**
    * Get the hexadecimal representation of a decimal number
    * @param {Number} dec The decimal number
    * @private
@@ -469,10 +473,10 @@ class Color {
   }
 
   /**
-   * Clamps a value between an interval 
-   * @param {Number} value 
-   * @param {Number} min 
-   * @param {Number} max 
+   * Clamps a value between an interval
+   * @param {Number} value
+   * @param {Number} min
+   * @param {Number} max
    * @returns {Number}
    */
   _clamp(value, min, max) {
@@ -505,7 +509,9 @@ class Color {
   }
 
   get hex() {
-    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(this._a)}`;
+    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(
+      this._a
+    )}`;
   }
 
   get rgb() {
