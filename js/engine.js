@@ -254,6 +254,14 @@ class Engine {
   }
 
   /**
+   * Get the current drawing canvas
+   * @returns {Object} The current drawing canvas
+   */
+  get canvas() {
+    return this._canvas;
+  }
+
+  /**
    * Get the count of frames since the start
    * @returns {Number} The number of total frames
    */
