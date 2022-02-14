@@ -2,7 +2,7 @@
  * HTML canvas simple engine.
  * GitHub repo and documentation: https://github.com/lorossi/empty-html5-canvas-project
  * @author Lorenzo Rossi <mail@lorenzoros.si>
- * @license Attribution 4.0 International (CC BY 4.0)
+ * @license MIT - 2022
  */
 
 /** Class containing the main engine running a canvas */
