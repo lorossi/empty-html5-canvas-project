@@ -30,12 +30,9 @@ and some internal functions:
 - `this.noLoop()` and `this.loop()` that will stop and restart the draw function
 - `this.background(color)` that will reset the background color of the canvas
 - `this.saveFrame(filename)` that will save the currently rendered frame as a `.png` image, with an optional filename
-- `this.calculatePressCoords(e)` that accepts the event from the mouse/touch screen interaction as a parameter and returns the coordinates relative to the canvas
-- `this.getPressedKey(e)` that accepts the event from the keyboard interaction ad a parameter and returns the pressed key and some infos about the type of keystroke
 - a lot of event handlers:
-  - `this.click()`,  `this.mouseup()`, `this.mousedown()`, `this.mousemove()`, regarding the mouse and the touch screen interactions
-  - `this.keydown()` regarding keyboard interactions
-  - All these functions have an optional parameter `e` that will contain the touch event (and it's needed in order to know which key has been pressed or where the mouse event happened)
+  - `this.click(x, y)`,  `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp()`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
+  - `this.keyPress(key, code)`, `this.keyDown(key, code)`, `this.keyUp(key, code)` regarding keyboard interactions
 
 Furthermore, two additional classes are included:
 

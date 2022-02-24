@@ -85,38 +85,31 @@ class Engine {
    * Returns the coordinates corresponding to a mouse/touch event
    * @param {Object} e event
    * @returns {Point} x,y coordinates
+   * @private
    */
-  calculatePressCoords(e) {
+  _calculatePressCoords(e) {
     // calculate size ratio
     const boundingBox = this._canvas.getBoundingClientRect();
     const ratio =
       Math.min(boundingBox.width, boundingBox.height) /
       this._canvas.getAttribute("width");
     // calculate real mouse/touch position
-    if (!e.touches) {
+    if ("touches" in e) {
+      // we're dealing with a touchscreen
+      if (e.touches.length > 0) {
+        // touch has been pressed
+        const tx = (e.touches[0].pageX - boundingBox.left) / ratio;
+        const ty = (e.touches[0].pageY - boundingBox.top) / ratio;
+        return new Point(tx, ty);
+      }
+      // touch has been released
+      return new Point(-1, -1);
+    } else {
       // we're dealing with a mouse
       const mx = (e.pageX - boundingBox.left) / ratio;
       const my = (e.pageY - boundingBox.top) / ratio;
       return new Point(mx, my);
-    } else {
-      // we're dealing with a touchscreen
-      const tx = (e.touches[0].pageX - boundingBox.left) / ratio;
-      const ty = (e.touches[0].pageY - boundingBox.top) / ratio;
-      return new Point(tx, ty);
     }
-  }
-
-  /**
-   * Returns the pressed key
-   * @param {Object} e event
-   * @returns {Object} Pressed key information
-   */
-  getPressedKey(e) {
-    return {
-      key: e.key,
-      keyCode: e.keyCode,
-      type: e.type,
-    };
   }
 
   /**
@@ -134,68 +127,123 @@ class Engine {
   }
 
   /**
-   * Callback for mouse click/touchscreen tap
+   * Private callback for mouse click/touchscreen tap
    * @param {Object} e event
+   * @private
    */
-  click(e) {}
+  _clickCallback(e) {
+    const p = this._calculatePressCoords(e);
+    this.click(p.x, p.y);
+  }
 
   /**
    * Callback for mouse down
    * @param {Object} event
+   * @private
    */
-  mousedown(e) {
+  _mouseDownCallback(e) {
     this._mouse_pressed = true;
+    const p = this._calculatePressCoords(e);
+    this.mouseDown(p.x, p.y);
   }
 
   /**
    * Callback for mouse up
    * @param {Object} event
+   * @private
    */
-  mouseup(e) {
+  _mouseUpCallback(e) {
     this._mouse_pressed = false;
+    const p = this._calculatePressCoords(e);
+    this.mouseUp(p.x, p.y);
   }
 
   /**
    * Callback for moved mouse
    * @param {Object} e event
+   * @private
    */
-  mousemove(e) {
-    if (this._mouse_pressed) {
+  _mouseMoveCallback(e) {
+    const p = this._calculatePressCoords(e);
+    if (!this._mouse_pressed) {
+      this.mouseMoved(p.x, p.y);
+    } else {
+      this.mouseDragged(p.x, p.y);
     }
-  }
-
-  /**
-   * Callback for screen tap press
-   * @param {Object} e event
-   * @private
-   */
-  touchdown(e) {
-    this.mousedown(e);
-  }
-
-  /**
-   * Callback for screen tap up
-   * @param {Object} e event
-   * @private
-   */
-  touchup(e) {
-    this.mouseup(e);
-  }
-
-  /**
-   * Callback for touch moved
-   * @param {Object} e event
-   * @private
-   */
-  touchmove(e) {
-    this.mousemove(e);
   }
 
   /**
    * Callback for key pressed event
    * @param {Object} e event
+   * @private
    */
-  keydown(e) {}
+  _keyDownCallback(e) {
+    this.keyDown(e.key, e.keyCode);
+  }
+
+  _keyUpCallback(e) {
+    this.keyUp(e.key, e.keyCode);
+  }
+
+  _keyPressCallback(e) {
+    this.keyPress(e.key, e.keyCode);
+  }
+
+  /**
+   * Public callback for mouse click and touchscreen tap
+   * @param {Number} x coordinate of the click/tap location
+   * @param {Number} y coordinate of the click/tap location
+   */
+  click(x, y) {}
+
+  /**
+   * Public callback for mouse and touchscreen pressed
+   * @param {Number} x coordinate of the click/tap location
+   * @param {Number} y coordinate of the click/tap location
+   */
+  mouseDown(x, y) {}
+
+  /**
+   * Public callback for mouse and touchscreen drag
+   * @param {Number} x coordinate of the click/tap location
+   * @param {Number} y coordinate of the click/tap location
+   */
+  mouseDragged(x, y) {}
+
+  /**
+   * Public callback for mouse and touchscreen up
+   * @param {Number} x coordinate of the click/tap location
+   * @param {Number} y coordinate of the click/tap location
+   */
+  mouseUp(x, y) {}
+
+  /**
+   * Public callback for mouse and touchscreen moved
+   * @param {Number} x coordinate of the click/tap location
+   * @param {Number} y coordinate of the click/tap location
+   */
+  mouseMoved(x, y) {}
+
+  /**
+   * Public callback for key press
+   * @param {String} key
+   * @param {Number} code
+   */
+  keyPress(key, code) {}
+
+  /**
+   * Public callback for key down
+   * @param {String} key
+   * @param {Number} code
+   */
+  keyDown(key, code) {}
+
+  /**
+   * Public callback for key up
+   * @param {String} key
+   * @param {Number} code
+   */
+  keyUp(key, code) {}
 
   /**
    * Save current frame
@@ -279,7 +327,7 @@ class Engine {
 
   /**
    * Set a framerate
-   * @param {Number} f The desired framerate
+   * @param {Number} f The desired framerate - optional
    */
   set frameRate(f) {
     this._setFps(f);
@@ -311,20 +359,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // mouse event listeners
-  canvas.addEventListener("click", (e) => s.click(e));
-  canvas.addEventListener("mousedown", (e) => s.mousedown(e));
-  canvas.addEventListener("mouseup", (e) => s.mouseup(e));
-  canvas.addEventListener("mousemove", (e) => s.mousemove(e));
+  canvas.addEventListener("click", (e) => s._clickCallback(e));
+  canvas.addEventListener("mousedown", (e) => s._mouseDownCallback(e));
+  canvas.addEventListener("mouseup", (e) => s._mouseUpCallback(e));
+  canvas.addEventListener("mousemove", (e) => s._mouseMoveCallback(e));
   // touchscreen event listeners
-  canvas.addEventListener("touchstart", (e) => s.touchdown(e), {
+  canvas.addEventListener("touchstart", (e) => s._mouseDownCallback(e), {
     passive: true,
   });
-  canvas.addEventListener("touchend", (e) => s.touchup(e), { passive: true });
-  canvas.addEventListener("touchmove", (e) => s.touchmove(e), {
+  canvas.addEventListener("touchend", (e) => s._mouseUpCallback(e), {
+    passive: true,
+  });
+  canvas.addEventListener("touchmove", (e) => s._mouseMoveCallback(e), {
     passive: true,
   });
   // keyboard event listeners
-  document.addEventListener("keydown", (e) => s.keydown(e));
+  document.addEventListener("keypress", (e) => s._keyPressCallback(e));
+  document.addEventListener("keydown", (e) => s._keyDownCallback(e));
+  document.addEventListener("keyup", (e) => s._keyUpCallback(e));
 });
 
 /** Class containing colors, either RGB or HSL */
