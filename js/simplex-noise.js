@@ -25,7 +25,14 @@ Better rank ordering method by Stefan Gustavson in 2012.
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
- */
+*/
+
+/*
+ ! The code has been modified slightly from the original.
+ - the random parameters passed to the buildPermutationTable function has been changed to
+    an instance of a class that has a random method.
+ - the export directive has been removed as it's not supported in the browser.
+*/
 // these #__PURE__ comments help uglifyjs with dead code removal
 //
 const F2 = /*#__PURE__*/ 0.5 * (Math.sqrt(3.0) - 1.0);
@@ -62,7 +69,7 @@ const grad4 = /*#__PURE__*/ new Float64Array([
  * @param random the random function that will be used to build the permutation table
  * @returns {NoiseFunction2D}
  */
-function createNoise2D(random = Math.random) {
+function createNoise2D(random) {
   const perm = buildPermutationTable(random);
   // precalculating this yields a little ~3% performance improvement.
   const permGrad2x = new Float64Array(perm).map((v) => grad2[(v % 12) * 2]);
@@ -140,7 +147,7 @@ function createNoise2D(random = Math.random) {
  * @param random the random function that will be used to build the permutation table
  * @returns {NoiseFunction3D}
  */
-function createNoise3D(random = Math.random) {
+function createNoise3D(random) {
   const perm = buildPermutationTable(random);
   // precalculating these seems to yield a speedup of over 15%
   const permGrad3x = new Float64Array(perm).map((v) => grad3[(v % 12) * 3]);
@@ -449,14 +456,14 @@ function createNoise4D(random = Math.random) {
  * Do not rely on this export.
  * @private
  */
-function buildPermutationTable(random) {
+function buildPermutationTable(randomInstance) {
   const tableSize = 512;
   const p = new Uint8Array(tableSize);
   for (let i = 0; i < tableSize / 2; i++) {
     p[i] = i;
   }
   for (let i = 0; i < tableSize / 2 - 1; i++) {
-    const r = i + ~~(random() * (256 - i));
+    const r = i + ~~(randomInstance.random() * (256 - i));
     const aux = p[i];
     p[i] = p[r];
     p[r] = aux;

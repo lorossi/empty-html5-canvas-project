@@ -11,7 +11,7 @@ class Engine {
    * Create the engine controlling a canvas
    * @param {Object} canvas DOM element containing the canvas
    * @param {Object} ctx Drawing context of the canvas
-   * @param {Number} [fps=60] Frames per second
+   * @param {number} [fps=60] Frames per second
    */
   constructor(canvas, ctx, fps = 60) {
     this._canvas = canvas;
@@ -130,7 +130,6 @@ class Engine {
    * Save the recording as a series of frames in a zip file
    *
    * @param {str} filename of the file to download
-   * @returns
    */
   saveRecording(filename = "frames.zip") {
     // if the recording is not active, do nothing
@@ -148,7 +147,7 @@ class Engine {
 
   /**
    * Save current frame
-   * @param {String} [title] The image filename (optional).
+   * @param {string} [title] The image filename (optional).
    */
   saveFrame(title = null) {
     if (title == null)
@@ -270,57 +269,57 @@ class Engine {
 
   /**
    * Public callback for mouse click and touchscreen tap
-   * @param {Number} x coordinate of the click/tap location
-   * @param {Number} y coordinate of the click/tap location
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
    */
   click(x, y) {}
 
   /**
    * Public callback for mouse and touchscreen pressed
-   * @param {Number} x coordinate of the click/tap location
-   * @param {Number} y coordinate of the click/tap location
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
    */
   mouseDown(x, y) {}
 
   /**
    * Public callback for mouse and touchscreen drag
-   * @param {Number} x coordinate of the click/tap location
-   * @param {Number} y coordinate of the click/tap location
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
    */
   mouseDragged(x, y) {}
 
   /**
    * Public callback for mouse and touchscreen up
-   * @param {Number} x coordinate of the click/tap location
-   * @param {Number} y coordinate of the click/tap location
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
    */
   mouseUp(x, y) {}
 
   /**
    * Public callback for mouse and touchscreen moved
-   * @param {Number} x coordinate of the click/tap location
-   * @param {Number} y coordinate of the click/tap location
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
    */
   mouseMoved(x, y) {}
 
   /**
    * Public callback for key press
-   * @param {String} key
-   * @param {Number} code
+   * @param {string} key
+   * @param {number} code
    */
   keyPress(key, code) {}
 
   /**
    * Public callback for key down
-   * @param {String} key
-   * @param {Number} code
+   * @param {string} key
+   * @param {number} code
    */
   keyDown(key, code) {}
 
   /**
    * Public callback for key up
-   * @param {String} key
-   * @param {Number} code
+   * @param {string} key
+   * @param {number} code
    */
   keyUp(key, code) {}
 
@@ -380,7 +379,7 @@ class Engine {
 
   /**
    * Get the count of frames since the start
-   * @returns {Number} The number of total frames
+   * @returns {number} The number of total frames
    */
   get frameCount() {
     return this._frameCount;
@@ -388,7 +387,7 @@ class Engine {
 
   /**
    * Get the current framerate as frames per second (fps)
-   * @returns {Number} The current fps
+   * @returns {number} The current fps
    */
   get frameRate() {
     return this._actualFrameRate;
@@ -396,7 +395,7 @@ class Engine {
 
   /**
    * Set a framerate
-   * @param {Number} f The desired framerate - optional
+   * @param {number} f The desired framerate - optional
    */
   set frameRate(f) {
     this._setFps(f);
@@ -453,10 +452,10 @@ class Color {
   /**
    * Create a color by setting the value of its channels.
    * Can be either RGB or HSL
-   * @param {Number} [a=0] The value of the first channel (red for RGB, hue for HSL)
-   * @param {Number} [b=0] The value of the second channel (green for RGB, saturation for HSL)
-   * @param {Number} [c=0] The value of the third channel (blue for RGB, lighting for HSL)
-   * @param {Number} [d=1] The value of the alpha channel
+   * @param {number} [a=0] The value of the first channel (red for RGB, hue for HSL)
+   * @param {number} [b=0] The value of the second channel (green for RGB, saturation for HSL)
+   * @param {number} [c=0] The value of the third channel (blue for RGB, lighting for HSL)
+   * @param {number} [d=1] The value of the alpha channel
    * @param {Boolean} [rgb=true] If true, color will be interpreted as RGB. Otherwise, it will be interpreted as HSL
    */
   constructor(a = 0, b = 0, c = 0, d = 1, rgb = true) {
@@ -485,9 +484,9 @@ class Color {
 
   /**
    * Sets a color hue, saturation and lighting values
-   * @param {Number} h Color hue
-   * @param {Number} s Color saturation
-   * @param {Number} l Color lighting
+   * @param {number} h Color hue
+   * @param {number} s Color saturation
+   * @param {number} l Color lighting
    */
   fromHSL(h, s, l) {
     this._h = h;
@@ -499,9 +498,9 @@ class Color {
 
   /**
    * Sets a color red, green and blue channels values
-   * @param {Number} r Red value
-   * @param {Number} g Green value
-   * @param {Number} b Blue value
+   * @param {number} r Red value
+   * @param {number} g Green value
+   * @param {number} b Blue value
    */
   fromRGB(r, g, b) {
     this._r = r;
@@ -584,7 +583,7 @@ class Color {
 
   /**
    * Get the hexadecimal representation of a decimal number
-   * @param {Number} dec The decimal number
+   * @param {number} dec The decimal number
    * @private
    */
   _toHex(dec) {
@@ -594,7 +593,7 @@ class Color {
 
   /**
    * Get the decimal representation of a hexadecimal number
-   * @param {Number} hex The hexadecimal number
+   * @param {number} hex The hexadecimal number
    * @private
    */
   _toDec(hex) {
@@ -603,10 +602,10 @@ class Color {
 
   /**
    * Clamps a value between an interval
-   * @param {Number} value
-   * @param {Number} min
-   * @param {Number} max
-   * @returns {Number}
+   * @param {number} value
+   * @param {number} min
+   * @param {number} max
+   * @returns {number}
    */
   _clamp(value, min, max) {
     return Math.min(Math.max(min, value), max);
@@ -614,10 +613,10 @@ class Color {
 
   /**
    * Wraps a value into an interval
-   * @param {Number} value
-   * @param {Number} min
-   * @param {Number} max
-   * @returns {Number}
+   * @param {number} value
+   * @param {number} min
+   * @param {number} max
+   * @returns {number}
    */
   _wrap(value, min, max) {
     while (value > max) value -= max - min;
@@ -738,8 +737,8 @@ class Color {
 class Point {
   /**
    * Create a point by its coordinates
-   * @param {Number} x x-coordinate
-   * @param {Number} y y-coordinate
+   * @param {number} x x-coordinate
+   * @param {number} y y-coordinate
    */
   constructor(x, y) {
     this._x = x;
@@ -760,5 +759,149 @@ class Point {
 
   set y(ny) {
     this._y = ny;
+  }
+}
+
+/** Class handling simplex noise.
+ * This class interfaces with the SimplexNoise library by Jonas Wagner.
+ * The number generation is taken care of by my xor128 library.
+ */
+class SimplexNoise {
+  /**
+   * Create a noise object
+   * @param {Number|String|Array} seed The seed for the noise (optional)
+   */
+  constructor(seed = null) {
+    // initialize the random function with the seed
+    // it needs to be passed to the noise function
+    // If no seed is passed, a random seed is generated
+
+    let rand_f;
+
+    if (seed) {
+      let x, y, z, w;
+
+      // initialize the four seed values
+      if (typeof seed === "number") {
+        // if the seed is a number, use it as the seed
+        // i'm not sure that this is the best way to do this
+        x = seed;
+        y = seed + 1;
+        z = seed + 2;
+        w = seed + 3;
+      } else if (typeof seed === "string") {
+        // if the seed is a string, use its hash as the seed
+        const h = this._hash(seed);
+        // i'm not sure that this is the best way to do this
+        x = h;
+        y = h + 1;
+        z = h + 2;
+        w = h + 3;
+      } else if (Array.isArray(seed)) {
+        // pass the seeds to the random function
+        x = seed[0];
+        y = seed[1];
+        z = seed[2];
+        w = seed[3];
+      }
+      rand_f = new XOR128(x, y, z, w);
+    } else {
+      // no seed is passed, generate a random seed
+      rand_f = new XOR128();
+    }
+
+    // initialize the noise function with the random function
+    this._noise = {
+      2: createNoise2D(rand_f),
+      3: createNoise3D(rand_f),
+      4: createNoise4D(rand_f),
+    };
+
+    // set the octaves and falloff
+    this._octaves = 1;
+    this._falloff = 0.5;
+  }
+
+  /**
+   * Simple hash function
+   *
+   * @param {string} string to be hashed
+   */
+  _hash(string) {
+    let hash = 0;
+    if (string.length == 0) return hash;
+
+    for (let i = 0; i < string.length; i++) {
+      const char = string.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+    return hash;
+  }
+
+  /**
+   * Get the noise value at a given point
+   * @param {number} x x-coordinate
+   * @param {number} [y] y-coordinate
+   * @param {number} [z] z-coordinate
+   * @param {number} [w] w-coordinate
+   * @returns {number} Noise value at the given point in range [-1, 1]
+   */
+  noise(x, y = null, z = null, w = null) {
+    let n = 0;
+    let amp = 1;
+    let freq = 1;
+
+    // calculate the number of parameters and the noise function to use
+    const dim = Math.max(arguments.length, 2);
+    // iterate over the octaves to five a more detailed noise value
+    for (let i = 0; i < this._octaves; i++) {
+      n += this._noise[dim](x * freq, y * freq, z * freq, w * freq) * amp;
+      amp *= this._falloff;
+      freq *= 1 / this._falloff;
+    }
+
+    return n;
+  }
+
+  /**
+   *
+   * @param {number} octaves Number of octaves to use
+   * @param {number} falloff Falloff of the noise
+   */
+  setDetail(octaves = 1, falloff = 0.5) {
+    this._octaves = octaves;
+    this._falloff = falloff;
+  }
+
+  /**
+   * Set the number of octaves to use
+   */
+  set octaves(o) {
+    this._octaves = o;
+  }
+
+  /**
+   * Get the number of octaves to use
+   * @returns {number} Number of octaves
+   */
+  get octaves() {
+    return this._octaves;
+  }
+
+  /**
+   * Set the falloff of the noise
+   */
+  set falloff(f) {
+    this._falloff = f;
+  }
+
+  /**
+   * Get the falloff of the noise
+   * @returns {number} Falloff
+   * @returns {number}
+   */
+  get falloff() {
+    return this._falloff;
   }
 }

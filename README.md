@@ -40,10 +40,14 @@ as well as recording capabilities:
 - `this.stopRecording()` will stop the recording process
 - `this.saveRecording(filename)` will save the recorded frames inside a zip archive, with an optional filename
 
-Furthermore, two additional classes are included:
+Furthermore, four additional classes are included:
 
 - `Color` that supports RGBA-HSLA colors in a handy way
 - `Point` that supports simple 2D points
+- `SimplexNoise` that supports simplex-noise generation, up to 4 dimensions both with and without seed
+- `XOR128` that supports a simple random number generator
+
+I recommend you to read the documentation of the classes to understand how they work and their methods.
 
 In order to draw on the canvas, all the [built in javascript functions](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) have to be used.
 
@@ -56,4 +60,5 @@ Font [Roboto](https://fonts.google.com/specimen/Roboto), made by Google, is pack
 
 [JSzip](https://stuk.github.io/jszip/) library, made by [Stuart Knightley](https://github.com/Stuk), is packaged in this repository.
 
-[simplex-noise.js](https://github.com/jwagner/simplex-noise.js) library, made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
+[simplex-noise.js](https://github.com/jwagner/simplex-noise.js) slightly, made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
+I have made some small changes to the original version.
