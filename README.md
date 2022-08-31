@@ -8,7 +8,10 @@ Just clone the repo or download the last release.
 
 ## Cool. Do you have some documentation?
 
-Well, not really. But it's easy to use:
+[Yes, here.](https://lorossi.github.io/empty-html5-canvas-project/).
+
+Don't have time for that?
+Keep reading for the short version.
 
 The canvas size is 1000px by 1000px.
 This can be changed by tweaking the `canvas` item in the `index.html` file.
@@ -45,7 +48,7 @@ Furthermore, four additional classes are included:
 - `Color` that supports RGBA-HSLA colors in a handy way
 - `Point` that supports simple 2D points
 - `SimplexNoise` that supports simplex-noise generation, up to 4 dimensions both with and without seed
-- `XOR128` that supports a simple random number generator
+- `XOR128` that supports a simple seeded random number generator
 
 I recommend you to read the documentation of the classes to understand how they work and their methods.
 
