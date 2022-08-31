@@ -23,6 +23,10 @@ class Engine {
     this._actualFrameRate = 0;
     this._noLoop = false;
     this._then = null;
+    this._recording = false;
+    this._first_frame_recorded = 0;
+    this._zip = null;
+
     // start sketch
     this._setFps(this._fps);
     this._run();
@@ -73,12 +77,84 @@ class Engine {
     this._ctx.save();
     this.draw();
     this._ctx.restore();
+    // save current frame if recording
+    if (this._recording) {
+      // compute frame name
+      const frame_count = this._frameCount - this._first_frame_recorded;
+      const filename = frame_count.toString().padStart(7, 0) + ".png";
+      // extract data from canvas
+      const data = this._canvas.toDataURL("image/png").split(";base64,")[1];
+      // add frame to zip
+      this._zip.file(filename, data, { base64: true });
+    }
+
     // update frame count
     this._frameCount++;
     // updated last frame rendered time
     this._then = now - (diff % this._fps_interval);
     // update framerate getter
     this._actualFrameRate = 1 / diff;
+  }
+
+  /**
+   * Starts looping the script
+   */
+  loop() {
+    this._noLoop = false;
+  }
+
+  /**
+   * Stops looping the script
+   */
+  noLoop() {
+    this._noLoop = true;
+  }
+
+  /**
+   * Start recording frames
+   */
+  startRecording() {
+    this._recording = true;
+    this._first_frame_recorded = this._frameCount;
+    this._zip = new JSZip();
+  }
+
+  /**
+   * Stop recording frames
+   */
+  stopRecording() {
+    this._recording = false;
+  }
+
+  /**
+   * Save the recording as a series of frames in a zip file
+   *
+   * @param {str} filename of the file to download
+   * @returns
+   */
+  saveRecording(filename = "frames.zip") {
+    // if the recording is not active, do nothing
+    // also skipped if no frame has been recorded
+    if (this._recording || !this._zip) return;
+
+    // download zip file
+    this._zip.generateAsync({ type: "blob" }).then((blob) => {
+      // convert blob to url
+      const data = URL.createObjectURL(blob);
+      //
+      this._downloadFile(filename, data);
+    });
+  }
+
+  /**
+   * Save current frame
+   * @param {String} [title] The image filename (optional).
+   */
+  saveFrame(title = null) {
+    if (title == null)
+      title = "frame-" + this._frameCount.toString().padStart(6, 0);
+
+    this._downloadFile(title, this._canvas.toDataURL("image/png"));
   }
 
   /**
@@ -113,17 +189,20 @@ class Engine {
   }
 
   /**
-   * Starts looping the script
+   * Create and download a file
+   * @param {str} filename
+   * @param {str} data
    */
-  loop() {
-    this._noLoop = false;
-  }
+  _downloadFile(filename, data) {
+    // create file
+    const container = document.createElement("a");
 
-  /**
-   * Stops looping the script
-   */
-  noLoop() {
-    this._noLoop = true;
+    container.href = data;
+    container.setAttribute("download", filename);
+    document.body.appendChild(container);
+    // download file
+    container.click();
+    document.body.removeChild(container);
   }
 
   /**
@@ -246,24 +325,6 @@ class Engine {
   keyUp(key, code) {}
 
   /**
-   * Save current frame
-   * @param {String} [title] The image filename (optional).
-   */
-  saveFrame(title) {
-    if (title === undefined)
-      title = "frame-" + this._frameCount.toString().padStart(6, 0);
-
-    let container;
-    container = document.createElement("a");
-    container.download = title + ".png";
-    container.href = this._canvas.toDataURL("image/png");
-    document.body.appendChild(container);
-
-    container.click();
-    document.body.removeChild(container);
-  }
-
-  /**
    * Set the background color for the canvas
    * @param {String | Number} color
    */
@@ -299,6 +360,14 @@ class Engine {
    */
   get ctx() {
     return this._ctx;
+  }
+
+  /**
+   * Get the the current recording state
+   * @returns {Boolean} The current recording state
+   */
+  get recording() {
+    return this._recording;
   }
 
   /**

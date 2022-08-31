@@ -34,6 +34,12 @@ and some internal functions:
   - `this.click(x, y)`,  `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp()`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
   - `this.keyPress(key, code)`, `this.keyDown(key, code)`, `this.keyUp(key, code)` regarding keyboard interactions
 
+as well as recording capabilities:
+
+- `this.startRecording()` will start saving frames as `.png` images at the end of the draw function
+- `this.stopRecording()` will stop the recording process
+- `this.saveRecording(filename)` will save the recorded frames inside a zip archive, with an optional filename
+
 Furthermore, two additional classes are included:
 
 - `Color` that supports RGBA-HSLA colors in a handy way
@@ -44,5 +50,8 @@ In order to draw on the canvas, all the [built in javascript functions](https://
 ## Credits
 
 This project is distributed under MIT license.
+I don't claim any rights over the external libraries and assets packaged inside the project.
 
 Font [Roboto](https://fonts.google.com/specimen/Roboto), made by Google, is packaged in this repository.
+
+[JSzip](https://stuk.github.io/jszip/) library, made by [Stuart Knightley](https://github.com/Stuk), is packaged in this repository.
