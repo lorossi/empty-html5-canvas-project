@@ -23,7 +23,7 @@ class Engine {
     this._actualFrameRate = 0;
     this._noLoop = false;
     this._then = null;
-    this._recording = false;
+    this._is_recording = false;
     this._first_frame_recorded = 0;
     this._zip = null;
 
@@ -78,7 +78,7 @@ class Engine {
     this.draw();
     this._ctx.restore();
     // save current frame if recording
-    if (this._recording) {
+    if (this._is_recording) {
       // compute frame name
       const frame_count = this._frameCount - this._first_frame_recorded;
       const filename = frame_count.toString().padStart(7, 0) + ".png";
@@ -114,7 +114,7 @@ class Engine {
    * Start recording frames
    */
   startRecording() {
-    this._recording = true;
+    this._is_recording = true;
     this._first_frame_recorded = this._frameCount;
     this._zip = new JSZip();
   }
@@ -123,7 +123,7 @@ class Engine {
    * Stop recording frames
    */
   stopRecording() {
-    this._recording = false;
+    this._is_recording = false;
   }
 
   /**
@@ -134,7 +134,7 @@ class Engine {
   saveRecording(filename = "frames.zip") {
     // if the recording is not active, do nothing
     // also skipped if no frame has been recorded
-    if (this._recording || !this._zip) return;
+    if (this._is_recording || !this._zip) return;
 
     // download zip file
     this._zip.generateAsync({ type: "blob" }).then((blob) => {
@@ -366,7 +366,7 @@ class Engine {
    * @returns {Boolean} The current recording state
    */
   get recording() {
-    return this._recording;
+    return this._is_recording;
   }
 
   /**
@@ -413,6 +413,13 @@ class Engine {
    */
   get height() {
     return this._canvas.height;
+  }
+
+  /**
+   * Get the current recording state
+   */
+  get is_recording() {
+    return this._is_recording;
   }
 }
 
