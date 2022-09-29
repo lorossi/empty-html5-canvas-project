@@ -119,7 +119,7 @@ class XOR128 {
    * @param {Array} arr an array
    */
   shuffle_array(arr) {
-    arr
+    return arr
       .map((s) => ({ sort: this.random(), value: s }))
       .sort((a, b) => a.sort - b.sort)
       .map((a) => a.value);
@@ -132,7 +132,7 @@ class XOR128 {
    * @returns {String}
    */
   shuffle_string(string) {
-    string
+    return string
       .split("")
       .map((s) => ({ sort: this.random(), value: s }))
       .sort((a, b) => a.sort - b.sort)

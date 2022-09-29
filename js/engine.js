@@ -25,6 +25,7 @@ class Engine {
     this._then = null;
     this._is_recording = false;
     this._first_frame_recorded = 0;
+    this._frames_recorded = 0;
     this._zip = null;
 
     // start sketch
@@ -86,6 +87,8 @@ class Engine {
       const data = this._canvas.toDataURL("image/png").split(";base64,")[1];
       // add frame to zip
       this._zip.file(filename, data, { base64: true });
+      // update the count of recorded frames
+      this._frames_recorded++;
     }
 
     // update frame count
@@ -116,6 +119,7 @@ class Engine {
   startRecording() {
     this._is_recording = true;
     this._first_frame_recorded = this._frameCount;
+    this._frames_recorded = 0;
     this._zip = new JSZip();
   }
 
@@ -134,7 +138,7 @@ class Engine {
   saveRecording(filename = "frames.zip") {
     // if the recording is not active, do nothing
     // also skipped if no frame has been recorded
-    if (this._is_recording || !this._zip) return;
+    if (this._is_recording || !this._zip || this._frames_recorded == 0) return;
 
     // download zip file
     this._zip.generateAsync({ type: "blob" }).then((blob) => {
