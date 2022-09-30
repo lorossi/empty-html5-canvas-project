@@ -864,7 +864,7 @@ class SimplexNoise {
     let freq = 1;
 
     // calculate the number of parameters and the noise function to use
-    const dim = Math.max(arguments.length, 2);
+    const dim = Math.min(Math.max(arguments.length, 1), 4);
     // iterate over the octaves to five a more detailed noise value
     for (let i = 0; i < this._octaves; i++) {
       n += this._noise[dim](x * freq, y * freq, z * freq, w * freq) * amp;
