@@ -756,6 +756,23 @@ class Point {
     this._y = y;
   }
 
+  /**
+   * Return a copy of the point
+   * @returns {Point}
+   */
+  copy() {
+    return new Point(this._x, this._y);
+  }
+
+  /**
+   * Return the distance between two points
+   * @param {Point} p1
+   * @returns {number}
+   */
+  distance(p) {
+    return Math.sqrt((p.x - this._x) ** 2 + (p.y - this._y) ** 2);
+  }
+
   get x() {
     return this._x;
   }
