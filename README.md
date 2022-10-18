@@ -8,7 +8,8 @@ Just clone the repo or download the last release.
 
 ## Cool. Do you have some documentation?
 
-[Yes, here.](https://lorossi.github.io/empty-html5-canvas-project/).
+[Yes, here](https://lorossi.github.io/empty-html5-canvas-project/).
+Documentation for the XOR128 random number generator is [here](https://lorossi.github.io/js-XOR128).
 
 Don't have time for that?
 Keep reading for the short version.
