@@ -813,6 +813,7 @@ class SimplexNoise {
       if (typeof seed === "number") {
         // if the seed is a number, use it as the seed
         // i'm not sure that this is the best way to do this
+        if (seed >= 2 ** 32) seed %= 2 ** 32; // make sure the seed is a 32-bit number
         x = seed;
         y = seed + 1;
         z = seed + 2;
