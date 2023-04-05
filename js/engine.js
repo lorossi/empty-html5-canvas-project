@@ -195,6 +195,7 @@ class Engine {
    * Create and download a file
    * @param {str} filename
    * @param {str} data
+   * @private
    */
   _downloadFile(filename, data) {
     // create file
@@ -617,6 +618,7 @@ class Color {
    * @param {number} min
    * @param {number} max
    * @returns {number}
+   * @private
    */
   _clamp(value, min, max) {
     return Math.min(Math.max(min, value), max);
@@ -628,6 +630,7 @@ class Color {
    * @param {number} min
    * @param {number} max
    * @returns {number}
+   * @private
    */
   _wrap(value, min, max) {
     while (value > max) value -= max - min;
@@ -855,6 +858,8 @@ class SimplexNoise {
    * Simple hash function
    *
    * @param {string} string to be hashed
+   * @returns {number} hash
+   * @private
    */
   _hash(string) {
     let hash = 0;
