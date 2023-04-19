@@ -494,18 +494,26 @@ class Color {
     }
   }
 
+  equals(other, compare_alpha = true) {
+    const epsilon = 0.0001;
+    const float_eq = (a, b) => Math.abs(a - b) < epsilon;
+    return (
+      float_eq(this._r, other._r) &&
+      float_eq(this._g, other._g) &&
+      float_eq(this._b, other._b) &&
+      (float_eq(this._a, other._a) || !compare_alpha)
+    );
+  }
+
   /**
    * Sets a color hue, saturation and lighting values
    * @param {number} h Color hue
    * @param {number} s Color saturation
    * @param {number} l Color lighting
+   * @static
    */
-  fromHSL(h, s, l) {
-    this._h = h;
-    this._s = s;
-    this._l = l;
-
-    this._toRgb();
+  static fromHSL(h, s, l) {
+    return new Color(h, s, l, 1, false);
   }
 
   /**
@@ -513,13 +521,10 @@ class Color {
    * @param {number} r Red value
    * @param {number} g Green value
    * @param {number} b Blue value
+   * @static
    */
   fromRGB(r, g, b) {
-    this._r = r;
-    this._g = g;
-    this._b = b;
-
-    this._toHsl();
+    return new Color(r, g, b, 1, true);
   }
 
   /**
@@ -774,6 +779,17 @@ class Point {
    */
   distance(p) {
     return Math.sqrt((p.x - this._x) ** 2 + (p.y - this._y) ** 2);
+  }
+
+  /**
+   * Returns true if the point is equal to another point
+   * @param {Point} p
+   * @returns {number}
+   */
+  equals(p) {
+    const epsilon = 0.0001;
+    const float_eq = (a, b) => Math.abs(a - b) < epsilon;
+    return float_eq(this._x, p.x) && float_eq(this._y, p.y);
   }
 
   get x() {
