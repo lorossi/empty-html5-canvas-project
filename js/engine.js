@@ -949,7 +949,6 @@ class SimplexNoise {
   /**
    * Get the falloff of the noise
    * @returns {number} Falloff
-   * @returns {number}
    */
   get falloff() {
     return this._falloff;
