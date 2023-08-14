@@ -35,6 +35,10 @@ class Engine {
     this._frames_recorded = 0;
     this._zip = null;
 
+    // mouse coordinates
+    this._mouseCoords = new Point(0, 0);
+    this._prevMouseCoords = new Point(0, 0);
+
     // start sketch
     this._setFps(this._fps);
     this._run();
@@ -255,6 +259,11 @@ class Engine {
    */
   _mouseMoveCallback(e) {
     const p = this._calculatePressCoords(e);
+
+    // update mouse position
+    this._prevMouseCoords = this._mouseCoords.copy();
+    this._mouseCoords = p.copy();
+
     if (!this._mouse_pressed) {
       this.mouseMoved(p.x, p.y);
     } else {
@@ -415,6 +424,7 @@ class Engine {
 
   /**
    * Get the drawing area width
+   * @returns {number} The drawing area width
    */
   get width() {
     return this._canvas.width;
@@ -422,6 +432,7 @@ class Engine {
 
   /**
    * Get the drawing area height
+   * @returns {number} The drawing area height
    */
   get height() {
     return this._canvas.height;
@@ -429,9 +440,29 @@ class Engine {
 
   /**
    * Get the current recording state
+   * @returns {Boolean} The current recording state
    */
   get is_recording() {
     return this._is_recording;
+  }
+
+  /**
+   * Get the current mouse position
+   * @returns {Point} The current mouse position
+   * @readonly
+   */
+  get mousePosition() {
+    return this._mouseCoords.copy();
+  }
+
+  /**
+   * Get the previous mouse position
+   *
+   * @returns {Point} The previous mouse position
+   * @readonly
+   */
+  get prevMousePosition() {
+    return this._prevMouseCoords.copy();
   }
 }
 
@@ -768,18 +799,42 @@ class Point {
     return float_eq(this._x, p.x) && float_eq(this._y, p.y);
   }
 
+  /**
+   * Returns the point as a string
+   * @returns {string}
+   */
+  toString() {
+    return `(${this._x}, ${this._y})`;
+  }
+
+  /**
+   * Returns the point x coordinate
+   * @returns {number}
+   */
   get x() {
     return this._x;
   }
 
+  /**
+   * Sets the point x coordinate
+   * @param {number} nx
+   */
   set x(nx) {
     this._x = nx;
   }
 
+  /**
+   * Returns the point y coordinate
+   * @returns {number}
+   */
   get y() {
     return this._y;
   }
 
+  /**
+   * Sets the point y coordinate
+   * @param {number} ny
+   */
   set y(ny) {
     this._y = ny;
   }
