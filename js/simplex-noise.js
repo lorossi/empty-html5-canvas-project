@@ -473,4 +473,5 @@ function buildPermutationTable(randomInstance) {
   }
   return p;
 }
-//# sourceMappingURL=simplex-noise.js.map
+
+export { createNoise2D, createNoise3D, createNoise4D };

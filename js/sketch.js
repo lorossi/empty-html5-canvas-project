@@ -3,6 +3,9 @@
   Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
 */
 
+import { Engine, SimplexNoise, Point, Color } from "./engine.js";
+import { XOR128 } from "./xor128.js";
+
 class Sketch extends Engine {
   preload() {
     // ran once. Ideally, this has never to be called again
@@ -16,3 +19,5 @@ class Sketch extends Engine {
     // looping continuously at a set framerate
   }
 }
+
+export { Sketch };

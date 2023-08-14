@@ -245,3 +245,5 @@ class XOR128 {
     throw new Error("XOR128: parameter must be an array or a string");
   }
 }
+
+export { XOR128 };
