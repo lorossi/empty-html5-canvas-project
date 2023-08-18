@@ -7,19 +7,7 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-}
-
-html {
-  height: -moz-available;
-  height: -webkit-fill-available;
-  height: fill-available;
-}
-
-body {
-  min-height: 100vh;
-  min-height: -moz-available;
-  min-height: -webkit-fill-available;
-  min-height: fill-available;
+  font-family: Roboto;
 }
 
 a {
@@ -41,8 +29,8 @@ a:active {
 }
 
 #sketch {
-  height: 95vh;
-  width: 95vh;
+  height: 90vh;
+  width: 90vh;
   aspect-ratio: 1;
 
   touch-action: none;
@@ -51,7 +39,6 @@ a:active {
 .footer {
   position: absolute;
   width: 100vw;
-  bottom: 1vh;
 
   display: flex;
   flex-direction: row;
@@ -60,14 +47,14 @@ a:active {
 }
 
 .footer * {
-  padding-left: 2vw;
-  padding-right: 2vw;
+  padding: 1rem;
+  font-size: 1.5rem;
 }
 
 @media only screen and (max-width: 600px) {
   #sketch {
-    height: 95vw;
-    width: 95vw;
+    height: 90vw;
+    width: 90vw;
   }
 
   .footer {

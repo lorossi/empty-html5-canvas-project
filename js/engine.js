@@ -6,6 +6,7 @@
  */
 
 import { XOR128 } from "./xor128.js";
+import { JSZip } from "./jszip.js";
 import {
   createNoise2D,
   createNoise3D,
@@ -149,7 +150,8 @@ class Engine {
   saveRecording(filename = "frames.zip") {
     // if the recording is not active, do nothing
     // also skipped if no frame has been recorded
-    if (this._is_recording || !this._zip || this._frames_recorded == 0) return;
+    if (this._is_recording || this._zip == null || this._frames_recorded == 0)
+      return;
 
     // download zip file
     this._zip.generateAsync({ type: "blob" }).then((blob) => {
