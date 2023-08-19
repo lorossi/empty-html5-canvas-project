@@ -82,7 +82,7 @@ class Engine {
 
     // time calculations
     const now = performance.now();
-    const diff = now - this._then;
+    const diff = (now - this._then) / 1000;
     // is it time to draw the next frame?
     if (diff < this._fps_interval || this._noLoop) return;
 
