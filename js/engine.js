@@ -6,7 +6,6 @@
  */
 
 import { XOR128 } from "./xor128.js";
-import { JSZip } from "./jszip.js";
 import {
   createNoise2D,
   createNoise3D,
