@@ -10,6 +10,12 @@
   font-family: Roboto;
 }
 
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-size: var(--text-size);
+}
+
 a {
   user-select: none;
 }
@@ -39,6 +45,7 @@ a:active {
 .footer {
   position: absolute;
   width: 100vw;
+  bottom: 0;
 
   display: flex;
   flex-direction: row;
@@ -48,7 +55,7 @@ a:active {
 
 .footer * {
   padding: 1rem;
-  font-size: 1.5rem;
+  font-size: var(--text-size);
 }
 
 @media only screen and (max-width: 600px) {
