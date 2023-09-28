@@ -531,10 +531,25 @@ class Color {
    * @param {number} b Blue value
    * @static
    */
-  fromRGB(r, g, b) {
+  static fromRGB(r, g, b) {
     return new Color(r, g, b, 1, true);
   }
 
+  static fromHEX(hex) {
+    // regex to extract r, g, b, a values from hex string
+    const regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i;
+    // extract values from hex string
+    const [, r, g, b, a] = regex.exec(hex);
+
+    // convert values to decimal
+    const dr = parseInt(r, 16);
+    const dg = parseInt(g, 16);
+    const db = parseInt(b, 16);
+    const da = a ? parseInt(a, 16) : 1;
+
+    // return color
+    return new Color(dr, dg, db, da, true);
+  }
   /**
    * Converts a color from RGB to HSL
    * @private
