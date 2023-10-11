@@ -378,7 +378,7 @@
     
 
     
-    <h4 class="name" id=".fromHEX"><span class="type-signature">(static) </span>fromHEX<span class="signature">(hex)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".fromHEX"><span class="type-signature">(static) </span>fromHEX<span class="signature">(hex)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
     
 
     
@@ -479,7 +479,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line557">line 557</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line560">line 560</a>
     </li></ul></dd>
     
 
@@ -504,6 +504,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Color.html">Color</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -515,7 +533,7 @@
     
 
     
-    <h4 class="name" id=".fromHSL"><span class="type-signature">(static) </span>fromHSL<span class="signature">(h, s, l)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".fromHSL"><span class="type-signature">(static) </span>fromHSL<span class="signature">(h, s, l)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
     
 
     
@@ -662,7 +680,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line537">line 537</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line538">line 538</a>
     </li></ul></dd>
     
 
@@ -687,6 +705,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Color.html">Color</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -698,7 +734,217 @@
     
 
     
-    <h4 class="name" id=".fromRGB"><span class="type-signature">(static) </span>fromRGB<span class="signature">(r, g, b)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".fromMonochrome"><span class="type-signature">(static) </span>fromMonochrome<span class="signature">(ch, a<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Create a monochrome color from a decimal value
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>ch</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">Red, green and blue value in range [0, 255]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    1
+                
+                </td>
+            
+
+            <td class="description last">Alpha value in range [0, 1], defaults to 1</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line584">line 584</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Color.html">Color</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".fromRGB"><span class="type-signature">(static) </span>fromRGB<span class="signature">(r, g, b)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
     
 
     
@@ -845,7 +1091,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line548">line 548</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line550">line 550</a>
     </li></ul></dd>
     
 
@@ -870,6 +1116,24 @@
 
 
 
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Color.html">Color</a></span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1213,7 +1477,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Sep 28 2023 17:54:08 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Oct 11 2023 11:00:42 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

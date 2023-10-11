@@ -533,6 +533,7 @@ class Color {
    * @param {number} s Color saturation
    * @param {number} l Color lighting
    * @static
+   * @returns {Color}
    */
   static fromHSL(h, s, l) {
     return new Color(h, s, l, 1, false);
@@ -544,6 +545,7 @@ class Color {
    * @param {number} g Green value
    * @param {number} b Blue value
    * @static
+   * @returns {Color}
    */
   static fromRGB(r, g, b) {
     return new Color(r, g, b, 1, true);
@@ -553,6 +555,7 @@ class Color {
    * Create a color from a hexadecimal string
    * @param {string} hex
    * @static
+   * @returns {Color}
    */
   static fromHEX(hex) {
     // regex to extract r, g, b, a values from hex string
@@ -569,6 +572,19 @@ class Color {
     // return color
     return new Color(dr, dg, db, da, true);
   }
+
+  /**
+   * Create a monochrome color from a decimal value
+   *
+   * @param {number} ch Red, green and blue value in range [0, 255]
+   * @param {number} [a=1] Alpha value in range [0, 1], defaults to 1
+   * @static
+   * @returns {Color}
+   */
+  static fromMonochrome(ch, a = 1) {
+    return new Color(ch, ch, ch, a, true);
+  }
+
   /**
    * Converts a color from RGB to HSL
    * @private
