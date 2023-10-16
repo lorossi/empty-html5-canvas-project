@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2><span class="attribs"><span class="type-signature"></span></span>Color<span class="signature">(a<span class="signature-attributes">opt</span>, b<span class="signature-attributes">opt</span>, c<span class="signature-attributes">opt</span>, d<span class="signature-attributes">opt</span>, rgb<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>Color<span class="signature">(r<span class="signature-attributes">opt</span>, g<span class="signature-attributes">opt</span>, b<span class="signature-attributes">opt</span>, a<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
         
             <div class="class-description">Class containing colors, either RGB or HSL</div>
         
@@ -45,7 +45,7 @@
     
 
     
-    <h4 class="name" id="Color"><span class="type-signature"></span>new Color<span class="signature">(a<span class="signature-attributes">opt</span>, b<span class="signature-attributes">opt</span>, c<span class="signature-attributes">opt</span>, d<span class="signature-attributes">opt</span>, rgb<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="Color"><span class="type-signature"></span>new Color<span class="signature">(r<span class="signature-attributes">opt</span>, g<span class="signature-attributes">opt</span>, b<span class="signature-attributes">opt</span>, a<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
     
 
     
@@ -53,7 +53,7 @@
 
 
 <div class="description">
-    Create a color by setting the value of its channels.Can be either RGB or HSL
+    Create a color by setting the value of its RGB channels.
 </div>
 
 
@@ -93,7 +93,7 @@
 
         <tr>
             
-                <td class="name"><code>a</code></td>
+                <td class="name"><code>r</code></td>
             
 
             <td class="type">
@@ -125,7 +125,46 @@
                 </td>
             
 
-            <td class="description last">The value of the first channel (red for RGB, hue for HSL)</td>
+            <td class="description last">The value of the Red channel in range [0, 255]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>g</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    0
+                
+                </td>
+            
+
+            <td class="description last">The value of the Green channel in range [0, 255]</td>
         </tr>
 
     
@@ -164,53 +203,14 @@
                 </td>
             
 
-            <td class="description last">The value of the second channel (green for RGB, saturation for HSL)</td>
+            <td class="description last">The value of the Blue channel in range [0, 255]</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>c</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    0
-                
-                </td>
-            
-
-            <td class="description last">The value of the third channel (blue for RGB, lighting for HSL)</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>d</code></td>
+                <td class="name"><code>a</code></td>
             
 
             <td class="type">
@@ -242,46 +242,7 @@
                 </td>
             
 
-            <td class="description last">The value of the alpha channel</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>rgb</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">Boolean</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    true
-                
-                </td>
-            
-
-            <td class="description last">If true, color will be interpreted as RGB. Otherwise, it will be interpreted as HSL</td>
+            <td class="description last">The value of the Alpha channel in range [0, 1]</td>
         </tr>
 
     
@@ -479,7 +440,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line560">line 560</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line567">line 567</a>
     </li></ul></dd>
     
 
@@ -533,7 +494,7 @@
     
 
     
-    <h4 class="name" id=".fromHSL"><span class="type-signature">(static) </span>fromHSL<span class="signature">(h, s, l)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
+    <h4 class="name" id=".fromHSL"><span class="type-signature">(static) </span>fromHSL<span class="signature">(h, s, l, a)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
     
 
     
@@ -593,7 +554,7 @@
 
             
 
-            <td class="description last">Color hue</td>
+            <td class="description last">Color hue in range [0, 360]</td>
         </tr>
 
     
@@ -616,7 +577,7 @@
 
             
 
-            <td class="description last">Color saturation</td>
+            <td class="description last">Color saturation in range [0, 100]</td>
         </tr>
 
     
@@ -639,7 +600,30 @@
 
             
 
-            <td class="description last">Color lighting</td>
+            <td class="description last">Color lighting in range [0, 100]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Color alpha in range [0, 1]</td>
         </tr>
 
     
@@ -680,7 +664,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line538">line 538</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line539">line 539</a>
     </li></ul></dd>
     
 
@@ -890,7 +874,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line584">line 584</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line591">line 591</a>
     </li></ul></dd>
     
 
@@ -944,7 +928,7 @@
     
 
     
-    <h4 class="name" id=".fromRGB"><span class="type-signature">(static) </span>fromRGB<span class="signature">(r, g, b)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
+    <h4 class="name" id=".fromRGB"><span class="type-signature">(static) </span>fromRGB<span class="signature">(r, g, b, a)</span><span class="type-signature"> &rarr; {<a href="Color.html">Color</a>}</span></h4>
     
 
     
@@ -1004,7 +988,7 @@
 
             
 
-            <td class="description last">Red value</td>
+            <td class="description last">Red channel value in range [0, 360]</td>
         </tr>
 
     
@@ -1027,7 +1011,7 @@
 
             
 
-            <td class="description last">Green value</td>
+            <td class="description last">Green channel value in range [0, 360]</td>
         </tr>
 
     
@@ -1050,7 +1034,30 @@
 
             
 
-            <td class="description last">Blue value</td>
+            <td class="description last">Blue channel value in range [0, 360]</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>a</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alpha channel value in range [0, 1]</td>
         </tr>
 
     
@@ -1091,7 +1098,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line550">line 550</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line557">line 557</a>
     </li></ul></dd>
     
 
@@ -1301,7 +1308,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line511">line 511</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line494">line 494</a>
     </li></ul></dd>
     
 
@@ -1344,6 +1351,233 @@
 </dl>
 
     
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="mix"><span class="type-signature"></span>mix<span class="signature">(other, amount, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Mix two colors, returning a new color.Optionally, an easing function can be passed to control the mix.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>other</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Color.html">Color</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line521">line 521</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1407,7 +1641,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line526">line 526</a>
+        <a href="engine.js.html">engine.js</a>, <a href="engine.js.html#line509">line 509</a>
     </li></ul></dd>
     
 
@@ -1477,7 +1711,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Oct 11 2023 11:00:42 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Mon Oct 16 2023 12:01:03 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>

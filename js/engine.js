@@ -511,6 +511,23 @@ class Color {
   }
 
   /**
+   * Mix two colors, returning a new color.
+   * Optionally, an easing function can be passed to control the mix.
+   *
+   * @param {Color} other
+   * @param {number} amount
+   * @param {function} [easing=null]
+   */
+  mix(other, amount, easing = null) {
+    const t = easing ? easing(amount) : amount;
+    const r = this._r + t * (other.r - this._r);
+    const g = this._g + t * (other.g - this._g);
+    const b = this._b + t * (other.b - this._b);
+    const a = this._a + t * (other.a - this._a);
+    return new Color(r, g, b, a);
+  }
+
+  /**
    * Create a color from HSL values
    * @param {number} h Color hue in range [0, 360]
    * @param {number} s Color saturation in range [0, 100]
