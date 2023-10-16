@@ -107,7 +107,8 @@ class Engine {
     // update frame count
     this._frame_count++;
     // update framerate buffer
-    this._fps_buffer.push(1000 / (performance.now() - this._then));
+    const ended = performance.now();
+    this._fps_buffer.push(1000 / (ended - this._then));
     // update current time
     this._then = ended;
   }
