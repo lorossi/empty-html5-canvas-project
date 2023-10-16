@@ -26,8 +26,8 @@ class Engine {
     this._fps = fps;
 
     // init variables
-    this._frameCount = 0;
-    this._noLoop = false;
+    this._frame_count = 0;
+    this._no_loop = false;
     this._then = null;
     this._is_recording = false;
     this._first_frame_recorded = 0;
@@ -79,7 +79,7 @@ class Engine {
   _timeDraw() {
     window.requestAnimationFrame(this._timeDraw.bind(this));
 
-    if (this._noLoop) return;
+    if (this._no_loop) return;
     if (this._then == null) {
       this._then = performance.now();
       return;
@@ -95,7 +95,7 @@ class Engine {
     // save current frame if recording
     if (this._is_recording) {
       // compute frame name
-      const frame_count = this._frameCount - this._first_frame_recorded;
+      const frame_count = this._frame_count - this._first_frame_recorded;
       const filename = frame_count.toString().padStart(7, 0) + ".png";
       // extract data from canvas
       const data = this._canvas.toDataURL("image/png").split(";base64,")[1];
@@ -105,11 +105,9 @@ class Engine {
       this._frames_recorded++;
     }
     // update frame count
-    this._frameCount++;
-    // updated last frame rendered time
-    const ended = performance.now();
+    this._frame_count++;
     // update framerate buffer
-    this._fps_buffer.push(1000 / (ended - this._then));
+    this._fps_buffer.push(1000 / (performance.now() - this._then));
     // update current time
     this._then = ended;
   }
@@ -118,14 +116,14 @@ class Engine {
    * Starts looping the script
    */
   loop() {
-    this._noLoop = false;
+    this._no_loop = false;
   }
 
   /**
    * Stops looping the script
    */
   noLoop() {
-    this._noLoop = true;
+    this._no_loop = true;
   }
 
   /**
@@ -133,7 +131,7 @@ class Engine {
    */
   startRecording() {
     this._is_recording = true;
-    this._first_frame_recorded = this._frameCount;
+    this._first_frame_recorded = this._frame_count;
     this._frames_recorded = 0;
     this._zip = new JSZip();
   }
@@ -171,7 +169,7 @@ class Engine {
    */
   saveFrame(title = null) {
     if (title == null)
-      title = "frame-" + this._frameCount.toString().padStart(6, 0);
+      title = "frame-" + this._frame_count.toString().padStart(6, 0);
 
     this._downloadFile(title, this._canvas.toDataURL("image/png"));
   }
@@ -351,7 +349,7 @@ class Engine {
 
   /**
    * Set the background color for the canvas
-   * @param {String | Number} color
+   * @param {string | number} color
    */
   background(color) {
     // reset background
@@ -359,7 +357,9 @@ class Engine {
     // reset canvas
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
     // set background
-    this._ctx.fillStyle = color;
+    if (typeof color === "number")
+      this._ctx.fillStyle = Color.fromMonochrome(color).rgba;
+    else this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
     this._ctx.restore();
   }
@@ -408,7 +408,7 @@ class Engine {
    * @returns {number} The number of total frames
    */
   get frameCount() {
-    return this._frameCount;
+    return this._frame_count;
   }
 
   /**
@@ -1076,22 +1076,30 @@ class SimplexNoise {
   }
 }
 
+/** Class for a circular buffer */
 class CircularBuffer {
+  /**
+   *
+   * @param {number} size of the buffer
+   */
   constructor(size) {
     this._buffer = new Array(size).fill(null);
     this._size = size;
     this._index = 0;
   }
 
+  /**
+   * Add a value to the buffer
+   * @param {number} value
+   */
   push(value) {
     this._buffer[this._index] = value;
     this._index = (this._index + 1) % this._size;
   }
 
-  getValues() {
-    return [...this._buffer];
-  }
-
+  /**
+   * Get the average of the buffer
+   */
   get average() {
     const items = this._buffer.filter((x) => x != null);
     if (items.length == 0) return 0;
