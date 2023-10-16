@@ -27,13 +27,15 @@ class Engine {
 
     // init variables
     this._frameCount = 0;
-    this._actualFrameRate = 0;
     this._noLoop = false;
     this._then = null;
     this._is_recording = false;
     this._first_frame_recorded = 0;
     this._frames_recorded = 0;
     this._zip = null;
+
+    // actual framerate buffer
+    this._fps_buffer = new CircularBuffer(60);
 
     // mouse coordinates
     this._mouseCoords = new Point(0, 0);
@@ -54,7 +56,7 @@ class Engine {
     // save fps value
     this._fps = fps;
     // time between frames
-    this._fps_interval = 1 / this._fps;
+    this._fps_interval = 1000 / this._fps;
   }
 
   /**
@@ -77,13 +79,14 @@ class Engine {
   _timeDraw() {
     window.requestAnimationFrame(this._timeDraw.bind(this));
 
-    if (!this._then) this._then = performance.now();
+    if (this._noLoop) return;
+    if (this._then == null) {
+      this._then = performance.now();
+      return;
+    }
 
     // time calculations
-    const now = performance.now();
-    const diff = (now - this._then) / 1000;
-    // is it time to draw the next frame?
-    if (diff < this._fps_interval || this._noLoop) return;
+    while (performance.now() - this._then < this._fps_interval) {}
 
     // now draw
     this._ctx.save();
@@ -101,13 +104,14 @@ class Engine {
       // update the count of recorded frames
       this._frames_recorded++;
     }
-
     // update frame count
     this._frameCount++;
     // updated last frame rendered time
-    this._then = now - (diff % this._fps_interval);
-    // update framerate getter
-    this._actualFrameRate = 1 / diff;
+    const ended = performance.now();
+    // update framerate buffer
+    this._fps_buffer.push(1000 / (ended - this._then));
+    // update current time
+    this._then = ended;
   }
 
   /**
@@ -412,7 +416,7 @@ class Engine {
    * @returns {number} The current fps
    */
   get frameRate() {
-    return this._actualFrameRate;
+    return this._fps_buffer.average;
   }
 
   /**
@@ -1069,6 +1073,30 @@ class SimplexNoise {
    */
   get min_value() {
     return -this.max_value;
+  }
+}
+
+class CircularBuffer {
+  constructor(size) {
+    this._buffer = new Array(size).fill(null);
+    this._size = size;
+    this._index = 0;
+  }
+
+  push(value) {
+    this._buffer[this._index] = value;
+    this._index = (this._index + 1) % this._size;
+  }
+
+  getValues() {
+    return [...this._buffer];
+  }
+
+  get average() {
+    const items = this._buffer.filter((x) => x != null);
+    if (items.length == 0) return 0;
+
+    return items.reduce((a, b) => a + b, 0) / items.length;
   }
 }
 
