@@ -470,36 +470,19 @@ class Engine {
 /** Class containing colors, either RGB or HSL */
 class Color {
   /**
-   * Create a color by setting the value of its channels.
-   * Can be either RGB or HSL
-   * @param {number} [a=0] The value of the first channel (red for RGB, hue for HSL)
-   * @param {number} [b=0] The value of the second channel (green for RGB, saturation for HSL)
-   * @param {number} [c=0] The value of the third channel (blue for RGB, lighting for HSL)
-   * @param {number} [d=1] The value of the alpha channel
-   * @param {Boolean} [rgb=true] If true, color will be interpreted as RGB. Otherwise, it will be interpreted as HSL
+   * Create a color by setting the value of its RGB channels.
+   * @param {number} [r=0] The value of the Red channel in range [0, 255]
+   * @param {number} [g=0] The value of the Green channel in range [0, 255]
+   * @param {number} [b=0] The value of the Blue channel in range [0, 255]
+   * @param {number} [a=1] The value of the Alpha channel in range [0, 1]
    */
-  constructor(a = 0, b = 0, c = 0, d = 1, rgb = true) {
-    if (rgb) {
-      this._r = a;
-      this._g = b;
-      this._b = c;
-      this._a = d;
+  constructor(r = 0, g = 0, b = 0, a = 1) {
+    this._r = r;
+    this._g = g;
+    this._b = b;
+    this._a = a;
 
-      this._h = undefined;
-      this._s = undefined;
-      this._l = undefined;
-      this._toHsl();
-    } else {
-      this._h = a;
-      this._s = b;
-      this._l = c;
-      this._a = d;
-
-      this._r = undefined;
-      this._g = undefined;
-      this._b = undefined;
-      this._toRgb();
-    }
+    this._toHsl();
   }
 
   /**
@@ -529,26 +512,33 @@ class Color {
 
   /**
    * Create a color from HSL values
-   * @param {number} h Color hue
-   * @param {number} s Color saturation
-   * @param {number} l Color lighting
+   * @param {number} h Color hue in range [0, 360]
+   * @param {number} s Color saturation in range [0, 100]
+   * @param {number} l Color lighting in range [0, 100]
+   * @param {number} a Color alpha in range [0, 1]
    * @static
    * @returns {Color}
    */
-  static fromHSL(h, s, l) {
-    return new Color(h, s, l, 1, false);
+  static fromHSL(h, s, l, a) {
+    const dummy = new Color();
+    dummy._h = h;
+    dummy._s = s;
+    dummy._l = l;
+    dummy._toRgb();
+    return new Color(dummy._r, dummy._g, dummy._b, a);
   }
 
   /**
    * Create a color from RGB values
-   * @param {number} r Red value
-   * @param {number} g Green value
-   * @param {number} b Blue value
+   * @param {number} r Red channel value in range [0, 360]
+   * @param {number} g Green channel value in range [0, 360]
+   * @param {number} b Blue channel value in range [0, 360]
+   * @param {number} a Alpha channel value in range [0, 1]
    * @static
    * @returns {Color}
    */
-  static fromRGB(r, g, b) {
-    return new Color(r, g, b, 1, true);
+  static fromRGB(r, g, b, a) {
+    return new Color(r, g, b, a);
   }
 
   /**
@@ -570,7 +560,7 @@ class Color {
     const da = a ? parseInt(a, 16) : 1;
 
     // return color
-    return new Color(dr, dg, db, da, true);
+    return new Color(dr, dg, db, da);
   }
 
   /**
@@ -582,7 +572,7 @@ class Color {
    * @returns {Color}
    */
   static fromMonochrome(ch, a = 1) {
-    return new Color(ch, ch, ch, a, true);
+    return new Color(ch, ch, ch, a);
   }
 
   /**
