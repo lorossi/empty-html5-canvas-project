@@ -28,11 +28,12 @@ class Engine {
     // init variables
     this._frame_count = 0;
     this._no_loop = false;
-    this._then = null;
     this._is_recording = false;
     this._first_frame_recorded = 0;
     this._frames_recorded = 0;
     this._zip = null;
+    this._dt = Infinity;
+    this._started = 0;
 
     // actual framerate buffer
     this._fps_buffer = new CircularBuffer(60);
@@ -51,8 +52,6 @@ class Engine {
    * @private
    */
   _setFps(fps) {
-    // keep track of time to handle fps
-    this._then = performance.now();
     // save fps value
     this._fps = fps;
     // time between frames
@@ -77,16 +76,11 @@ class Engine {
    */
 
   _timeDraw() {
+    // request next frame
     window.requestAnimationFrame(this._timeDraw.bind(this));
 
+    // if the sketch is not looping, do nothing
     if (this._no_loop) return;
-    if (this._then == null) {
-      this._then = performance.now();
-      return;
-    }
-
-    // time calculations
-    while (performance.now() - this._then < this._fps_interval) {}
 
     // now draw
     this._ctx.save();
@@ -106,11 +100,15 @@ class Engine {
     }
     // update frame count
     this._frame_count++;
-    // update framerate buffer
     const ended = performance.now();
-    this._fps_buffer.push(1000 / (ended - this._then));
+    // update framerate buffer
+    if (this._started != 0) {
+      const dt = ended - this._started;
+      this._fps_buffer.push(1000 / dt);
+      this._dt = dt;
+    }
     // update current time
-    this._then = ended;
+    this._started = ended;
   }
 
   /**
@@ -360,6 +358,7 @@ class Engine {
     // set background
     if (typeof color === "number")
       this._ctx.fillStyle = Color.fromMonochrome(color).rgba;
+    else if (color instanceof Color) this._ctx.fillStyle = color.rgba;
     else this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
     this._ctx.restore();
@@ -418,6 +417,22 @@ class Engine {
    */
   get frameRate() {
     return this._fps_buffer.average;
+  }
+
+  /**
+   * Get the current framerate as milliseconds per frame (mspf)
+   * @returns {number} The current mspf
+   */
+  get deltaTime() {
+    return this._dt;
+  }
+
+  /**
+   * Set the framerate as milliseconds per frame (mspf)
+   * @param {number} dt The desired mspf
+   */
+  set deltaTime(dt) {
+    this._setFps(1000 / dt);
   }
 
   /**
