@@ -533,6 +533,14 @@ class Color {
   }
 
   /**
+   * Return a copy of the color
+   * @returns {Color}
+   */
+  copy() {
+    return new Color(this._r, this._g, this._b, this._a);
+  }
+
+  /**
    * Create a color from HSL values
    * @param {number} h Color hue in range [0, 360]
    * @param {number} s Color saturation in range [0, 100]
