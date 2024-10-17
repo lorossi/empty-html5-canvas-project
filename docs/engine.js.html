@@ -40,6 +40,174 @@ import {
   createNoise4D,
 } from "./simplex-noise.js";
 
+// colors string to rgb
+const COLOR_NAMES = {
+  black: [0, 0, 0],
+  silver: [192, 192, 192],
+  gray: [128, 128, 128],
+  white: [255, 255, 255],
+  maroon: [128, 0, 0],
+  red: [255, 0, 0],
+  purple: [128, 0, 128],
+  fuchsia: [255, 0, 255],
+  green: [0, 128, 0],
+  lime: [0, 255, 0],
+  olive: [128, 128, 0],
+  yellow: [255, 255, 0],
+  navy: [0, 0, 128],
+  blue: [0, 0, 255],
+  teal: [0, 128, 128],
+  aqua: [0, 255, 255],
+  aliceblue: [240, 248, 255],
+  antiquewhite: [250, 235, 215],
+  aqua: [0, 255, 255],
+  aquamarine: [127, 255, 212],
+  azure: [240, 255, 255],
+  beige: [245, 245, 220],
+  bisque: [255, 228, 196],
+  black: [0, 0, 0],
+  blanchedalmond: [255, 235, 205],
+  blue: [0, 0, 255],
+  blueviolet: [138, 43, 226],
+  brown: [165, 42, 42],
+  burlywood: [222, 184, 135],
+  cadetblue: [95, 158, 160],
+  chartreuse: [127, 255, 0],
+  chocolate: [210, 105, 30],
+  coral: [255, 127, 80],
+  cornflowerblue: [100, 149, 237],
+  cornsilk: [255, 248, 220],
+  crimson: [220, 20, 60],
+  cyan: [0, 255, 255],
+  darkblue: [0, 0, 139],
+  darkcyan: [0, 139, 139],
+  darkgoldenrod: [184, 134, 11],
+  darkgray: [169, 169, 169],
+  darkgreen: [0, 100, 0],
+  darkgrey: [169, 169, 169],
+  darkkhaki: [189, 183, 107],
+  darkmagenta: [139, 0, 139],
+  darkolivegreen: [85, 107, 47],
+  darkorange: [255, 140, 0],
+  darkorchid: [153, 50, 204],
+  darkred: [139, 0, 0],
+  darksalmon: [233, 150, 122],
+  darkseagreen: [143, 188, 143],
+  darkslateblue: [72, 61, 139],
+  darkslategray: [47, 79, 79],
+  darkslategrey: [47, 79, 79],
+  darkturquoise: [0, 206, 209],
+  darkviolet: [148, 0, 211],
+  deeppink: [255, 20, 147],
+  deepskyblue: [0, 191, 255],
+  dimgray: [105, 105, 105],
+  dimgrey: [105, 105, 105],
+  dodgerblue: [30, 144, 255],
+  firebrick: [178, 34, 34],
+  floralwhite: [255, 250, 240],
+  forestgreen: [34, 139, 34],
+  fuchsia: [255, 0, 255],
+  gainsboro: [220, 220, 220],
+  ghostwhite: [248, 248, 255],
+  gold: [255, 215, 0],
+  goldenrod: [218, 165, 32],
+  gray: [128, 128, 128],
+  green: [0, 128, 0],
+  greenyellow: [173, 255, 47],
+  grey: [128, 128, 128],
+  honeydew: [240, 255, 240],
+  hotpink: [255, 105, 180],
+  indianred: [205, 92, 92],
+  indigo: [75, 0, 130],
+  ivory: [255, 255, 240],
+  khaki: [240, 230, 140],
+  lavender: [230, 230, 250],
+  lavenderblush: [255, 240, 245],
+  lawngreen: [124, 252, 0],
+  lemonchiffon: [255, 250, 205],
+  lightblue: [173, 216, 230],
+  lightcoral: [240, 128, 128],
+  lightcyan: [224, 255, 255],
+  lightgoldenrodyellow: [250, 250, 210],
+  lightgray: [211, 211, 211],
+  lightgreen: [144, 238, 144],
+  lightgrey: [211, 211, 211],
+  lightpink: [255, 182, 193],
+  lightsalmon: [255, 160, 122],
+  lightseagreen: [32, 178, 170],
+  lightskyblue: [135, 206, 250],
+  lightslategray: [119, 136, 153],
+  lightslategrey: [119, 136, 153],
+  lightsteelblue: [176, 196, 222],
+  lightyellow: [255, 255, 224],
+  lime: [0, 255, 0],
+  limegreen: [50, 205, 50],
+  linen: [250, 240, 230],
+  magenta: [255, 0, 255],
+  maroon: [128, 0, 0],
+  mediumaquamarine: [102, 205, 170],
+  mediumblue: [0, 0, 205],
+  mediumorchid: [186, 85, 211],
+  mediumpurple: [147, 112, 219],
+  mediumseagreen: [60, 179, 113],
+  mediumslateblue: [123, 104, 238],
+  mediumspringgreen: [0, 250, 154],
+  mediumturquoise: [72, 209, 204],
+  mediumvioletred: [199, 21, 133],
+  midnightblue: [25, 25, 112],
+  mintcream: [245, 255, 250],
+  mistyrose: [255, 228, 225],
+  moccasin: [255, 228, 181],
+  navajowhite: [255, 222, 173],
+  navy: [0, 0, 128],
+  oldlace: [253, 245, 230],
+  olive: [128, 128, 0],
+  olivedrab: [107, 142, 35],
+  orange: [255, 165, 0],
+  orangered: [255, 69, 0],
+  orchid: [218, 112, 214],
+  palegoldenrod: [238, 232, 170],
+  palegreen: [152, 251, 152],
+  paleturquoise: [175, 238, 238],
+  palevioletred: [219, 112, 147],
+  papayawhip: [255, 239, 213],
+  peachpuff: [255, 218, 185],
+  peru: [205, 133, 63],
+  pink: [255, 192, 203],
+  plum: [221, 160, 221],
+  powderblue: [176, 224, 230],
+  purple: [128, 0, 128],
+  red: [255, 0, 0],
+  rosybrown: [188, 143, 143],
+  royalblue: [65, 105, 225],
+  saddlebrown: [139, 69, 19],
+  salmon: [250, 128, 114],
+  sandybrown: [244, 164, 96],
+  seagreen: [46, 139, 87],
+  seashell: [255, 245, 238],
+  sienna: [160, 82, 45],
+  silver: [192, 192, 192],
+  skyblue: [135, 206, 235],
+  slateblue: [106, 90, 205],
+  slategray: [112, 128, 144],
+  slategrey: [112, 128, 144],
+  snow: [255, 250, 250],
+  springgreen: [0, 255, 127],
+  steelblue: [70, 130, 180],
+  tan: [210, 180, 140],
+  teal: [0, 128, 128],
+  thistle: [216, 191, 216],
+  tomato: [255, 99, 71],
+  turquoise: [64, 224, 208],
+  violet: [238, 130, 238],
+  wheat: [245, 222, 179],
+  white: [255, 255, 255],
+  whitesmoke: [245, 245, 245],
+  yellow: [255, 255, 0],
+  yellowgreen: [154, 205, 50],
+};
+Object.freeze(COLOR_NAMES);
+
 /** Class containing the main engine running a canvas */
 class Engine {
   /**
@@ -54,14 +222,17 @@ class Engine {
     this._fps = fps;
 
     // init variables
-    this._frameCount = 0;
-    this._actualFrameRate = 0;
-    this._noLoop = false;
-    this._then = null;
+    this._frame_count = 0;
+    this._no_loop = false;
     this._is_recording = false;
     this._first_frame_recorded = 0;
     this._frames_recorded = 0;
     this._zip = null;
+    this._dt = Infinity;
+    this._started = 0;
+
+    // actual framerate buffer
+    this._fps_buffer = new CircularBuffer(60);
 
     // mouse coordinates
     this._mouseCoords = new Point(0, 0);
@@ -77,12 +248,10 @@ class Engine {
    * @private
    */
   _setFps(fps) {
-    // keep track of time to handle fps
-    this._then = performance.now();
     // save fps value
     this._fps = fps;
     // time between frames
-    this._fps_interval = 1 / this._fps;
+    this._fps_interval = 1000 / this._fps;
   }
 
   /**
@@ -103,24 +272,21 @@ class Engine {
    */
 
   _timeDraw() {
+    // request next frame
     window.requestAnimationFrame(this._timeDraw.bind(this));
 
-    if (!this._then) this._then = performance.now();
-
-    // time calculations
-    const now = performance.now();
-    const diff = (now - this._then) / 1000;
-    // is it time to draw the next frame?
-    if (diff &lt; this._fps_interval || this._noLoop) return;
+    // if the sketch is not looping, do nothing
+    if (this._no_loop) return;
 
     // now draw
     this._ctx.save();
     this.draw();
     this._ctx.restore();
+
     // save current frame if recording
     if (this._is_recording) {
       // compute frame name
-      const frame_count = this._frameCount - this._first_frame_recorded;
+      const frame_count = this._frame_count - this._first_frame_recorded;
       const filename = frame_count.toString().padStart(7, 0) + ".png";
       // extract data from canvas
       const data = this._canvas.toDataURL("image/png").split(";base64,")[1];
@@ -129,27 +295,31 @@ class Engine {
       // update the count of recorded frames
       this._frames_recorded++;
     }
-
     // update frame count
-    this._frameCount++;
-    // updated last frame rendered time
-    this._then = now - (diff % this._fps_interval);
-    // update framerate getter
-    this._actualFrameRate = 1 / diff;
+    this._frame_count++;
+    const ended = performance.now();
+    // update framerate buffer
+    if (this._started != 0) {
+      const dt = ended - this._started;
+      this._fps_buffer.push(1000 / dt);
+      this._dt = dt;
+    }
+    // update current time
+    this._started = ended;
   }
 
   /**
    * Starts looping the script
    */
   loop() {
-    this._noLoop = false;
+    this._no_loop = false;
   }
 
   /**
    * Stops looping the script
    */
   noLoop() {
-    this._noLoop = true;
+    this._no_loop = true;
   }
 
   /**
@@ -157,7 +327,7 @@ class Engine {
    */
   startRecording() {
     this._is_recording = true;
-    this._first_frame_recorded = this._frameCount;
+    this._first_frame_recorded = this._frame_count;
     this._frames_recorded = 0;
     this._zip = new JSZip();
   }
@@ -195,7 +365,7 @@ class Engine {
    */
   saveFrame(title = null) {
     if (title == null)
-      title = "frame-" + this._frameCount.toString().padStart(6, 0);
+      title = "frame-" + this._frame_count.toString().padStart(6, 0);
 
     this._downloadFile(title, this._canvas.toDataURL("image/png"));
   }
@@ -375,7 +545,7 @@ class Engine {
 
   /**
    * Set the background color for the canvas
-   * @param {String | Number} color
+   * @param {string | number} color
    */
   background(color) {
     // reset background
@@ -383,9 +553,27 @@ class Engine {
     // reset canvas
     this._ctx.clearRect(0, 0, this._canvas.width, this._canvas.height);
     // set background
-    this._ctx.fillStyle = color;
+    if (typeof color === "number")
+      this._ctx.fillStyle = Color.fromMonochrome(color).rgba;
+    else if (color instanceof Color) this._ctx.fillStyle = color.rgba;
+    else this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
     this._ctx.restore();
+  }
+
+  /**
+   * Scale the canvas by a factor from the center.
+   * If only one parameter is passed, the canvas will be scaled uniformly.
+   *
+   * @param {number} x
+   * @param {number} [y=null]
+   */
+  scaleFromCenter(x, y = null) {
+    if (y == null) y = x;
+
+    this._ctx.translate(this._canvas.width / 2, this._canvas.height / 2);
+    this._ctx.scale(x, y);
+    this._ctx.translate(-this._canvas.width / 2, -this._canvas.height / 2);
   }
 
   /**
@@ -432,7 +620,7 @@ class Engine {
    * @returns {number} The number of total frames
    */
   get frameCount() {
-    return this._frameCount;
+    return this._frame_count;
   }
 
   /**
@@ -440,7 +628,23 @@ class Engine {
    * @returns {number} The current fps
    */
   get frameRate() {
-    return this._actualFrameRate;
+    return this._fps_buffer.average;
+  }
+
+  /**
+   * Get the current framerate as milliseconds per frame (mspf)
+   * @returns {number} The current mspf
+   */
+  get deltaTime() {
+    return this._dt;
+  }
+
+  /**
+   * Set the framerate as milliseconds per frame (mspf)
+   * @param {number} dt The desired mspf
+   */
+  set deltaTime(dt) {
+    this._setFps(1000 / dt);
   }
 
   /**
@@ -505,6 +709,10 @@ class Color {
    * @param {number} [a=1] The value of the Alpha channel in range [0, 1]
    */
   constructor(r = 0, g = 0, b = 0, a = 1) {
+    if (r > 255 || r &lt; 0 || g > 255 || g &lt; 0 || b > 255 || b &lt; 0)
+      throw new Error("Color values must be in range [0, 255]");
+    if (a > 1 || a &lt; 0) throw new Error("Alpha value must be in range [0, 1]");
+
     this._r = r;
     this._g = g;
     this._b = b;
@@ -553,6 +761,40 @@ class Color {
     const b = this._b + t * (other.b - this._b);
     const a = this._a + t * (other.a - this._a);
     return new Color(r, g, b, a);
+  }
+
+  /**
+   * Darken the color by a certain amount, returning a new color.
+   * Optionally, an easing function can be passed to control the mix.
+   *
+   * @param {number} amount
+   * @param {function} easing
+   * @returns {Color}
+   */
+  darken(amount, easing = null) {
+    const t = easing ? easing(amount) : amount;
+    return this.mix(Color.fromMonochrome(0), t);
+  }
+
+  /**
+   * Lighten the color by a certain amount, returning a new color.
+   * Optionally, an easing function can be passed to control the mix.
+   *
+   * @param {number} amount
+   * @param {function} easing
+   * @returns {Color}
+   */
+  lighten(amount, easing = null) {
+    const t = easing ? easing(amount) : amount;
+    return this.mix(Color.fromMonochrome(255), t);
+  }
+
+  /**
+   * Return a copy of the color
+   * @returns {Color}
+   */
+  copy() {
+    return new Color(this._r, this._g, this._b, this._a);
   }
 
   /**
@@ -618,6 +860,19 @@ class Color {
    */
   static fromMonochrome(ch, a = 1) {
     return new Color(ch, ch, ch, a);
+  }
+
+  /**
+   * Create a color from CSS name. List of name provided by the W3C (https://www.w3.org/wiki/CSS/Properties/color/keywords)
+   * @param {string} name
+   * @static
+   * @returns {Color}
+   */
+  static fromCSS(name) {
+    if (COLOR_NAMES[name] == undefined) {
+      throw new Error("Color name not found");
+    }
+    return new Color(...COLOR_NAMES[name]);
   }
 
   /**
@@ -750,8 +1005,14 @@ class Color {
 
   get hex() {
     return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(
-      this._a
+      this._b
     )}`;
+  }
+
+  get hexa() {
+    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(
+      this._b
+    )}${this._toHex(this._a * 255)}`;
   }
 
   get rgb() {
@@ -833,7 +1094,7 @@ class Color {
   }
 
   get monochrome() {
-    if (this._r == this._g &amp;&amp; this._g == this._b) return this._r;
+    if (this._r == this._g &amp;&amp; this._g == this._b) return true;
     else return false;
   }
 
@@ -853,6 +1114,8 @@ class Point {
    * @param {number} y y-coordinate
    */
   constructor(x, y) {
+    if (arguments.length != 2)
+      throw new Error("Point must have only two coordinates");
     this._x = x;
     this._y = y;
   }
@@ -1100,6 +1363,38 @@ class SimplexNoise {
   }
 }
 
+/** Class for a circular buffer */
+class CircularBuffer {
+  /**
+   *
+   * @param {number} size of the buffer
+   */
+  constructor(size) {
+    this._buffer = new Array(size).fill(null);
+    this._size = size;
+    this._index = 0;
+  }
+
+  /**
+   * Add a value to the buffer
+   * @param {number} value
+   */
+  push(value) {
+    this._buffer[this._index] = value;
+    this._index = (this._index + 1) % this._size;
+  }
+
+  /**
+   * Get the average of the buffer
+   */
+  get average() {
+    const items = this._buffer.filter((x) => x != null);
+    if (items.length == 0) return 0;
+
+    return items.reduce((a, b) => a + b, 0) / items.length;
+  }
+}
+
 export { Point, Color, Engine, SimplexNoise };
 </code></pre>
         </article>
@@ -1111,13 +1406,13 @@ export { Point, Color, Engine, SimplexNoise };
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Color.html">Color</a></li><li><a href="Engine.html">Engine</a></li><li><a href="Point.html">Point</a></li><li><a href="SimplexNoise.html">SimplexNoise</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CircularBuffer.html">CircularBuffer</a></li><li><a href="Color.html">Color</a></li><li><a href="Engine.html">Engine</a></li><li><a href="Point.html">Point</a></li><li><a href="SimplexNoise.html">SimplexNoise</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Mon Oct 16 2023 12:01:03 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Thu Oct 17 2024 14:50:49 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
