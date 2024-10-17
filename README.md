@@ -1,6 +1,6 @@
 # Empty HTML5 Canvas Project
 
-I got bored of creating a new document every time.
+I got bored by creating a new document every time.
 
 Contains all the needed files to create a new HTML5 page with a JS canvas inside.
 
@@ -26,7 +26,7 @@ All you have to do is write your code inside the `sketch.js` file. Inside you wi
 You also have access to some class attributes:
 
 - `this.width` and `this.height` containing the size (in pixels) of the canvas
-- `this.frameCount` and `this.frameRate` containing, well, the number of rendered frames and the current framerate. You can also set the frame rate using this variable (by default the draw function runs ad 60fps).
+- `this.frameCount` and `this.frameRate` containing, well, the number of rendered frames and the current frame rate. You can also set the frame rate using this variable (by default the draw function runs ad 60fps).
 - `this.ctx` and `this.canvas`, with the former needed in order to draw
 
 and some internal functions:
@@ -35,7 +35,7 @@ and some internal functions:
 - `this.background(color)` that will reset the background color of the canvas
 - `this.saveFrame(filename)` that will save the currently rendered frame as a `.png` image, with an optional filename
 - a lot of event handlers:
-  - `this.click(x, y)`,  `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp()`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
+  - `this.click(x, y)`, `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp()`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
   - `this.keyPress(key, code)`, `this.keyDown(key, code)`, `this.keyUp(key, code)` regarding keyboard interactions
 
 as well as recording capabilities:
@@ -53,7 +53,7 @@ Furthermore, four additional classes are included:
 
 I recommend you to read the documentation of the classes to understand how they work and their methods.
 
-In order to draw on the canvas, all the [built in javascript functions](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) have to be used.
+In order to draw on the canvas, all the [built-in JavaScript functions](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) have to be used.
 
 ## Credits
 
@@ -62,7 +62,7 @@ I don't claim any rights over the external libraries and assets packaged inside 
 
 Font [Roboto](https://fonts.google.com/specimen/Roboto), made by Google, is packaged in this repository.
 
-[JSzip](https://stuk.github.io/jszip/) library, made by [Stuart Knightley](https://github.com/Stuk), is packaged in this repository.
+Library [JSzip](https://stuk.github.io/jszip/) library, made by [Stuart Knightley](https://github.com/Stuk), is packaged in this repository.
 
-[simplex-noise.js](https://github.com/jwagner/simplex-noise.js) slightly, made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
+Library [simplex-noise.js](https://github.com/jwagner/simplex-noise.js) slightly, made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
 I have made some small changes to the original version.
