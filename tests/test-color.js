@@ -185,6 +185,18 @@ describe("Color test", () => {
 
     const darkened = white.darken(1);
     chai.expect(darkened.equals(black)).to.be.true;
+
+    // test lightening and darkening
+    const mid = new Color(128, 128, 128, 1);
+    for (let t = 1; t <= 128; t++) {
+      const l_expected = mid.lighten(t);
+      const l_calculated = mid.mix(white, t);
+      chai.expect(l_expected.equals(l_calculated)).to.be.true;
+
+      const d_expected = mid.darken(t);
+      const d_calculated = mid.mix(black, t);
+      chai.expect(d_expected.equals(d_calculated)).to.be.true;
+    }
   });
 
   it("Static Color Methods", () => {

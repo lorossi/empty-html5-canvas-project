@@ -728,10 +728,10 @@ class Color {
    */
   mix(other, amount, easing = null) {
     const t = easing ? easing(amount) : amount;
-    const r = this._r + t * (other.r - this._r);
-    const g = this._g + t * (other.g - this._g);
-    const b = this._b + t * (other.b - this._b);
-    const a = this._a + t * (other.a - this._a);
+    const r = this._clamp(this._r + t * (other.r - this._r), 0, 255);
+    const g = this._clamp(this._g + t * (other.g - this._g), 0, 255);
+    const b = this._clamp(this._b + t * (other.b - this._b), 0, 255);
+    const a = this._clamp(this._a + t * (other.a - this._a), 0, 1);
     return new Color(r, g, b, a);
   }
 
@@ -1335,7 +1335,9 @@ class SimplexNoise {
   }
 }
 
-/** Class for a circular buffer */
+/** Class for a circular buffer
+ * @private
+ */
 class CircularBuffer {
   /**
    *
