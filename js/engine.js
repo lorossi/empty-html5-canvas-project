@@ -690,7 +690,7 @@ class Color {
     this._b = b;
     this._a = a;
 
-    this._toHsl();
+    this._calculateHsl();
   }
 
   /**
@@ -780,10 +780,10 @@ class Color {
    */
   static fromHSL(h, s, l, a) {
     const dummy = new Color();
-    dummy._h = h;
-    dummy._s = s;
-    dummy._l = l;
-    dummy._toRgb();
+    dummy.h = h;
+    dummy.s = s;
+    dummy.l = l;
+    dummy._calculateRgb();
     return new Color(dummy._r, dummy._g, dummy._b, a);
   }
 
@@ -806,7 +806,7 @@ class Color {
    * @static
    * @returns {Color}
    */
-  static fromHEX(hex) {
+  static fromHex(hex) {
     // regex to extract r, g, b, a values from hex string
     const regex = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})?$/i;
     // extract values from hex string
@@ -820,6 +820,17 @@ class Color {
 
     // return color
     return new Color(dr, dg, db, da);
+  }
+
+  /**
+   * Create a color from a hexadecimal string
+   * @deprecated Use Color.fromHex instead
+   * @param {string} hex
+   * @static
+   * @returns {Color}
+   */
+  static fromHEX(hex) {
+    return Color.fromHex(hex);
   }
 
   /**
@@ -851,7 +862,7 @@ class Color {
    * Converts a color from RGB to HSL
    * @private
    */
-  _toHsl() {
+  _calculateHsl() {
     const r = this._r / 255;
     const g = this._g / 255;
     const b = this._b / 255;
@@ -890,7 +901,7 @@ class Color {
    * Converts a color from HSL to RGB
    * @private
    */
-  _toRgb() {
+  _calculateRgb() {
     if (this._s == 0) {
       this._r = this._l;
       this._g = this._l;
@@ -923,9 +934,8 @@ class Color {
    * @param {number} dec The decimal number
    * @private
    */
-  _toHex(dec) {
-    dec = Math.floor(dec);
-    return dec.toString(16).padStart(2, 0).toUpperCase();
+  _decToHex(dec) {
+    return Math.floor(dec).toString(16).padStart(2, 0).toUpperCase();
   }
 
   /**
@@ -933,7 +943,7 @@ class Color {
    * @param {number} hex The hexadecimal number
    * @private
    */
-  _toDec(hex) {
+  _hexToDec(hex) {
     return parseInt(hex, 16);
   }
 
@@ -963,44 +973,74 @@ class Color {
     return value;
   }
 
-  set hex(h) {
-    this._r = this._toDec(h.slice(1, 3));
-    this._g = this._toDec(h.slice(3, 5));
-    this._b = this._toDec(h.slice(5, 7));
+  set hex(hex) {
+    this._r = this._hexToDec(hex.slice(1, 3));
+    this._g = this._hexToDec(hex.slice(3, 5));
+    this._b = this._hexToDec(hex.slice(5, 7));
 
-    const a = parseInt(h.slice(7, 9), 16);
+    const a = parseInt(hex.slice(7, 9), 16);
     if (isNaN(a)) this._a = 1;
     else this._a = a;
 
-    this._toHsl();
+    this._calculateHsl();
+  }
+
+  get_hex() {
+    return `#${this._decToHex(this._r)}${this._decToHex(
+      this._g
+    )}${this._decToHex(this._b)}`;
   }
 
   get hex() {
-    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(
-      this._b
-    )}`;
+    return this.get_hex();
+  }
+
+  get_hexa() {
+    return `#${this._decToHex(this._r)}${this._decToHex(
+      this._g
+    )}${this._decToHex(this._b)}${this._decToHex(this._a * 255)}`;
   }
 
   get hexa() {
-    return `#${this._toHex(this._r)}${this._toHex(this._g)}${this._toHex(
-      this._b
-    )}${this._toHex(this._a * 255)}`;
+    return this.get_hexa();
+  }
+
+  get_rgb() {
+    const [r, g, b] = [this._r, this._g, this._b].map(Math.floor);
+    return `rgb(${r}, ${g}, ${b})`;
   }
 
   get rgb() {
-    return `rgb(${this._r}, ${this._g}, ${this._b})`;
+    return this.get_rgb();
+  }
+
+  get_rgba() {
+    const [r, g, b] = [this._r, this._g, this._b].map(Math.floor);
+    const a = this._a;
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
 
   get rgba() {
-    return `rgba(${this._r}, ${this._g}, ${this._b}, ${this._a})`;
+    return this.get_rgba();
+  }
+
+  get_hsl() {
+    const [h, s, l] = [this._h, this._s, this._l].map(Math.floor);
+    return `hsl(${h}, ${s}%, ${l}%)`;
   }
 
   get hsl() {
-    return `hsl(${this._h}, ${this._s}%, ${this._l}%)`;
+    return this.get_hsl();
+  }
+
+  get_hsla() {
+    const [h, s, l] = [this._h, this._s, this._l].map(Math.floor);
+    const a = this._a;
+    return `hsla(${h}, ${s}%, ${l}%, ${a})`;
   }
 
   get hsla() {
-    return `hsla(${this._h}, ${this._s}%, ${this._l}%, ${this._a})`;
+    return this.get_hsla();
   }
 
   get r() {
@@ -1009,7 +1049,7 @@ class Color {
 
   set r(x) {
     this._r = Math.floor(this._clamp(x, 0, 255));
-    this._toHsl();
+    this._calculateHsl();
   }
 
   get g() {
@@ -1018,7 +1058,7 @@ class Color {
 
   set g(x) {
     this._g = Math.floor(this._clamp(x, 0, 255));
-    this._toHsl();
+    this._calculateHsl();
   }
 
   get b() {
@@ -1027,7 +1067,7 @@ class Color {
 
   set b(x) {
     this._b = Math.floor(this._clamp(x, 0, 255));
-    this._toHsl();
+    this._calculateHsl();
   }
 
   get a() {
@@ -1044,7 +1084,7 @@ class Color {
 
   set h(x) {
     this._h = Math.floor(this._wrap(x, 0, 360));
-    this._toRgb();
+    this._calculateRgb();
   }
 
   get s() {
@@ -1053,7 +1093,7 @@ class Color {
 
   set s(x) {
     this._s = Math.floor(this._clamp(x, 0, 100));
-    this._toRgb();
+    this._calculateRgb();
   }
 
   get l() {
@@ -1062,19 +1102,12 @@ class Color {
 
   set l(x) {
     this._l = Math.floor(this._clamp(x, 0, 255));
-    this._toRgb();
+    this._calculateRgb();
   }
 
-  get monochrome() {
+  get is_monochrome() {
     if (this._r == this._g && this._g == this._b) return true;
     else return false;
-  }
-
-  set monochrome(s) {
-    this._r = s;
-    this._g = s;
-    this._b = s;
-    this._toHsl();
   }
 }
 
