@@ -63,11 +63,18 @@ describe("Color test", () => {
     chai.expect(white.rgba).to.equal("rgba(255, 255, 255, 1)");
     chai.expect(white.hsl).to.equal("hsl(0, 0%, 100%)");
     chai.expect(white.hsla).to.equal("hsla(0, 0%, 100%, 1)");
+    chai.expect(white.get_rgb()).to.equal("rgb(255, 255, 255)");
+    chai.expect(white.get_rgba()).to.equal("rgba(255, 255, 255, 1)");
+    chai.expect(white.get_hsl()).to.equal("hsl(0, 0%, 100%)");
+    chai.expect(white.get_hsla()).to.equal("hsla(0, 0%, 100%, 1)");
     chai.expect(white.h).to.equal(0);
     chai.expect(white.s).to.equal(0);
     chai.expect(white.l).to.equal(100);
     chai.expect(white.hex).to.equal("#FFFFFF");
     chai.expect(white.hexa).to.equal("#FFFFFFFF");
+    chai.expect(white.get_hex()).to.equal("#FFFFFF");
+    chai.expect(white.get_hexa()).to.equal("#FFFFFFFF");
+    chai.expect(white.is_monochrome).to.be.true;
     chai.expect(white.toString()).to.equal("#FFFFFF");
 
     const black = new Color(0, 0, 0, 0);
@@ -209,7 +216,7 @@ describe("Color test", () => {
       chai
         .expect(c.hex)
         .to.equal(`#${dec_to_hex(i)}${dec_to_hex(i)}${dec_to_hex(i)}`);
-      chai.expect(c.monochrome).to.be.true;
+      chai.expect(c.is_monochrome).to.be.true;
     }
 
     // test hsl
@@ -234,6 +241,22 @@ describe("Color test", () => {
     chai.expect(() => Color.fromHEX("")).to.throw;
   });
 
+  it("Test getters", () => {
+    const c = new Color(255, 0, 0, 1);
+    chai.expect(c.get_rgb()).to.equal("rgb(255, 0, 0)");
+    chai.expect(c.get_rgba()).to.equal("rgba(255, 0, 0, 1)");
+    chai.expect(c.get_hsl()).to.equal("hsl(0, 100%, 50%)");
+    chai.expect(c.get_hsla()).to.equal("hsla(0, 100%, 50%, 1)");
+    chai.expect(c.get_hex()).to.equal("#FF0000");
+    chai.expect(c.get_hexa()).to.equal("#FF0000FF");
+    chai.expect(c.rgb).to.equal("rgb(255, 0, 0)");
+    chai.expect(c.rgba).to.equal("rgba(255, 0, 0, 1)");
+    chai.expect(c.hsl).to.equal("hsl(0, 100%, 50%)");
+    chai.expect(c.hsla).to.equal("hsla(0, 100%, 50%, 1)");
+    chai.expect(c.hex).to.equal("#FF0000");
+    chai.expect(c.hexa).to.equal("#FF0000FF");
+  });
+
   it("Color names", () => {
     for (let i = 0; i < COLOR_NAMES.length; i++) {
       const [name, hex, rgb] = COLOR_NAMES[i];
@@ -253,7 +276,7 @@ describe("Color test", () => {
   it("Known values", () => {
     for (const pair of COLOR_PAIRS) {
       const rgb = new Color(pair.rgb[0], pair.rgb[1], pair.rgb[2]);
-      const hex = Color.fromHEX(pair.hex);
+      const hex = Color.fromHex(pair.hex);
       const hsl = Color.fromHSL(pair.hsl[0], pair.hsl[1], pair.hsl[2]);
 
       chai.expect(rgb.r).to.equal(pair.rgb[0]);
