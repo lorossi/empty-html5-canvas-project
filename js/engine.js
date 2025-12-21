@@ -961,7 +961,7 @@ class Color {
     const dr = parseInt(r, 16);
     const dg = parseInt(g, 16);
     const db = parseInt(b, 16);
-    const da = a ? parseInt(a, 16) : 1;
+    const da = a ? parseInt(a, 16) / 255 : 1;
 
     // return color
     return new Color(dr, dg, db, da);
