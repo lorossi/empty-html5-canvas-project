@@ -1259,13 +1259,29 @@ class Color {
   }
 
   set l(x) {
-    this._l = Math.floor(this._clamp(x, 0, 255));
+    this._l = Math.floor(this._clamp(x, 0, 100));
     this._calculateRgb();
   }
 
   get is_monochrome() {
     if (this._r == this._g && this._g == this._b) return true;
     else return false;
+  }
+
+  get luminance() {
+    // relative luminance calculation according to WCAG 2.0
+    const RsRGB = this._r / 255;
+    const GsRGB = this._g / 255;
+    const BsRGB = this._b / 255;
+
+    const R =
+      RsRGB <= 0.03928 ? RsRGB / 12.92 : Math.pow((RsRGB + 0.055) / 1.055, 2.4);
+    const G =
+      GsRGB <= 0.03928 ? GsRGB / 12.92 : Math.pow((GsRGB + 0.055) / 1.055, 2.4);
+    const B =
+      BsRGB <= 0.03928 ? BsRGB / 12.92 : Math.pow((BsRGB + 0.055) / 1.055, 2.4);
+
+    return 0.2126 * R + 0.7152 * G + 0.0722 * B;
   }
 }
 

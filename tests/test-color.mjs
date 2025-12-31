@@ -1,5 +1,5 @@
 import { Color } from "../js/engine.js";
-import { COLOR_NAMES } from "./color-names.js";
+import { COLOR_NAMES } from "./color-names.mjs";
 
 const lerp = (x, y, t) => x * (1 - t) + y * t;
 const color_lerp = (c1, c2, t) => {
@@ -28,6 +28,7 @@ const dec_to_hex = (dec) => {
   return hex.length === 1 ? `0${hex}` : hex;
 };
 const random_int = (a, b) => Math.floor(Math.random() * (b - a + 1) + a);
+const random_float = (a, b) => Math.random() * (b - a) + a;
 
 const COLOR_PAIRS = [
   { rgb: [0, 191, 255], hex: "#00BFFF", hsl: [195, 100, 50] },
@@ -293,7 +294,38 @@ describe("Color test", () => {
     }
   });
 
-  it("Random tests", () => {
+  it("Randomized conversion consistency", () => {
+    for (let i = 0; i < 100; i++) {
+      const r = random_int(0, 255);
+      const g = random_int(0, 255);
+      const b = random_int(0, 255);
+      const a = random_float(0, 1);
+
+      const color_rgb = new Color(r, g, b, a);
+      const hex = color_rgb.hexa;
+
+      const color_from_hex = Color.fromHex(hex);
+
+      chai.expect(color_from_hex.r).to.equal(r);
+      chai.expect(color_from_hex.g).to.equal(g);
+      chai.expect(color_from_hex.b).to.equal(b);
+      chai.expect(color_from_hex.a).to.closeTo(a, 0.01);
+
+      const h = color_rgb.h;
+      const s = color_rgb.s;
+      const l = color_rgb.l;
+      const a_hsl = color_rgb.a;
+
+      const color_from_hsl = Color.fromHSL(h, s, l, a_hsl);
+
+      chai.expect(color_from_hsl.r).to.closeTo(r, 8);
+      chai.expect(color_from_hsl.g).to.closeTo(g, 8);
+      chai.expect(color_from_hsl.b).to.closeTo(b, 8);
+      chai.expect(color_from_hsl.a).to.closeTo(a, 0.01);
+    }
+  });
+
+  it("Randomized tests", () => {
     for (let i = 0; i < 100; i++) {
       const r = random_int(0, 255);
       const g = random_int(0, 255);
