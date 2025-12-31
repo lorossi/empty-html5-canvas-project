@@ -1452,18 +1452,18 @@ class SimplexNoise {
   /**
    * Get the noise value at a given point
    * @param {number} x x-coordinate
-   * @param {number} [y] y-coordinate
+   * @param {number} y y-coordinate
    * @param {number} [z] z-coordinate
    * @param {number} [w] w-coordinate
    * @returns {number} Noise value at the given point in range [-1, 1]
    */
-  noise(x, y = null, z = null, w = null) {
+  noise(x, y, z = null, w = null) {
     let n = 0;
     let amp = 1;
     let freq = 1;
 
     // calculate the number of parameters and the noise function to use
-    const dim = Math.min(Math.max(arguments.length, 1), 4);
+    const dim = Math.min(Math.max(arguments.length, 2), 4);
     // iterate over the octaves to five a more detailed noise value
     for (let i = 0; i < this._octaves; i++) {
       n += this._noise[dim](x * freq, y * freq, z * freq, w * freq) * amp;
