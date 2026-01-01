@@ -1,1 +1,10 @@
+# IDE
 .vscode
+
+# npm
+node_modules
+package-lock.json
+
+# Artifacts
+/docs
+/coverage
