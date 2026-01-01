@@ -5,9 +5,10 @@
     "js/**/*.mjs"
   ],
   "reporter": [
-    "html",
     "text",
-    "lcov"
+    "lcov",
+    "html",
+    "cobertura"
   ],
   "check-coverage": true,
   "lines": 0
