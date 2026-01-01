@@ -2,7 +2,13 @@ name: Build and Deploy Docs
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+    paths:
+      - 'js/**'
+      - 'README.md'
+      - 'package.json'
+      - '.github/workflows/docs.yml'
 
 jobs:
   build-and-deploy-docs:
