@@ -1,4 +1,5 @@
 import { Point } from "../js/engine.js";
+import * as chai from "chai";
 
 const distance = (x, y) => Math.hypot(x, y);
 
