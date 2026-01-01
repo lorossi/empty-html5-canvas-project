@@ -1,7 +1,8 @@
 {
   "all": true,
   "include": [
-    "src/**/*.mjs"
+    "js/**/*.js",
+    "js/**/*.mjs"
   ],
   "reporter": [
     "html",
