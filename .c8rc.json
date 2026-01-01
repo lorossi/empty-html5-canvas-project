@@ -1,0 +1,15 @@
+{
+  "all": true,
+  "include": [
+    "js/**/*.js",
+    "js/**/*.mjs"
+  ],
+  "reporter": [
+    "text",
+    "lcov",
+    "html",
+    "cobertura"
+  ],
+  "check-coverage": true,
+  "lines": 0
+}

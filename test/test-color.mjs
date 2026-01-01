@@ -1,5 +1,6 @@
 import { Color } from "../js/engine.js";
 import { COLOR_NAMES } from "./color-names.mjs";
+import * as chai from "chai";
 
 const lerp = (x, y, t) => x * (1 - t) + y * t;
 const color_lerp = (c1, c2, t) => {
