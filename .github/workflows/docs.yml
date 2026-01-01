@@ -10,8 +10,16 @@ on:
       - 'package.json'
       - '.github/workflows/docs.yml'
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+env:
+  SITE_DIR: _site
+
 jobs:
-  build-and-deploy-docs:
+  build-docs:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,8 +38,22 @@ jobs:
       - name: Generate documentation
         run: npm run docs
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Prepare files for deployment
+        run: |
+          mkdir -p ${{ env.SITE_DIR }}
+          cp -r docs/* ${{ env.SITE_DIR }}/
+
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs
+          path: ${{ env.SITE_DIR }}
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build-docs
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
