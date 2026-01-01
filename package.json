@@ -9,7 +9,8 @@
   },
   "scripts": {
     "test": "c8 mocha 'test/**/*.mjs'",
-    "docs": "jsdoc js/*.js -d docs/"
+    "docs": "jsdoc js/*.js -d docs/",
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r js/ css/ dist/ && terser dist/js/engine.js -c -m -o dist/js/engine.js"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,8 @@
     "chai": "^6.2.2",
     "jsdoc": "^4.0.5",
     "mocha": "^11.7.5"
+  },
+  "dependencies": {
+    "terser": "^5.44.1"
   }
 }
