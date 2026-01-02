@@ -10,6 +10,11 @@ describe("Point test", () => {
     chai.expect(() => new Point(0, 0, 0)).to.throw();
   });
 
+  it("Point methods", () => {
+    const p = new Point(1, 1);
+    chai.expect(p.toString()).to.equal("(1, 1)");
+  });
+
   it("Point equals", () => {
     const p1 = new Point(1, 1);
     const p2 = new Point(1, 1);

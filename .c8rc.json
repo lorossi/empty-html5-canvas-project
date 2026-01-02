@@ -4,6 +4,11 @@
     "js/**/*.js",
     "js/**/*.mjs"
   ],
+  "exclude": [
+    "js/jszip.js",
+    "js/simplex-noise.js",
+    "js/xor128.js"
+  ],
   "reporter": [
     "text",
     "lcov",

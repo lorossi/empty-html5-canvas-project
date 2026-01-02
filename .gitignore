@@ -8,3 +8,7 @@ dist
 # Artifacts
 /docs
 /coverage
+
+# Python
+.venv
+__pycache__
