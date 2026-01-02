@@ -1,5 +1,5 @@
-import { Color } from "../js/engine.js";
-import { COLOR_NAMES } from "./color-names.mjs";
+import { Color, Engine } from "../js/engine.js";
+import { COLOR_NAMES, SANZO_WADA_COLORS } from "./color-names.mjs";
 import * as chai from "chai";
 
 const lerp = (x, y, t) => x * (1 - t) + y * t;
@@ -18,6 +18,8 @@ const color_equal = (c1, c2, epsilon = 0.0001) => {
     Math.abs(c1.a - c2.a) < epsilon
   );
 };
+const color_luminance = (c) => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
+
 const easeInPoly = (t, n = 2) => Math.pow(t, n);
 const easeOutPoly = (t, n = 2) => 1 - Math.pow(1 - t, n);
 const easeInOutPoly = (t, n = 2) => {
@@ -42,6 +44,7 @@ const COLOR_PAIRS = [
 describe("Color test", () => {
   it("instance of Color", () => {
     chai.expect(new Color()).to.be.an.instanceof(Color);
+    chai.expect(() => new Color()).to.not.throw();
     chai.expect(() => new Color(0, 0, 0, 0)).to.not.throw();
     chai.expect(() => new Color(255, 255, 255, 1)).to.not.throw();
     chai.expect(() => new Color(0, 0, 0, 2)).to.throw();
@@ -52,6 +55,10 @@ describe("Color test", () => {
     chai.expect(() => new Color(256, 0, 0, 1)).to.throw();
     chai.expect(() => new Color(0, 256, 0, 1)).to.throw();
     chai.expect(() => new Color(0, 0, 256, 1)).to.throw();
+
+    // default color
+    const c1 = new Color();
+    chai.expect(c1.hex).to.equal("#000000");
   });
 
   it("Color properties", () => {
@@ -78,6 +85,7 @@ describe("Color test", () => {
     chai.expect(white.get_hexa()).to.equal("#FFFFFFFF");
     chai.expect(white.is_monochrome).to.be.true;
     chai.expect(white.toString()).to.equal("#FFFFFF");
+    chai.expect(white.luminance).to.equal(1);
 
     const black = new Color(0, 0, 0, 0);
     chai.expect(black).to.be.an.instanceof(Color);
@@ -95,6 +103,8 @@ describe("Color test", () => {
     chai.expect(black.hex).to.equal("#000000");
     chai.expect(black.hexa).to.equal("#00000000");
     chai.expect(black.toString()).to.equal("#000000");
+    chai.expect(black.is_monochrome).to.be.true;
+    chai.expect(black.luminance).to.equal(0);
   });
 
   it("Color Equality", () => {
@@ -110,6 +120,7 @@ describe("Color test", () => {
   it("Color Copy", () => {
     const c1 = new Color();
     const c2 = c1.copy();
+
     chai.expect(c1).to.be.an.instanceof(Color);
     chai.expect(c2).to.be.an.instanceof(Color);
     chai.expect(c1.equals(c2)).to.be.true;
@@ -160,6 +171,40 @@ describe("Color test", () => {
     chai.expect(c2.hex).to.equal("#FF0000");
     chai.expect(c2.hexa).to.equal("#FF00007F");
     chai.expect(c2.toString()).to.equal("#FF0000");
+
+    // Test setting hex
+    const c3 = new Color();
+    c3.hex = "#FFFFFF";
+    chai.expect(c3.r).to.equal(255);
+    chai.expect(c3.g).to.equal(255);
+    chai.expect(c3.b).to.equal(255);
+    chai.expect(c3.a).to.equal(1);
+    chai.expect(c3.rgb).to.equal("rgb(255, 255, 255)");
+    chai.expect(c3.rgba).to.equal("rgba(255, 255, 255, 1)");
+    chai.expect(c3.hsl).to.equal("hsl(0, 0%, 100%)");
+    chai.expect(c3.hsla).to.equal("hsla(0, 0%, 100%, 1)");
+    chai.expect(c3.h).to.equal(0);
+    chai.expect(c3.s).to.equal(0);
+    chai.expect(c3.l).to.equal(100);
+    chai.expect(c3.hex).to.equal("#FFFFFF");
+    chai.expect(c3.hexa).to.equal("#FFFFFFFF");
+    chai.expect(c3.toString()).to.equal("#FFFFFF");
+
+    // Test setting hexa
+    const c4 = new Color();
+    c4.hex = "#FFFFFF80";
+    chai.expect(c4.r).to.equal(255);
+    chai.expect(c4.g).to.equal(255);
+    chai.expect(c4.b).to.equal(255);
+    chai.expect(c4.a).to.be.closeTo(0.5, 0.05);
+    chai.expect(c4.rgb).to.equal("rgb(255, 255, 255)");
+    chai.expect(c4.hsl).to.equal("hsl(0, 0%, 100%)");
+    chai.expect(c4.h).to.equal(0);
+    chai.expect(c4.s).to.equal(0);
+    chai.expect(c4.l).to.equal(100);
+    chai.expect(c4.hex).to.equal("#FFFFFF");
+    chai.expect(c4.hexa).to.equal("#FFFFFF80");
+    chai.expect(c4.toString()).to.equal("#FFFFFF");
   });
 
   it("Color Mixing", () => {
@@ -184,7 +229,9 @@ describe("Color test", () => {
         chai.expect(expected.equals(calculated)).to.be.true;
       }
     }
+  });
 
+  it("Lighten and Darken", () => {
     // lighten and darken
     const white = new Color(255, 255, 255, 1);
     const black = new Color(0, 0, 0, 1);
@@ -205,6 +252,20 @@ describe("Color test", () => {
       const d_expected = mid.darken(t);
       const d_calculated = mid.mix(black, t);
       chai.expect(d_expected.equals(d_calculated)).to.be.true;
+    }
+
+    // lighten and darken with easing
+    const easing_functions = [easeInPoly, easeOutPoly, easeInOutPoly];
+    for (let t = 0; t <= 1; t += 0.01) {
+      for (const easing of easing_functions) {
+        const l_expected = mid.mix(white, easing(t, 2));
+        const l_calculated = mid.lighten(t, easing);
+        chai.expect(l_expected.equals(l_calculated)).to.be.true;
+
+        const d_expected = mid.mix(black, easing(t, 2));
+        const d_calculated = mid.darken(t, easing);
+        chai.expect(d_expected.equals(d_calculated)).to.be.true;
+      }
     }
   });
 
@@ -232,15 +293,49 @@ describe("Color test", () => {
     chai.expect(c1.hex).to.equal("#FF0000");
 
     // test hex
-    const c2 = Color.fromHEX("#FF0000");
+    const c2 = Color.fromHex("#FF0000");
     chai.expect(c2.r).to.equal(255);
     chai.expect(c2.g).to.equal(0);
     chai.expect(c2.b).to.equal(0);
     chai.expect(c2.hex).to.equal("#FF0000");
+    const c2_deprecated = Color.fromHEX("FF0000");
+    chai.expect(c2_deprecated.r).to.equal(255);
+    chai.expect(c2_deprecated.g).to.equal(0);
+    chai.expect(c2_deprecated.b).to.equal(0);
+    chai.expect(c2_deprecated.hex).to.equal("#FF0000");
 
-    chai.expect(() => Color.fromHEX("#FF000")).to.throw();
-    chai.expect(() => Color.fromHEX("##FF000F")).to.throw();
-    chai.expect(() => Color.fromHEX("")).to.throw;
+    chai.expect(() => Color.fromHex("#FF000")).to.throw();
+    chai.expect(() => Color.fromHex("##FF000F")).to.throw();
+    chai.expect(() => Color.fromHex("")).to.throw;
+
+    // test rgb
+    const c3 = Color.fromRGB(255, 0, 0);
+    chai.expect(c3.r).to.equal(255);
+    chai.expect(c3.g).to.equal(0);
+    chai.expect(c3.b).to.equal(0);
+    chai.expect(c3.hex).to.equal("#FF0000");
+
+    // test Sanzo-Wada colors
+    const c4 = Color.fromSanzoWada("peachred");
+    chai.expect(c4.r).to.equal(255);
+    chai.expect(c4.g).to.equal(51);
+    chai.expect(c4.b).to.equal(25);
+    chai.expect(c4.hex).to.equal("#FF3319");
+  });
+
+  it("Test Sanzo-Wada colors", () => {
+    for (const [name, hex, rgb] of SANZO_WADA_COLORS) {
+      const color = Color.fromSanzoWada(name);
+      chai.expect(color.r).to.equal(rgb[0]);
+      chai.expect(color.g).to.equal(rgb[1]);
+      chai.expect(color.b).to.equal(rgb[2]);
+      chai.expect(color.hex).to.equal(hex);
+    }
+
+    const invalid_names = ["thequickbrownfox", "jumps", "over", "thelazydog"];
+    for (const name of invalid_names) {
+      chai.expect(() => Color.fromSanzoWada(name)).to.throw();
+    }
   });
 
   it("Test getters", () => {
@@ -257,11 +352,11 @@ describe("Color test", () => {
     chai.expect(c.hsla).to.equal("hsla(0, 100%, 50%, 1)");
     chai.expect(c.hex).to.equal("#FF0000");
     chai.expect(c.hexa).to.equal("#FF0000FF");
+    chai.expect(c.is_monochrome).to.be.false;
   });
 
   it("Color names", () => {
-    for (let i = 0; i < COLOR_NAMES.length; i++) {
-      const [name, hex, rgb] = COLOR_NAMES[i];
+    for (const [name, hex, rgb] of COLOR_NAMES) {
       const color = Color.fromCSS(name);
       chai.expect(color.r).to.equal(rgb[0]);
       chai.expect(color.g).to.equal(rgb[1]);
@@ -333,6 +428,7 @@ describe("Color test", () => {
       const b = random_int(0, 255);
       const a = Math.random();
       const color_rgb = new Color(r, g, b, a);
+
       chai.expect(color_rgb.r).to.equal(r);
       chai.expect(color_rgb.g).to.equal(g);
       chai.expect(color_rgb.b).to.equal(b);
@@ -345,6 +441,7 @@ describe("Color test", () => {
       const l = random_int(0, 100);
       const a = Math.random();
       const color_hsl = new Color();
+
       color_hsl.h = h;
       color_hsl.s = s;
       color_hsl.l = l;
