@@ -10,7 +10,7 @@
   "scripts": {
     "test": "c8 mocha 'test/**/*.mjs'",
     "docs": "jsdoc js/*.js -d docs/",
-    "build": "mkdir -p dist && cp index.html dist/ && cp -r js/ css/ dist/ && terser dist/js/engine.js -c -m -o dist/js/engine.js"
+    "build": "mkdir -p dist && cp index.html dist/ && cp -r js/ css/ dist/ && terser dist/js/engine.js -c -m -o dist/js/engine.js && terser dist/js/inject.js -c -m -o dist/js/inject.js"
   },
   "repository": {
     "type": "git",

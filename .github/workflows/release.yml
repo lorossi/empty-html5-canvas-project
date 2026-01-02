@@ -32,19 +32,8 @@ jobs:
 
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ github.ref_name }}  # Matches pushed tag (e.g., v1.0.0)
-          release_name: ${{ github.ref_name }}
           draft: false
           prerelease: false
-
-      - name: Upload dist.zip to Release
-        uses: ncipollo/release-action@v1.20.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          artifactErrorsFailBuild: true
           artifacts: dist.zip
