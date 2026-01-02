@@ -6,6 +6,11 @@ Contains all the needed files to create a new HTML5 page with a JS canvas inside
 
 Just clone the repo or download the last release.
 
+## Is this used anywhere?
+
+Yes! I have a bunch of repositories that use this as a base, most notably my [random animations repo](https://github.com/lorossi/random-animations), where I create random animations using this engine.
+[All the animations (and some experiments) are hosted here](https://lorossi.github.io/random-animations).
+
 ## Cool. Do you have some documentation?
 
 [Yes, here](https://lorossi.github.io/empty-html5-canvas-project/).
