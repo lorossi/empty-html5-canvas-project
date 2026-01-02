@@ -1422,9 +1422,9 @@ class SimplexNoise {
    * @private
    */
   _hash(string) {
-    let hash = 0;
-    if (string.length == 0) return hash;
+    if (string.length == 0) return 0;
 
+    let hash = 0;
     for (let i = 0; i < string.length; i++) {
       const char = string.charCodeAt(i);
       hash = (hash << 5) - hash + char;
