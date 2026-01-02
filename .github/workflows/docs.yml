@@ -47,6 +47,7 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: ${{ env.SITE_DIR }}
+
   deploy:
     environment:
       name: github-pages

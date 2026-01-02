@@ -28,7 +28,7 @@ jobs:
         run: npm run build
 
       - name: Zip dist folder
-        run: zip -r dist.zip dist/  # Zips entire dist/ folder
+        run: zip -r dist.zip dist/
 
       - name: Create Release
         id: create_release
