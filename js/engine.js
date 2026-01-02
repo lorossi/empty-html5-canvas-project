@@ -1117,20 +1117,6 @@ class Color {
     return Math.min(Math.max(min, value), max);
   }
 
-  /**
-   * Wraps a value into an interval
-   * @param {number} value
-   * @param {number} min
-   * @param {number} max
-   * @returns {number}
-   * @private
-   */
-  _wrap(value, min, max) {
-    while (value > max) value -= max - min;
-    while (value < min) value += max - min;
-    return value;
-  }
-
   set hex(hex) {
     this._r = this._hexToDec(hex.slice(1, 3));
     this._g = this._hexToDec(hex.slice(3, 5));
@@ -1138,7 +1124,7 @@ class Color {
 
     const a = parseInt(hex.slice(7, 9), 16);
     if (isNaN(a)) this._a = 1;
-    else this._a = a;
+    else this._a = this._clamp(a / 255, 0, 1);
 
     this._calculateHsl();
   }
@@ -1241,7 +1227,7 @@ class Color {
   }
 
   set h(x) {
-    this._h = Math.floor(this._wrap(x, 0, 360));
+    this._h = Math.floor(this._clamp(x, 0, 360));
     this._calculateRgb();
   }
 
@@ -1390,8 +1376,6 @@ class SimplexNoise {
       // initialize the four seed values
       if (typeof seed === "number") {
         // if the seed is a number, use it as the seed
-        // i'm not sure that this is the best way to do this
-        if (seed >= 2 ** 32) seed %= 2 ** 32; // make sure the seed is a 32-bit number
         x = seed;
         y = seed + 1;
         z = seed + 2;
