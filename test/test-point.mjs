@@ -1,8 +1,6 @@
 import { Point } from "../js/engine.js";
 import * as chai from "chai";
 
-const distance = (x, y) => Math.hypot(x, y);
-
 describe("Point test", () => {
   it("Instance of Point", () => {
     chai.expect(() => new Point(0, 0)).to.not.throw();
@@ -71,7 +69,7 @@ describe("Point test", () => {
       const p2 = new Point(x2, y2);
       chai
         .expect(p1.distance(p2))
-        .to.closeTo(distance(x2 - x1, y2 - y1), 0.0001);
+        .to.closeTo(Math.hypot(x2 - x1, y2 - y1), 0.0001);
     }
 
     // getters and setters
