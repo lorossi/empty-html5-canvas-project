@@ -34,6 +34,6 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          draft: false
+          draft: true
           prerelease: false
           artifacts: dist.zip
