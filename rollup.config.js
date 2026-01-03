@@ -4,8 +4,7 @@ export default {
   input: "js/lib.js",
   output: {
     file: "dist/js/lib.js",
-    format: "iife",
-    name: "CanvasLib",
+    format: "es",
   },
   plugins: [terser()],
 };
