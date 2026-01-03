@@ -10,7 +10,8 @@
   "scripts": {
     "test": "c8 mocha 'test/**/*.mjs'",
     "docs": "jsdoc js/*.js -d docs/",
-    "build": "mkdir -p dist/js && npm run rollup -c && cp index.html dist/ && cp -r css/ dist/ && cp js/sketch.js dist/js/sketch.js"
+    "bundle": "rollup -c",
+    "build": "mkdir -p dist/js && npm run bundle && cp index.html dist/ && cp -r css/ dist/ && cp js/sketch.js dist/js/sketch.js && cp js/inject.js dist/js/inject.js"
   },
   "repository": {
     "type": "git",

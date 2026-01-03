@@ -1,7 +1,7 @@
 /**
  * HTML canvas library bundle
  * Bundles: engine.js, xor128.js, simplex-noise.js, jszip.js
- * Excludes: sketch.js (user-defined)
+ * Excludes: sketch.js (user-defined), inject.js (DOM injection)
  */
 
 export { Engine, SimplexNoise, Point, Color } from "./engine.js";
