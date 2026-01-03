@@ -3,8 +3,7 @@
   Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
 */
 
-import { Engine, SimplexNoise, Point, Color } from "./engine.js";
-import { XOR128 } from "./xor128.js";
+import { Engine, SimplexNoise, Point, Color, XOR128 } from "./lib.js";
 
 class Sketch extends Engine {
   preload() {
