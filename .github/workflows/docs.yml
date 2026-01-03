@@ -16,11 +16,16 @@ permissions:
   id-token: write
 
 env:
-  SITE_DIR: _site
+  DOCS_FOLDER: docs
+  SITE_FOLDER: _site
 
 jobs:
-  build-docs:
+  test:
+    uses: ./.github/workflows/test.yml
+
+  build:
     runs-on: ubuntu-latest
+    needs: test
 
     steps:
       - name: Checkout repository
@@ -40,20 +45,20 @@ jobs:
 
       - name: Prepare files for deployment
         run: |
-          mkdir -p ${{ env.SITE_DIR }}
-          cp -r docs/* ${{ env.SITE_DIR }}/
+          mkdir -p ${{ env.SITE_FOLDER }}
+          cp -r ${{ env.DOCS_FOLDER }}/* ${{ env.SITE_FOLDER }}/
 
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: ${{ env.SITE_DIR }}
+          path: ${{ env.SITE_FOLDER }}
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-docs
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
