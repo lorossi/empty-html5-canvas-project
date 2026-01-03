@@ -31,9 +31,7 @@
     "chai": "^6.2.2",
     "jsdoc": "^4.0.5",
     "mocha": "^11.7.5",
-    "rollup": "^4.54.0"
-  },
-  "dependencies": {
+    "rollup": "^4.54.0",
     "terser": "^5.44.1"
   }
 }
