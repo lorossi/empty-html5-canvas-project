@@ -6,13 +6,9 @@ import { Sketch } from "./sketch.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   // page loaded
-  let canvas, ctx, s;
-  canvas = document.querySelector("#sketch");
-  // inject canvas in page
-  if (canvas.getContext) {
-    ctx = canvas.getContext("2d", { alpha: false });
-    s = new Sketch(canvas, ctx);
-  }
+  const canvas = document.querySelector("#sketch");
+  // create sketch
+  const s = new Sketch(canvas);
 
   // mouse event listeners
   canvas.addEventListener("click", (e) => s._clickCallback(e));
