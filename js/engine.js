@@ -330,12 +330,10 @@ class Engine {
   /**
    * Create the engine controlling a canvas
    * @param {Object} canvas DOM element containing the canvas
-   * @param {Object} ctx Drawing context of the canvas
    * @param {number} [fps=60] Frames per second
    */
-  constructor(canvas, ctx, fps = 60) {
+  constructor(canvas, fps = 60) {
     this._canvas = canvas;
-    this._ctx = ctx;
     this._fps = fps;
 
     // init variables
@@ -354,6 +352,9 @@ class Engine {
     // mouse coordinates
     this._mouseCoords = new Point(0, 0);
     this._prevMouseCoords = new Point(0, 0);
+
+    // extract the drawing context
+    this._ctx = this._canvas.getContext("2d", { alpha: false });
 
     // start sketch
     this._setFps(this._fps);
