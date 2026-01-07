@@ -58,6 +58,9 @@ class Engine {
 
     if (timestamp === undefined) return;
     if (this._no_loop) return;
+    if (this._last_timestamp === 0) {
+      this._last_timestamp = timestamp;
+    }
     const dt = timestamp - this._last_timestamp;
 
     // draw the frame
