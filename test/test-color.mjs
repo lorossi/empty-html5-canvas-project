@@ -1,4 +1,4 @@
-import { Color, Engine } from "../js/engine.js";
+import { Color } from "../js/lib.js";
 import { COLOR_NAMES, SANZO_WADA_COLORS } from "./color-names.mjs";
 import * as chai from "chai";
 
@@ -18,7 +18,6 @@ const color_equal = (c1, c2, epsilon = 0.0001) => {
     Math.abs(c1.a - c2.a) < epsilon
   );
 };
-const color_luminance = (c) => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
 
 const easeInPoly = (t, n = 2) => Math.pow(t, n);
 const easeOutPoly = (t, n = 2) => 1 - Math.pow(1 - t, n);
@@ -30,8 +29,33 @@ const dec_to_hex = (dec) => {
   const hex = dec.toString(16).toUpperCase();
   return hex.length === 1 ? `0${hex}` : hex;
 };
-const random_int = (a, b) => Math.floor(Math.random() * (b - a + 1) + a);
-const random_float = (a, b) => Math.random() * (b - a) + a;
+
+class SFC32 {
+  constructor(a, b, c, d) {
+    this._a = a;
+    this._b = b;
+    this._c = c;
+    this._d = d;
+  }
+
+  random() {
+    this._a >>>= 0;
+    this._b >>>= 0;
+    this._c >>>= 0;
+    this._d >>>= 0;
+
+    let t = (this._a + this._b) | 0;
+    this._a = this._b ^ (this._b >>> 9);
+    this._b = (this._c + (this._c << 3)) | 0;
+    this._c = (this._c << 21) | (this._c >>> 11);
+    this._d = (this._d + 1) | 0;
+    t = (t + this._d) | 0;
+    this._c = (this._c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  }
+}
+
+const SEEDS = [42, 192312, 1239120312, 0xdeadbeef];
 
 const COLOR_PAIRS = [
   { rgb: [0, 191, 255], hex: "#00BFFF", hsl: [195, 100, 50] },
@@ -42,7 +66,7 @@ const COLOR_PAIRS = [
 ];
 
 describe("Color test", () => {
-  it("instance of Color", () => {
+  it("Should correctly create and validate Color instances", () => {
     chai.expect(new Color()).to.be.an.instanceof(Color);
     chai.expect(() => new Color()).to.not.throw();
     chai.expect(() => new Color(0, 0, 0, 0)).to.not.throw();
@@ -61,7 +85,7 @@ describe("Color test", () => {
     chai.expect(c1.hex).to.equal("#000000");
   });
 
-  it("Color properties", () => {
+  it("Should correctly provide properties", () => {
     const white = new Color(255, 255, 255, 1);
     chai.expect(white).to.be.an.instanceof(Color);
     chai.expect(white.r).to.equal(255);
@@ -107,7 +131,7 @@ describe("Color test", () => {
     chai.expect(black.luminance).to.equal(0);
   });
 
-  it("Color Equality", () => {
+  it("Should correctly compare Color instances for equality", () => {
     const c1 = new Color(255, 255, 255, 1);
     const c2 = new Color(255, 255, 255, 1);
     const c3 = new Color(255, 255, 255, 0.5);
@@ -117,7 +141,7 @@ describe("Color test", () => {
     chai.expect(c2.equals(c3, false)).to.be.true;
   });
 
-  it("Color Copy", () => {
+  it("Should correctly copy Color instances", () => {
     const c1 = new Color();
     const c2 = c1.copy();
 
@@ -127,7 +151,7 @@ describe("Color test", () => {
     chai.expect(c1).to.not.equal(c2);
   });
 
-  it("Color Setters", () => {
+  it("Should correctly set Color properties", () => {
     // Test setting r, g, b, a
     const c1 = new Color();
     c1.r = 255;
@@ -207,7 +231,7 @@ describe("Color test", () => {
     chai.expect(c4.toString()).to.equal("#FFFFFF");
   });
 
-  it("Color Mixing", () => {
+  it("Should correctly mix Color instances", () => {
     const from = new Color(255, 0, 0, 1);
     const to = new Color(0, 255, 0, 0);
 
@@ -231,7 +255,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Lighten and Darken", () => {
+  it("Should correctly lighten and darken colors", () => {
     // lighten and darken
     const white = new Color(255, 255, 255, 1);
     const black = new Color(0, 0, 0, 1);
@@ -269,7 +293,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Static Color Methods", () => {
+  it("Should correctly use static Color methods", () => {
     // test monochrome
     for (let i = 0; i < 256; i++) {
       const c = Color.fromMonochrome(i);
@@ -323,7 +347,7 @@ describe("Color test", () => {
     chai.expect(c4.hex).to.equal("#FF3319");
   });
 
-  it("Test Sanzo-Wada colors", () => {
+  it("Should correctly handle Sanzo-Wada colors", () => {
     for (const [name, hex, rgb] of SANZO_WADA_COLORS) {
       const color = Color.fromSanzoWada(name);
       chai.expect(color.r).to.equal(rgb[0]);
@@ -338,7 +362,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Test getters", () => {
+  it("Should correctly provide getters", () => {
     const c = new Color(255, 0, 0, 1);
     chai.expect(c.get_rgb()).to.equal("rgb(255, 0, 0)");
     chai.expect(c.get_rgba()).to.equal("rgba(255, 0, 0, 1)");
@@ -355,7 +379,7 @@ describe("Color test", () => {
     chai.expect(c.is_monochrome).to.be.false;
   });
 
-  it("Color names", () => {
+  it("Should correctly handle Color names", () => {
     for (const [name, hex, rgb] of COLOR_NAMES) {
       const color = Color.fromCSS(name);
       chai.expect(color.r).to.equal(rgb[0]);
@@ -370,7 +394,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Known values", () => {
+  it("Should correctly handle known color values", () => {
     for (const pair of COLOR_PAIRS) {
       const rgb = new Color(pair.rgb[0], pair.rgb[1], pair.rgb[2]);
       const hex = Color.fromHex(pair.hex);
@@ -390,12 +414,14 @@ describe("Color test", () => {
     }
   });
 
-  it("Randomized conversion consistency", () => {
+  it("Should correctly handle randomized conversion consistency", () => {
+    const sfc = new SFC32(...SEEDS);
+
     for (let i = 0; i < 100; i++) {
-      const r = random_int(0, 255);
-      const g = random_int(0, 255);
-      const b = random_int(0, 255);
-      const a = random_float(0, 1);
+      const r = Math.floor(sfc.random() * 256);
+      const g = Math.floor(sfc.random() * 256);
+      const b = Math.floor(sfc.random() * 256);
+      const a = sfc.random();
 
       const color_rgb = new Color(r, g, b, a);
       const hex = color_rgb.hexa;
@@ -421,12 +447,14 @@ describe("Color test", () => {
     }
   });
 
-  it("Randomized tests", () => {
+  it("Should correctly handle randomized tests", () => {
+    const sfc = new SFC32(...SEEDS);
+
     for (let i = 0; i < 100; i++) {
-      const r = random_int(0, 255);
-      const g = random_int(0, 255);
-      const b = random_int(0, 255);
-      const a = Math.random();
+      const r = Math.floor(sfc.random() * 256);
+      const g = Math.floor(sfc.random() * 256);
+      const b = Math.floor(sfc.random() * 256);
+      const a = sfc.random();
       const color_rgb = new Color(r, g, b, a);
 
       chai.expect(color_rgb.r).to.equal(r);
@@ -436,10 +464,10 @@ describe("Color test", () => {
     }
 
     for (let i = 0; i < 100; i++) {
-      const h = random_int(0, 360);
-      const s = random_int(0, 100);
-      const l = random_int(0, 100);
-      const a = Math.random();
+      const h = Math.floor(sfc.random() * 361);
+      const s = Math.floor(sfc.random() * 101);
+      const l = Math.floor(sfc.random() * 101);
+      const a = sfc.random();
       const color_hsl = new Color();
 
       color_hsl.h = h;
