@@ -5,20 +5,25 @@ describe("SimplexNoise test", () => {
   it("Should accept various seeds", () => {
     chai.expect(() => new SimplexNoise()).to.not.throw();
     chai.expect(() => new SimplexNoise(123)).to.not.throw();
+    chai.expect(() => new SimplexNoise(-123)).to.not.throw();
     chai.expect(() => new SimplexNoise(2e36)).to.not.throw();
     chai.expect(() => new SimplexNoise("seed")).to.not.throw();
     chai.expect(() => new SimplexNoise("")).to.not.throw();
     chai.expect(() => new SimplexNoise([1, 2, 3, 4])).to.not.throw();
-
     chai.expect(() => new SimplexNoise(null)).to.not.throw();
-    chai.expect(() => new SimplexNoise(undefined)).to.not.throw();
-    chai.expect(() => new SimplexNoise(true)).to.not.throw();
   });
 
   it("Should reject invalid array seeds", () => {
     chai.expect(() => new SimplexNoise([1, 2, 3])).to.throw();
     chai.expect(() => new SimplexNoise([1])).to.throw();
     chai.expect(() => new SimplexNoise([])).to.throw();
+  });
+
+  it("Should reject invalid seed types", () => {
+    chai.expect(() => new SimplexNoise(true)).to.throw();
+    chai.expect(() => new SimplexNoise(false)).to.throw();
+    chai.expect(() => new SimplexNoise({})).to.throw();
+    chai.expect(() => new SimplexNoise(() => {})).to.throw();
   });
 
   it("Should produce deterministic output with same seed", () => {
