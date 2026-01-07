@@ -12,7 +12,7 @@ import { XOR128 } from "./xor128.js";
 class SimplexNoise {
   /**
    * Create a noise object
-   * @param {Number|String|Array} seed The seed for the noise (optional)
+   * @param {Number|String|Array} [seed] The seed for the noise (optional)
    */
   constructor(seed = null) {
     // initialize the random function with the seed
@@ -20,37 +20,26 @@ class SimplexNoise {
     // If no seed is passed, a random seed is generated
 
     let rand_f;
+    let state;
 
-    if (seed) {
-      let x, y, z, w;
+    if (Array.isArray(seed)) {
+      if (seed.length < 4)
+        throw new Error("Array seed must have at least 4 elements");
 
-      // initialize the four seed values
-      if (typeof seed === "number") {
-        // if the seed is a number, use it as the seed
-        x = seed;
-        y = seed + 1;
-        z = seed + 2;
-        w = seed + 3;
-      } else if (typeof seed === "string") {
-        // if the seed is a string, use its hash as the seed
-        const h = this._hash(seed);
-        // i'm not sure that this is the best way to do this
-        x = h;
-        y = h + 1;
-        z = h + 2;
-        w = h + 3;
-      } else if (Array.isArray(seed)) {
-        // pass the seeds to the random function
-        x = seed[0];
-        y = seed[1];
-        z = seed[2];
-        w = seed[3];
-      }
-      rand_f = new XOR128(x, y, z, w);
+      state = seed.slice(0, 4);
+    } else if (typeof seed === "number") {
+      const s = new SplitMix32(seed);
+      state = [s.next(), s.next(), s.next(), s.next()];
+    } else if (typeof seed === "string") {
+      const s = SplitMix32.fromString(seed);
+      state = [s.next(), s.next(), s.next(), s.next()];
     } else {
-      // no seed is passed, generate a random seed
-      rand_f = new XOR128();
+      state = new Array(4)
+        .fill(0)
+        .map(() => Math.floor(Math.random() * 0xffffffff));
     }
+
+    rand_f = new XOR128(state);
 
     // initialize the noise function with the random function
     this._noise = {
@@ -63,25 +52,6 @@ class SimplexNoise {
     this._octaves = 1;
     this._falloff = 0.5;
     this._max_value = this._calculateMaxValue();
-  }
-
-  /**
-   * Simple hash function
-   *
-   * @param {string} string to be hashed
-   * @returns {number} hash
-   * @private
-   */
-  _hash(string) {
-    if (string.length == 0) return 0;
-
-    let hash = 0;
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    return hash;
   }
 
   /**
@@ -174,6 +144,34 @@ class SimplexNoise {
    */
   get min_value() {
     return -this.max_value;
+  }
+}
+
+/**
+ * SplitMix32 for seeding XOR128
+ * @private
+ */
+class SplitMix32 {
+  constructor(seed) {
+    this.state = seed >>> 0;
+  }
+
+  static fromString(string) {
+    let hash = 0;
+    for (let i = 0; i < string.length; i++) {
+      const char = string.charCodeAt(i);
+      hash = (hash << 5) - hash + char;
+    }
+    return new SplitMix32(hash >>> 0);
+  }
+
+  next() {
+    let z = (this.state += 0x9e3779b9) >>> 0;
+    z = (z ^ (z >>> 16)) >>> 0;
+    z = Math.imul(z, 0x85ebca6b) >>> 0;
+    z = (z ^ (z >>> 13)) >>> 0;
+    z = Math.imul(z, 0xc2b2ae35) >>> 0;
+    return (z ^ (z >>> 16)) >>> 0;
   }
 }
 
