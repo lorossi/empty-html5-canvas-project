@@ -330,11 +330,9 @@ class Engine {
   /**
    * Create the engine controlling a canvas
    * @param {Object} canvas DOM element containing the canvas
-   * @param {number} [fps=60] Frames per second
    */
-  constructor(canvas, fps = 60) {
+  constructor(canvas) {
     this._canvas = canvas;
-    this._fps = fps;
 
     // init variables
     this._frame_count = 0;
@@ -343,33 +341,22 @@ class Engine {
     this._first_frame_recorded = 0;
     this._frames_recorded = 0;
     this._zip = null;
-    this._dt = Infinity;
-    this._started = 0;
+    this._raf_id = null;
 
-    // actual framerate buffer
-    this._fps_buffer = new CircularBuffer(60);
+    // delta time buffer
+    this._dt_buffer = new MovingAverage(30);
+    // last timed frame
+    this._last_timestamp = 0;
 
     // mouse coordinates
-    this._mouseCoords = new Point(0, 0);
-    this._prevMouseCoords = new Point(0, 0);
+    this._mouse_coords = new Point(0, 0);
+    this._p_mouse_coords = new Point(0, 0);
 
     // extract the drawing context
     this._ctx = this._canvas.getContext("2d", { alpha: false });
 
     // start sketch
-    this._setFps(this._fps);
     this._run();
-  }
-
-  /**
-   * Sets the fps for the current sketch
-   * @private
-   */
-  _setFps(fps) {
-    // save fps value
-    this._fps = fps;
-    // time between frames
-    this._fps_interval = 1000 / this._fps;
   }
 
   /**
@@ -377,10 +364,10 @@ class Engine {
    * @private
    */
   _run() {
-    this.preload();
-    this.setup();
     // anti alias
     this._ctx.imageSmoothingQuality = "high";
+    this.preload();
+    this.setup();
     this._timeDraw();
   }
 
@@ -389,16 +376,17 @@ class Engine {
    * @private
    */
 
-  _timeDraw() {
-    // request next frame
-    window.requestAnimationFrame(this._timeDraw.bind(this));
+  _timeDraw(timestamp) {
+    // request next frame and store the id
+    this._raf_id = window.requestAnimationFrame(this._timeDraw.bind(this));
 
-    // if the sketch is not looping, do nothing
+    if (timestamp === undefined) return;
     if (this._no_loop) return;
+    const dt = timestamp - this._last_timestamp;
 
-    // now draw
+    // draw the frame
     this._ctx.save();
-    this.draw();
+    this.draw(dt);
     this._ctx.restore();
 
     // save current frame if recording
@@ -413,17 +401,13 @@ class Engine {
       // update the count of recorded frames
       this._frames_recorded++;
     }
-    // update frame count
+
+    // update delta time buffer
+    this._dt_buffer.push(dt);
+    this._last_timestamp = timestamp;
+
+    // update frame count and timing
     this._frame_count++;
-    const ended = performance.now();
-    // update framerate buffer
-    if (this._started != 0) {
-      const dt = ended - this._started;
-      this._fps_buffer.push(1000 / dt);
-      this._dt = dt;
-    }
-    // update current time
-    this._started = ended;
   }
 
   /**
@@ -438,6 +422,17 @@ class Engine {
    */
   noLoop() {
     this._no_loop = true;
+  }
+
+  /**
+   * Completely stop the engine.
+   * Note that this step is final and there's no way to programatically restart it after this call.
+   */
+  stop() {
+    if (this._raf_id !== null) {
+      window.cancelAnimationFrame(this._raf_id);
+      this._raf_id = null;
+    }
   }
 
   /**
@@ -578,8 +573,8 @@ class Engine {
     const p = this._calculatePressCoords(e);
 
     // update mouse position
-    this._prevMouseCoords = this._mouseCoords.copy();
-    this._mouseCoords = p.copy();
+    this._p_mouse_coords = this._mouse_coords.copy();
+    this._mouse_coords = p.copy();
 
     if (!this._mouse_pressed) {
       this.mouseMoved(p.x, p.y);
@@ -705,9 +700,11 @@ class Engine {
   setup() {}
 
   /**
-   * Main sketch function, will be run continuously
+   * Main sketch function, will be run continuously unless noLoop() is called
+   *
+   * @param {number} dt Delta time in milliseconds since last frame
    */
-  draw() {}
+  draw(dt) {}
 
   /**
    * Get the current drawing context
@@ -715,14 +712,6 @@ class Engine {
    */
   get ctx() {
     return this._ctx;
-  }
-
-  /**
-   * Get the the current recording state
-   * @returns {Boolean} The current recording state
-   */
-  get recording() {
-    return this._is_recording;
   }
 
   /**
@@ -746,7 +735,15 @@ class Engine {
    * @returns {number} The current fps
    */
   get frameRate() {
-    return this._fps_buffer.average;
+    return 1000 / this._dt_buffer.latest;
+  }
+
+  /**
+   * Get the average framerate as frames per second (fps)
+   * @returns {number} The average fps
+   */
+  get frameRateAverage() {
+    return 1000 / this._dt_buffer.average;
   }
 
   /**
@@ -754,23 +751,15 @@ class Engine {
    * @returns {number} The current mspf
    */
   get deltaTime() {
-    return this._dt;
+    return this._dt_buffer.latest;
   }
 
   /**
-   * Set the framerate as milliseconds per frame (mspf)
-   * @param {number} dt The desired mspf
+   * Get the average framerate as milliseconds per frame (mspf)
+   * @returns {number} The average mspf
    */
-  set deltaTime(dt) {
-    this._setFps(1000 / dt);
-  }
-
-  /**
-   * Set a framerate
-   * @param {number} f The desired framerate - optional
-   */
-  set frameRate(f) {
-    this._setFps(f);
+  get deltaTimeAverage() {
+    return this._dt_buffer.average;
   }
 
   /**
@@ -803,7 +792,7 @@ class Engine {
    * @readonly
    */
   get mousePosition() {
-    return this._mouseCoords.copy();
+    return this._mouse_coords.copy();
   }
 
   /**
@@ -813,7 +802,7 @@ class Engine {
    * @readonly
    */
   get prevMousePosition() {
-    return this._prevMouseCoords.copy();
+    return this._p_mouse_coords.copy();
   }
 }
 
@@ -1527,18 +1516,22 @@ class SimplexNoise {
   }
 }
 
-/** Class for a circular buffer
+/** Class for a moving average buffer.
  * @private
  */
-class CircularBuffer {
+class MovingAverage {
   /**
    *
    * @param {number} size of the buffer
    */
   constructor(size) {
-    this._buffer = new Array(size).fill(null);
     this._size = size;
-    this._index = 0;
+
+    this._sum = 0;
+    this._count = 0;
+    this._average = 0;
+
+    this._buffer = new Array(size).fill(0);
   }
 
   /**
@@ -1546,18 +1539,31 @@ class CircularBuffer {
    * @param {number} value
    */
   push(value) {
-    this._buffer[this._index] = value;
-    this._index = (this._index + 1) % this._size;
+    const index = this._count % this._size;
+    this._sum += value - this._buffer[index];
+    this._buffer[index] = value;
+
+    this._count++;
+    const size = Math.min(this._count, this._size);
+    this._average = this._sum / size;
   }
 
   /**
-   * Get the average of the buffer
+   * Get the current average
+   * @returns {number} average
    */
   get average() {
-    const items = this._buffer.filter((x) => x != null);
-    if (items.length == 0) return 0;
+    return this._average;
+  }
 
-    return items.reduce((a, b) => a + b, 0) / items.length;
+  /**
+   * Get the last stored value
+   * @returns {number} last value
+   */
+  get latest() {
+    if (this._count == 0) return null;
+    const index = (this._count - 1) % this._size;
+    return this._buffer[index];
   }
 }
 

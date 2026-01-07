@@ -14,7 +14,7 @@ class Sketch extends Engine {
     // ran once. This can be called multiple times
   }
 
-  draw() {
+  draw(dt) {
     // looping continuously at a set framerate
   }
 }
