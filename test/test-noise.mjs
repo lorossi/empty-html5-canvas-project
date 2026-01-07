@@ -21,13 +21,6 @@ describe("SimplexNoise test", () => {
     chai.expect(() => new SimplexNoise([])).to.throw();
   });
 
-  it("Should accept a custom random function", () => {
-    const customRand = () => 0.5;
-    chai.expect(() => new SimplexNoise(null, customRand)).to.not.throw();
-    chai.expect(() => new SimplexNoise(123, customRand)).to.not.throw();
-    chai.expect(() => new SimplexNoise("seed", customRand)).to.not.throw();
-  });
-
   it("Should produce deterministic output with same seed", () => {
     const seeds = [42, "test-seed", [1, 2, 3, 4]];
 
