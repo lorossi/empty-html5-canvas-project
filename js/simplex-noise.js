@@ -31,10 +31,10 @@ Better rank ordering method by Stefan Gustavson in 2012.
  ! The code has been modified slightly from the original.
  - the random parameters passed to the buildPermutationTable function has been changed to
     an instance of a class that has a random method.
- - the export directive has been removed as it's not supported in the browser.
 */
 // these #__PURE__ comments help uglifyjs with dead code removal
 //
+
 const F2 = /*#__PURE__*/ 0.5 * (Math.sqrt(3.0) - 1.0);
 const G2 = /*#__PURE__*/ (3.0 - Math.sqrt(3.0)) / 6.0;
 const F3 = 1.0 / 3.0;

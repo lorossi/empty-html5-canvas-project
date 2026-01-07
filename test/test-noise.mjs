@@ -1,4 +1,4 @@
-import { SimplexNoise } from "../js/engine.js";
+import { SimplexNoise } from "../js/lib.js";
 import * as chai from "chai";
 
 describe("SimplexNoise test", () => {

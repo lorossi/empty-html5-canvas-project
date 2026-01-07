@@ -1,5 +1,5 @@
 import "./setup-dom.mjs"; // ensure globals are set before importing Engine
-import { Engine } from "../js/engine.js";
+import { Engine } from "../js/lib.js";
 import * as chai from "chai";
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

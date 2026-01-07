@@ -1,4 +1,4 @@
-import { Color, Engine } from "../js/engine.js";
+import { Color } from "../js/lib.js";
 import { COLOR_NAMES, SANZO_WADA_COLORS } from "./color-names.mjs";
 import * as chai from "chai";
 

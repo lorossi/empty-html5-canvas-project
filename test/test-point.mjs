@@ -1,4 +1,4 @@
-import { Point } from "../js/engine.js";
+import { Point } from "../js/lib.js";
 import * as chai from "chai";
 
 describe("Point test", () => {
