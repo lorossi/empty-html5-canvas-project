@@ -69,7 +69,7 @@ Font [Roboto](https://fonts.google.com/specimen/Roboto), made by Google, is pack
 
 Library [JSzip](https://stuk.github.io/jszip/) library, made by [Stuart Knightley](https://github.com/Stuk), is packaged in this repository.
 
-Library [simplex-noise.js](https://github.com/jwagner/simplex-noise.js) slightly, made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
+Library [simplex-noise.js](https://github.com/jwagner/simplex-noise.js), made by [Jonathan Wagner](https://github.com/jwagner), is packaged in this repository.
 I have made some small changes to the original version.
 
 Some colors distributed with the engine are fetched from the [Sanzo Wada Dictionary of Color Combinations](https://sanzo-wada.dmbk.io/). Those colours have the prefix `SW` before their names.
