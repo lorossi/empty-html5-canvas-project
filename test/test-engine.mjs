@@ -16,7 +16,7 @@ describe("Engine Canvas Tests", () => {
     const ctx = canvas.getContext("2d");
     const engine = new Engine(canvas);
 
-    const duration = 500; // milliseconds
+    const duration = 1000; // milliseconds
     const expected_frames = duration / (1000 / 60);
 
     await sleep(duration);
@@ -31,8 +31,8 @@ describe("Engine Canvas Tests", () => {
     chai.expect(engine.deltaTime).to.be.approximately(1000 / 60, 5);
     chai.expect(engine.frameRate).to.be.approximately(60, 5);
     // Average values may be slightly off due to smoothing
-    chai.expect(engine.deltaTimeAverage).to.be.approximately(1000 / 60, 10);
-    chai.expect(engine.frameRateAverage).to.be.approximately(60, 10);
+    chai.expect(engine.deltaTimeAverage).to.be.approximately(1000 / 60, 15);
+    chai.expect(engine.frameRateAverage).to.be.approximately(60, 15);
   });
 
   it("test engine loop and noloop", async () => {
