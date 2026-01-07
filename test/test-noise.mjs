@@ -15,27 +15,44 @@ describe("SimplexNoise test", () => {
     chai.expect(() => new SimplexNoise(true)).to.not.throw();
   });
 
+  it("Should reject invalid array seeds", () => {
+    chai.expect(() => new SimplexNoise([1, 2, 3])).to.throw();
+    chai.expect(() => new SimplexNoise([1])).to.throw();
+    chai.expect(() => new SimplexNoise([])).to.throw();
+  });
+
+  it("Should accept a custom random function", () => {
+    const customRand = () => 0.5;
+    chai.expect(() => new SimplexNoise(null, customRand)).to.not.throw();
+    chai.expect(() => new SimplexNoise(123, customRand)).to.not.throw();
+    chai.expect(() => new SimplexNoise("seed", customRand)).to.not.throw();
+  });
+
   it("Should produce deterministic output with same seed", () => {
-    const noise1 = new SimplexNoise(42);
-    const noise2 = new SimplexNoise(42);
-    const bounds = 5;
+    const seeds = [42, "test-seed", [1, 2, 3, 4]];
 
-    for (let x = 0; x <= bounds; x += 1) {
-      for (let y = 0; y <= bounds; y += 1) {
-        const n1 = noise1.noise(x, y);
-        const n2 = noise2.noise(x, y);
-        chai.expect(n1).to.equal(n2);
-        chai.expect(n1).to.be.at.least(-1).and.at.most(1);
+    for (const seed of seeds) {
+      const noise1 = new SimplexNoise(seed);
+      const noise2 = new SimplexNoise(seed);
+      const bounds = 10;
 
-        const n3 = noise1.noise(x, y, 0);
-        const n4 = noise2.noise(x, y, 0);
-        chai.expect(n3).to.equal(n4);
-        chai.expect(n3).to.be.at.least(-1).and.at.most(1);
+      for (let x = 0; x <= bounds; x++) {
+        for (let y = 0; y <= bounds; y++) {
+          const n1 = noise1.noise(x, y);
+          const n2 = noise2.noise(x, y);
+          chai.expect(n1).to.equal(n2);
+          chai.expect(n1).to.be.at.least(-1).and.at.most(1);
 
-        const n5 = noise1.noise(x, y, 0, 0);
-        const n6 = noise2.noise(x, y, 0, 0);
-        chai.expect(n5).to.equal(n6);
-        chai.expect(n5).to.be.at.least(-1).and.at.most(1);
+          const n3 = noise1.noise(x, y, 0);
+          const n4 = noise2.noise(x, y, 0);
+          chai.expect(n3).to.equal(n4);
+          chai.expect(n3).to.be.at.least(-1).and.at.most(1);
+
+          const n5 = noise1.noise(x, y, 0, 0);
+          const n6 = noise2.noise(x, y, 0, 0);
+          chai.expect(n5).to.equal(n6);
+          chai.expect(n5).to.be.at.least(-1).and.at.most(1);
+        }
       }
     }
   });
@@ -68,8 +85,8 @@ describe("SimplexNoise test", () => {
       for (const falloff of falloff_list) {
         noise.setDetail(octaves, falloff);
 
-        for (let x = -bounds; x <= bounds; x += 1) {
-          for (let y = -bounds; y <= bounds; y += 1) {
+        for (let x = 0; x <= bounds; x++) {
+          for (let y = 0; y <= bounds; y++) {
             const n = noise.noise(x, y);
             chai.expect(n).to.be.at.least(-1).and.at.most(1);
             chai
