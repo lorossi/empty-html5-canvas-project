@@ -2,18 +2,18 @@ import { Point } from "../js/engine.js";
 import * as chai from "chai";
 
 describe("Point test", () => {
-  it("Instance of Point", () => {
+  it("Should correctly instantiate Point objects", () => {
     chai.expect(() => new Point(0, 0)).to.not.throw();
     chai.expect(() => new Point()).to.throw();
     chai.expect(() => new Point(0, 0, 0)).to.throw();
   });
 
-  it("Point methods", () => {
+  it("Should correctly provide toString method", () => {
     const p = new Point(1, 1);
     chai.expect(p.toString()).to.equal("(1, 1)");
   });
 
-  it("Point equals", () => {
+  it("Should correctly compare Point instances for equality", () => {
     const p1 = new Point(1, 1);
     const p2 = new Point(1, 1);
 
@@ -26,20 +26,20 @@ describe("Point test", () => {
     chai.expect(p1.equals(p4)).to.be.false;
   });
 
-  it("Point copy", () => {
+  it("Should correctly copy Point instances", () => {
     const p1 = new Point(1, 1);
     const p2 = p1.copy();
     chai.expect(p1.equals(p2)).to.be.true;
     chai.expect(p1 === p2).to.be.false;
   });
 
-  it("Point distance", () => {
+  it("Should correctly calculate Point distance", () => {
     const p1 = new Point(0, 0);
     const p2 = new Point(3, 4);
     chai.expect(p1.distance(p2)).to.equal(5);
   });
 
-  it("Getters and Setters", () => {
+  it("Should correctly provide getters and setters", () => {
     const p = new Point(0, 0);
     chai.expect(p.x).to.equal(0);
     chai.expect(p.y).to.equal(0);
@@ -50,7 +50,7 @@ describe("Point test", () => {
     chai.expect(p.y).to.equal(1);
   });
 
-  it("Randomized tests", () => {
+  it("Should correctly handle randomized tests", () => {
     // instantiation
     for (let i = 0; i < 100; i++) {
       const x = Math.random() * 100;
