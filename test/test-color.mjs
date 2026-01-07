@@ -18,7 +18,6 @@ const color_equal = (c1, c2, epsilon = 0.0001) => {
     Math.abs(c1.a - c2.a) < epsilon
   );
 };
-const color_luminance = (c) => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
 
 const easeInPoly = (t, n = 2) => Math.pow(t, n);
 const easeOutPoly = (t, n = 2) => 1 - Math.pow(1 - t, n);
@@ -42,7 +41,7 @@ const COLOR_PAIRS = [
 ];
 
 describe("Color test", () => {
-  it("instance of Color", () => {
+  it("Should correctly create and validate Color instances", () => {
     chai.expect(new Color()).to.be.an.instanceof(Color);
     chai.expect(() => new Color()).to.not.throw();
     chai.expect(() => new Color(0, 0, 0, 0)).to.not.throw();
@@ -61,7 +60,7 @@ describe("Color test", () => {
     chai.expect(c1.hex).to.equal("#000000");
   });
 
-  it("Color properties", () => {
+  it("Should correctly provide properties", () => {
     const white = new Color(255, 255, 255, 1);
     chai.expect(white).to.be.an.instanceof(Color);
     chai.expect(white.r).to.equal(255);
@@ -107,7 +106,7 @@ describe("Color test", () => {
     chai.expect(black.luminance).to.equal(0);
   });
 
-  it("Color Equality", () => {
+  it("Should correctly compare Color instances for equality", () => {
     const c1 = new Color(255, 255, 255, 1);
     const c2 = new Color(255, 255, 255, 1);
     const c3 = new Color(255, 255, 255, 0.5);
@@ -117,7 +116,7 @@ describe("Color test", () => {
     chai.expect(c2.equals(c3, false)).to.be.true;
   });
 
-  it("Color Copy", () => {
+  it("Should correctly copy Color instances", () => {
     const c1 = new Color();
     const c2 = c1.copy();
 
@@ -127,7 +126,7 @@ describe("Color test", () => {
     chai.expect(c1).to.not.equal(c2);
   });
 
-  it("Color Setters", () => {
+  it("Should correctly set Color properties", () => {
     // Test setting r, g, b, a
     const c1 = new Color();
     c1.r = 255;
@@ -207,7 +206,7 @@ describe("Color test", () => {
     chai.expect(c4.toString()).to.equal("#FFFFFF");
   });
 
-  it("Color Mixing", () => {
+  it("Should correctly mix Color instances", () => {
     const from = new Color(255, 0, 0, 1);
     const to = new Color(0, 255, 0, 0);
 
@@ -231,7 +230,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Lighten and Darken", () => {
+  it("Should correctly lighten and darken colors", () => {
     // lighten and darken
     const white = new Color(255, 255, 255, 1);
     const black = new Color(0, 0, 0, 1);
@@ -269,7 +268,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Static Color Methods", () => {
+  it("Should correctly use static Color methods", () => {
     // test monochrome
     for (let i = 0; i < 256; i++) {
       const c = Color.fromMonochrome(i);
@@ -323,7 +322,7 @@ describe("Color test", () => {
     chai.expect(c4.hex).to.equal("#FF3319");
   });
 
-  it("Test Sanzo-Wada colors", () => {
+  it("Should correctly handle Sanzo-Wada colors", () => {
     for (const [name, hex, rgb] of SANZO_WADA_COLORS) {
       const color = Color.fromSanzoWada(name);
       chai.expect(color.r).to.equal(rgb[0]);
@@ -338,7 +337,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Test getters", () => {
+  it("Should correctly provide getters", () => {
     const c = new Color(255, 0, 0, 1);
     chai.expect(c.get_rgb()).to.equal("rgb(255, 0, 0)");
     chai.expect(c.get_rgba()).to.equal("rgba(255, 0, 0, 1)");
@@ -355,7 +354,7 @@ describe("Color test", () => {
     chai.expect(c.is_monochrome).to.be.false;
   });
 
-  it("Color names", () => {
+  it("Should correctly handle Color names", () => {
     for (const [name, hex, rgb] of COLOR_NAMES) {
       const color = Color.fromCSS(name);
       chai.expect(color.r).to.equal(rgb[0]);
@@ -370,7 +369,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Known values", () => {
+  it("Should correctly handle known color values", () => {
     for (const pair of COLOR_PAIRS) {
       const rgb = new Color(pair.rgb[0], pair.rgb[1], pair.rgb[2]);
       const hex = Color.fromHex(pair.hex);
@@ -390,7 +389,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Randomized conversion consistency", () => {
+  it("Should correctly handle randomized conversion consistency", () => {
     for (let i = 0; i < 100; i++) {
       const r = random_int(0, 255);
       const g = random_int(0, 255);
@@ -421,7 +420,7 @@ describe("Color test", () => {
     }
   });
 
-  it("Randomized tests", () => {
+  it("Should correctly handle randomized tests", () => {
     for (let i = 0; i < 100; i++) {
       const r = random_int(0, 255);
       const g = random_int(0, 255);
