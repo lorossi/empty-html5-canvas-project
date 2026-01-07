@@ -1,4 +1,4 @@
-import "../test/setup-dom.mjs"; // ensure globals are set before importing Engine
+import "./setup-dom.mjs"; // ensure globals are set before importing Engine
 import { Engine } from "../js/engine.js";
 import * as chai from "chai";
 
