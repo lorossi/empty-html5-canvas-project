@@ -29,8 +29,33 @@ const dec_to_hex = (dec) => {
   const hex = dec.toString(16).toUpperCase();
   return hex.length === 1 ? `0${hex}` : hex;
 };
-const random_int = (a, b) => Math.floor(Math.random() * (b - a + 1) + a);
-const random_float = (a, b) => Math.random() * (b - a) + a;
+
+class SFC32 {
+  constructor(a, b, c, d) {
+    this._a = a;
+    this._b = b;
+    this._c = c;
+    this._d = d;
+  }
+
+  random() {
+    this._a >>>= 0;
+    this._b >>>= 0;
+    this._c >>>= 0;
+    this._d >>>= 0;
+
+    let t = (this._a + this._b) | 0;
+    this._a = this._b ^ (this._b >>> 9);
+    this._b = (this._c + (this._c << 3)) | 0;
+    this._c = (this._c << 21) | (this._c >>> 11);
+    this._d = (this._d + 1) | 0;
+    t = (t + this._d) | 0;
+    this._c = (this._c + t) | 0;
+    return (t >>> 0) / 4294967296;
+  }
+}
+
+const SEEDS = [42, 192312, 1239120312, 0xdeadbeef];
 
 const COLOR_PAIRS = [
   { rgb: [0, 191, 255], hex: "#00BFFF", hsl: [195, 100, 50] },
@@ -390,11 +415,13 @@ describe("Color test", () => {
   });
 
   it("Should correctly handle randomized conversion consistency", () => {
+    const sfc = new SFC32(...SEEDS);
+
     for (let i = 0; i < 100; i++) {
-      const r = random_int(0, 255);
-      const g = random_int(0, 255);
-      const b = random_int(0, 255);
-      const a = random_float(0, 1);
+      const r = Math.floor(sfc.random() * 256);
+      const g = Math.floor(sfc.random() * 256);
+      const b = Math.floor(sfc.random() * 256);
+      const a = sfc.random();
 
       const color_rgb = new Color(r, g, b, a);
       const hex = color_rgb.hexa;
@@ -421,11 +448,13 @@ describe("Color test", () => {
   });
 
   it("Should correctly handle randomized tests", () => {
+    const sfc = new SFC32(...SEEDS);
+
     for (let i = 0; i < 100; i++) {
-      const r = random_int(0, 255);
-      const g = random_int(0, 255);
-      const b = random_int(0, 255);
-      const a = Math.random();
+      const r = Math.floor(sfc.random() * 256);
+      const g = Math.floor(sfc.random() * 256);
+      const b = Math.floor(sfc.random() * 256);
+      const a = sfc.random();
       const color_rgb = new Color(r, g, b, a);
 
       chai.expect(color_rgb.r).to.equal(r);
@@ -435,10 +464,10 @@ describe("Color test", () => {
     }
 
     for (let i = 0; i < 100; i++) {
-      const h = random_int(0, 360);
-      const s = random_int(0, 100);
-      const l = random_int(0, 100);
-      const a = Math.random();
+      const h = Math.floor(sfc.random() * 361);
+      const s = Math.floor(sfc.random() * 101);
+      const l = Math.floor(sfc.random() * 101);
+      const a = sfc.random();
       const color_hsl = new Color();
 
       color_hsl.h = h;
