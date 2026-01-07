@@ -18,8 +18,6 @@ class SimplexNoise {
     // initialize the random function with the seed
     // it needs to be passed to the noise function
     // If no seed is passed, a random seed is generated
-
-    let rand_f;
     let state;
 
     if (Array.isArray(seed)) {
@@ -33,13 +31,15 @@ class SimplexNoise {
     } else if (typeof seed === "string") {
       const s = SplitMix32.fromString(seed);
       state = [s.next(), s.next(), s.next(), s.next()];
-    } else {
+    } else if (seed === null) {
       state = new Array(4)
         .fill(0)
         .map(() => Math.floor(Math.random() * 0xffffffff));
+    } else {
+      throw new Error("Seed must be a number, string, array or null");
     }
 
-    rand_f = new XOR128(state);
+    const rand_f = new XOR128(state);
 
     // initialize the noise function with the random function
     this._noise = {

@@ -530,7 +530,8 @@ class MovingAverage {
    * @returns {number} last value
    */
   get latest() {
-    if (this._count == 0) return null;
+    if (this._count == 0) return 0;
+
     const index = (this._count - 1) % this._size;
     return this._buffer[index];
   }
