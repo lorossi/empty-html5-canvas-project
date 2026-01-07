@@ -5,13 +5,13 @@ import * as chai from "chai";
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe("Engine Canvas Tests", () => {
-  it("should create an engine with a canvas", () => {
+  it("Should create an engine with a canvas", () => {
     const canvas = document.createElement("canvas");
     const engine = new Engine(canvas);
     engine.stop();
   });
 
-  it("test Engine getters", async () => {
+  it("Should provide functional getters", async () => {
     const canvas = document.createElement("canvas");
     const ctx = canvas.getContext("2d");
     const engine = new Engine(canvas);
@@ -35,7 +35,7 @@ describe("Engine Canvas Tests", () => {
     chai.expect(engine.frameRateAverage).to.be.approximately(60, 15);
   });
 
-  it("test engine loop and noloop", async () => {
+  it("Should provide a working loop and noLoop function", async () => {
     const canvas = document.createElement("canvas");
     const engine = new Engine(canvas);
 
