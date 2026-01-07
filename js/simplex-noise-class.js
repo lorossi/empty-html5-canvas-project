@@ -12,7 +12,7 @@ import { XOR128 } from "./xor128.js";
 class SimplexNoise {
   /**
    * Create a noise object
-   * @param {Number|String|Array} [seed] The seed for the noise (optional)
+   * @param {number|string|Array} [seed] The seed for the noise (optional)
    */
   constructor(seed = null) {
     // initialize the random function with the seed
