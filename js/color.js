@@ -311,14 +311,14 @@ const SANZO_WADA_COLORS = {
 };
 Object.freeze(SANZO_WADA_COLORS);
 
-/** Class containing colors, either RGB or HSL */
+/** Class containing colors.*/
 class Color {
   /**
    * Create a color by setting the value of its RGB channels.
-   * @param {number} [r=0] The value of the Red channel in range [0, 255]
-   * @param {number} [g=0] The value of the Green channel in range [0, 255]
-   * @param {number} [b=0] The value of the Blue channel in range [0, 255]
-   * @param {number} [a=1] The value of the Alpha channel in range [0, 1]
+   * @param {number} [r] The value of the Red channel in range [0, 255]
+   * @param {number} [g] The value of the Green channel in range [0, 255]
+   * @param {number} [b] The value of the Blue channel in range [0, 255]
+   * @param {number} [a] The value of the Alpha channel in range [0, 1]
    */
   constructor(r = 0, g = 0, b = 0, a = 1) {
     if (r > 255 || r < 0 || g > 255 || g < 0 || b > 255 || b < 0)
@@ -335,9 +335,9 @@ class Color {
 
   /**
    * Checks if two colors are equal
-   * @param {Color} other
-   * @param {Boolean} [compare_alpha=true] If true, the alpha channel will be compared too
-   * @returns {Boolean}
+   * @param {Color} other The other color to compare with
+   * @param {boolean} [compare_alpha] If true, the alpha channel will be compared too
+   * @returns {boolean} True if the colors are equal, false otherwise
    */
   equals(other, compare_alpha = true) {
     const epsilon = 0.0001;
@@ -352,7 +352,7 @@ class Color {
 
   /**
    * Returns the color as a string
-   * @returns {string}
+   * @returns {string} The hexadecimal representation of the color
    */
   toString() {
     return this.hex;
@@ -361,10 +361,11 @@ class Color {
   /**
    * Mix two colors, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   *
-   * @param {Color} other
-   * @param {number} amount
-   * @param {function} [easing=null]
+   * @typedef {function(number): number} easingFunction
+   * @param {Color} other   The other color to mix with
+   * @param {number} amount The amount of the other color in range [0, 1]
+   * @param {easingFunction} [easing] An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
+   * @returns {Color} The mixed color
    */
   mix(other, amount, easing = null) {
     const t = easing ? easing(amount) : amount;
@@ -378,10 +379,10 @@ class Color {
   /**
    * Darken the color by a certain amount, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   *
-   * @param {number} amount
-   * @param {function} easing
-   * @returns {Color}
+   * @typedef {function(number): number} easingFunction
+   * @param {number} amount The amount to darken in range [0, 1]
+   * @param {easingFunction} easing An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
+   * @returns {Color} The darkened color
    */
   darken(amount, easing = null) {
     const t = easing ? easing(amount) : amount;
@@ -391,10 +392,10 @@ class Color {
   /**
    * Lighten the color by a certain amount, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   *
-   * @param {number} amount
-   * @param {function} easing
-   * @returns {Color}
+   * @typedef {function(number): number} easingFunction
+   * @param {number} amount The amount to lighten in range [0, 1]
+   * @param {easingFunction} easing An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
+   * @returns {Color} The lightened color
    */
   lighten(amount, easing = null) {
     const t = easing ? easing(amount) : amount;
@@ -403,7 +404,7 @@ class Color {
 
   /**
    * Return a copy of the color
-   * @returns {Color}
+   * @returns {Color} A new Color instance with the same values
    */
   copy() {
     return new Color(this._r, this._g, this._b, this._a);
@@ -416,7 +417,7 @@ class Color {
    * @param {number} l Color lighting in range [0, 100]
    * @param {number} a Color alpha in range [0, 1]
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromHSL(h, s, l, a) {
     const dummy = new Color();
@@ -434,7 +435,7 @@ class Color {
    * @param {number} b Blue channel value in range [0, 360]
    * @param {number} a Alpha channel value in range [0, 1]
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromRGB(r, g, b, a) {
     return new Color(r, g, b, a);
@@ -442,9 +443,9 @@ class Color {
 
   /**
    * Create a color from a hexadecimal string
-   * @param {string} hex
+   * @param {string} hex The hexadecimal string, with or without the leading #
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromHex(hex) {
     // regex to extract r, g, b, a values from hex string
@@ -465,9 +466,9 @@ class Color {
   /**
    * Create a color from a hexadecimal string
    * @deprecated Use Color.fromHex instead
-   * @param {string} hex
+   * @param {string} hex The hexadecimal string, with or without the leading #
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromHEX(hex) {
     return Color.fromHex(hex);
@@ -475,11 +476,10 @@ class Color {
 
   /**
    * Create a monochrome color from a decimal value
-   *
    * @param {number} ch Red, green and blue value in range [0, 255]
-   * @param {number} [a=1] Alpha value in range [0, 1], defaults to 1
+   * @param {number} [a] Alpha value in range [0, 1], defaults to 1
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromMonochrome(ch, a = 1) {
     return new Color(ch, ch, ch, a);
@@ -487,9 +487,9 @@ class Color {
 
   /**
    * Create a color from CSS name. List of name provided by the W3C (https://www.w3.org/wiki/CSS/Properties/color/keywords)
-   * @param {string} name
+   * @param {string} name The CSS color name
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromCSS(name) {
     if (CSS_COLOR_NAMES[name] == undefined) {
@@ -500,9 +500,9 @@ class Color {
 
   /**
    * Create a color from Sanzo Wada's Dictionary of Color Combinations (https://sanzo-wada.dmbk.io/)
-   * @param {string} name
+   * @param {string} name The Sanzo Wada color name
    * @static
-   * @returns {Color}
+   * @returns {Color} The created Color instance
    */
   static fromSanzoWada(name) {
     if (SANZO_WADA_COLORS[name] == undefined) {
@@ -585,6 +585,7 @@ class Color {
   /**
    * Get the hexadecimal representation of a decimal number
    * @param {number} dec The decimal number
+   * @returns {string} The hexadecimal representation
    * @private
    */
   _decToHex(dec) {
@@ -594,6 +595,7 @@ class Color {
   /**
    * Get the decimal representation of a hexadecimal number
    * @param {number} hex The hexadecimal number
+   * @returns {number} The decimal representation
    * @private
    */
   _hexToDec(hex) {
@@ -602,10 +604,10 @@ class Color {
 
   /**
    * Clamps a value between an interval
-   * @param {number} value
-   * @param {number} min
-   * @param {number} max
-   * @returns {number}
+   * @param {number} value The value to clamp
+   * @param {number} min The minimum value
+   * @param {number} max The maximum value
+   * @returns {number} The clamped value
    * @private
    */
   _clamp(value, min, max) {

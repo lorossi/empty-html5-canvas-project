@@ -5,7 +5,8 @@ import {
 } from "./simplex-noise.js";
 import { XOR128 } from "./xor128.js";
 
-/** Class handling simplex noise.
+/**
+ * Class handling simplex noise.
  * This class interfaces with the SimplexNoise library by Jonas Wagner.
  * The number generation is taken care of by my xor128 library.
  */
