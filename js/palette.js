@@ -15,7 +15,7 @@ class Palette {
    * @param {string[]} colors array of HEX color strings
    * @returns {Palette} palette object
    */
-  static fromArrayHEX(colors) {
+  static fromHEXArray(colors) {
     return new Palette(colors.map((c) => Color.fromHex(c)));
   }
 
@@ -24,8 +24,8 @@ class Palette {
    * @param {number[][]} colors array of RGB color arrays
    * @returns {Palette} palette object
    */
-  static fromArrayRGB(colors) {
-    return new Palette(colors.map((c) => Color.fromRGB(c)));
+  static fromRGBArray(colors) {
+    return new Palette(colors.map((c) => Color.fromRGB(...c)));
   }
 
   /**
@@ -79,9 +79,13 @@ class Palette {
    * @returns {Color} smoothly interpolated color from the palette
    */
   getSmoothColor(t, easing = null) {
+    // Clamp t to [0, 1]
+    t = Math.max(0, Math.min(1, t));
+
     const n = this._colors.length - 1;
-    const integer_part = Math.floor(t * n) % n;
-    const fractional_part = t * n - Math.floor(t * n);
+    const position = t * n;
+    const integer_part = Math.floor(position);
+    const fractional_part = position - integer_part;
 
     const c1 = this.getColor(integer_part);
     const c2 = this.getColor(integer_part + 1);
@@ -121,8 +125,18 @@ class PaletteFactory {
    * @param {Array.<Array.<string>>} hex_palettes array of palettes, each palette is an array of HEX color strings
    * @returns {PaletteFactory} palette factory object
    */
-  static fromHEXPalettes(hex_palettes) {
-    const palettes = hex_palettes.map((p) => Palette.fromArrayHEX(p));
+  static fromHEXArray(hex_palettes) {
+    const palettes = hex_palettes.map((p) => Palette.fromHEXArray(p));
+    return new PaletteFactory(palettes);
+  }
+
+  /**
+   * Create a palette factory from an array of RGB palettes
+   * @param {Array.<Array.<number[]>>} rgb_palettes array of palettes, each palette is an array of RGB color arrays
+   * @returns {PaletteFactory} palette factory object
+   */
+  static fromRGBArray(rgb_palettes) {
+    const palettes = rgb_palettes.map((p) => Palette.fromRGBArray(p));
     return new PaletteFactory(palettes);
   }
 
@@ -135,13 +149,7 @@ class PaletteFactory {
    */
   getRandomPalette(rand = Math, randomize = true) {
     const colors_index = Math.floor(rand.random() * this._palettes.length);
-    let colors = this._palettes[colors_index].map((c) => {
-      if (c instanceof Color) {
-        return c.copy();
-      }
-
-      return Color.fromHex(c);
-    });
+    let colors = this._palettes[colors_index].colors.map((c) => c.copy());
 
     if (randomize) {
       colors = colors
@@ -162,7 +170,23 @@ class PaletteFactory {
     if (n < 0 || n > this._palettes.length - 1)
       throw new Error("Palette index out of bounds");
 
-    return new Palette(this._palettes[n].map((h) => Color.fromHex(h)));
+    return new Palette(this._palettes[n].colors.map((c) => c.copy()));
+  }
+
+  /**
+   * Get the number of palettes in the factory
+   * @returns {number} number of palettes in the factory
+   */
+  get length() {
+    return this._palettes.length;
+  }
+
+  /**
+   * Get all palettes in the factory
+   * @returns {Array.<Palette>} array of palettes in the factory
+   */
+  get palettes() {
+    return this._palettes.map((p) => p.copy());
   }
 }
 
