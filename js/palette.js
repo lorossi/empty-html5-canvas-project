@@ -1,4 +1,4 @@
-import { Color } from "./lib.js";
+import { Color } from "./color.js";
 
 /* Class representing a color palette */
 class Palette {

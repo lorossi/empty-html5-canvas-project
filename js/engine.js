@@ -1,4 +1,5 @@
-import { Color, Point } from "./lib.js";
+import { Color } from "./color.js";
+import { Point } from "./point.js";
 import "./jszip.js";
 
 /** Class containing the main engine running a canvas */
