@@ -3,7 +3,15 @@
   Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
 */
 
-import { Engine, SimplexNoise, Point, Color, XOR128 } from "./lib.js";
+import {
+  Engine,
+  Color,
+  Palette,
+  PaletteFactory,
+  Point,
+  SimplexNoise,
+  XOR128,
+} from "./lib.js";
 
 class Sketch extends Engine {
   preload() {
