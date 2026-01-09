@@ -28,7 +28,6 @@ class XOR128State {
 
   /**
    * Get the current internal state as an array of 4 numbers.
-   *
    * @returns {Array} current internal state
    */
   get state() {
@@ -37,7 +36,6 @@ class XOR128State {
 
   /**
    * Return true if the internal state is all zero, false otherwise.
-   *
    * @returns {boolean} true if the internal state is all zero, false otherwise
    */
   isAllZero() {
@@ -46,7 +44,6 @@ class XOR128State {
 
   /**
    * Rotate the internal state.
-   *
    * @returns {void}
    */
   rotateState() {
@@ -56,7 +53,7 @@ class XOR128State {
 
   /**
    * Set the first word of the internal state.
-   *
+   * @param x
    * @returns {void}
    * @throws {Error} if x is not a number
    */
@@ -85,7 +82,6 @@ class SplitMix64State {
 
   /**
    * Get the current internal state.
-   *
    * @returns {number} current internal state
    */
   get seed() {
@@ -94,7 +90,6 @@ class SplitMix64State {
 
   /**
    * Set the internal state.
-   *
    * @param {number} seed
    * @returns {void}
    * @throws {Error} if seed is not a number
@@ -134,7 +129,6 @@ class XOR128 {
    * now based on the xor128 as described on Wikipedia https://en.wikipedia.org/wiki/Xorshift
    * All parameters are optional, if nothing is passed a random value from
    *  js functions Math.random() will be used
-   *
    * @param {number|Array} [x] seed or array of seeds. \
    *  If an array is passed, the first 4 elements will be used as seeds
    * @returns {XOR128}
@@ -180,7 +174,6 @@ class XOR128 {
    * Returns a random number in range [a, b) (i.e. a included, b excluded)
    * If only one parameter is passed, the random number will be generated in range [0, a)
    * If no parameters are passed, the random number will be generated in range [0, 1)
-   *
    * @param {number|undefined} [a] if two parameters are passed, minimum range value; maximum range value otherwise
    * @param {number|undefined} [b] maximum range value
    * @returns {number} random number
@@ -227,7 +220,6 @@ class XOR128 {
    * Returns a random integer in range [a, b) (i.e. a included, b excluded)
    * If only one parameter is passed, the random number will be generated in range [0, a)
    * If no parameters are passed, the random number will be generated in range [0, 1]
-   *
    * @param {number|undefined} [a] if two parameters are passed, minimum range value; maximum range value otherwise
    * @param {number|undefined} [b] maximum range value
    * @returns {number} random number
@@ -248,7 +240,6 @@ class XOR128 {
 
   /**
    * Returns a random boolean
-   *
    * @returns {boolean} random boolean
    */
   random_bool() {
@@ -257,9 +248,8 @@ class XOR128 {
 
   /**
    * Returns a random string
-   *
-   * @param {number} [length=10] length of the string
-   * @param {string} [chars="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"] characters to use
+   * @param {number} [length] length of the string
+   * @param {string} [chars] characters to use
    */
   random_string(
     length = 10,
@@ -275,9 +265,8 @@ class XOR128 {
    * Returns a random integer in range (average - interval, average + interval)
    * If only one parameter is passed, the random number will be generated in range (average - 0.5, average + 0.5)
    * If no parameters are passed, the random number will be generated in range [0, 1]
-   *
-   * @param {number} [average=0.5] average value of the random numbers
-   * @param {number} [interval=0.5] semi interval of the random numbers
+   * @param {number} [average] average value of the random numbers
+   * @param {number} [interval] semi interval of the random numbers
    * @returns {number} random number
    */
   random_interval(average = 0.5, interval = 0.5) {
@@ -286,7 +275,6 @@ class XOR128 {
 
   /**
    * Returns a random item from the provided array
-   *
    * @param {Array} arr an array
    * @returns {*} item from input array
    */
@@ -299,7 +287,6 @@ class XOR128 {
 
   /**
    * Returns a random char from the provided string
-   *
    * @param {string} str a string
    * @returns {string} char from input string
    */
@@ -312,7 +299,7 @@ class XOR128 {
 
   /**
    * Returns a random item from the provided array or a random char from the provided string
-   *
+   * @param x
    * @returns {*} item from input array or char from input string
    */
   pick(x) {
@@ -323,7 +310,6 @@ class XOR128 {
 
   /**
    * Shuffles the provided array (the original array does not get shuffled)
-   *
    * @param {Array} arr an array
    */
   shuffle_array(arr) {
@@ -337,7 +323,6 @@ class XOR128 {
 
   /**
    * Shuffles and returns a string
-   *
    * @param {string} string the string to be shuffled
    * @returns {string}
    */
@@ -354,7 +339,6 @@ class XOR128 {
 
   /**
    * Shuffles and returns an array or a string.
-   *
    * @param {Array|string} x an array or a string
    * @returns {*} shuffled array or string
    */

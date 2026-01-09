@@ -5,7 +5,7 @@ import "./jszip.js";
 class Engine {
   /**
    * Create the engine controlling a canvas
-   * @param {Object} canvas DOM element containing the canvas
+   * @param {object} canvas DOM element containing the canvas
    */
   constructor(canvas) {
     this._canvas = canvas;
@@ -133,8 +133,7 @@ class Engine {
 
   /**
    * Save the recording as a series of frames in a zip file
-   *
-   * @param {str} filename of the file to download
+   * @param {string} filename of the file to download
    */
   saveRecording(filename = "frames.zip") {
     // if the recording is not active, do nothing
@@ -164,7 +163,7 @@ class Engine {
 
   /**
    * Returns the coordinates corresponding to a mouse/touch event
-   * @param {Object} e event
+   * @param {object} e event
    * @returns {Point} x,y coordinates
    * @private
    */
@@ -195,8 +194,8 @@ class Engine {
 
   /**
    * Create and download a file
-   * @param {str} filename
-   * @param {str} data
+   * @param {string} filename name of the file
+   * @param {string} data data url or base64 data
    * @private
    */
   _downloadFile(filename, data) {
@@ -213,7 +212,7 @@ class Engine {
 
   /**
    * Private callback for mouse click/touchscreen tap
-   * @param {Object} e event
+   * @param {MouseEvent} e event
    * @private
    */
   _clickCallback(e) {
@@ -223,7 +222,7 @@ class Engine {
 
   /**
    * Callback for mouse down
-   * @param {Object} event
+   * @param {MouseEvent} e event
    * @private
    */
   _mouseDownCallback(e) {
@@ -234,7 +233,7 @@ class Engine {
 
   /**
    * Callback for mouse up
-   * @param {Object} event
+   * @param {MouseEvent} e event
    * @private
    */
   _mouseUpCallback(e) {
@@ -245,7 +244,7 @@ class Engine {
 
   /**
    * Callback for moved mouse
-   * @param {Object} e event
+   * @param {MouseEvent} e event
    * @private
    */
   _mouseMoveCallback(e) {
@@ -264,19 +263,29 @@ class Engine {
 
   /**
    * Callback for key pressed event
-   * @param {Object} e event
+   * @param {KeyboardEvent} e event
    * @private
    */
   _keyDownCallback(e) {
-    this.keyDown(e.key, e.keyCode);
+    this.keyDown(e.key, e.code);
   }
 
+  /**
+   * Callback for key up event
+   * @param {KeyboardEvent} e event
+   * @private
+   */
   _keyUpCallback(e) {
-    this.keyUp(e.key, e.keyCode);
+    this.keyUp(e.key, e.code);
   }
 
+  /**
+   * Callback for key press event
+   * @param {KeyboardEvent} e event
+   * @private
+   */
   _keyPressCallback(e) {
-    this.keyPress(e.key, e.keyCode);
+    this.keyPress(e.key, e.code);
   }
 
   /**
@@ -316,28 +325,28 @@ class Engine {
 
   /**
    * Public callback for key press
-   * @param {string} key
-   * @param {number} code
+   * @param {string} key pressed key
+   * @param {string} code code of the pressed key
    */
   keyPress(key, code) {}
 
   /**
    * Public callback for key down
-   * @param {string} key
-   * @param {number} code
+   * @param {string} key pressed key
+   * @param {number} code code of the pressed key
    */
   keyDown(key, code) {}
 
   /**
    * Public callback for key up
-   * @param {string} key
-   * @param {number} code
+   * @param {string} key pressed key
+   * @param {number} code code of the pressed key
    */
   keyUp(key, code) {}
 
   /**
    * Set the background color for the canvas
-   * @param {string | number} color
+   * @param {string | number} color Color can be a CSS< RGB, RGBA, HEX, HEAX, HSL, HSLA string, a Color object, or a monochrome value (number)
    */
   background(color) {
     // reset background
@@ -356,9 +365,8 @@ class Engine {
   /**
    * Scale the canvas by a factor from the center.
    * If only one parameter is passed, the canvas will be scaled uniformly.
-   *
-   * @param {number} x
-   * @param {number} [y=null]
+   * @param {number} x scaling factor in the x direction
+   * @param {number} y scaling factor in the y direction
    */
   scaleFromCenter(x, y = null) {
     if (y == null) y = x;
@@ -380,14 +388,13 @@ class Engine {
 
   /**
    * Main sketch function, will be run continuously unless noLoop() is called
-   *
    * @param {number} dt Delta time in milliseconds since last frame
    */
   draw(dt) {}
 
   /**
    * Get the current drawing context
-   * @returns {Object} The current drawing context
+   * @returns {object} The current drawing context
    */
   get ctx() {
     return this._ctx;
@@ -395,7 +402,7 @@ class Engine {
 
   /**
    * Get the current drawing canvas
-   * @returns {Object} The current drawing canvas
+   * @returns {object} The current drawing canvas
    */
   get canvas() {
     return this._canvas;
@@ -459,7 +466,7 @@ class Engine {
 
   /**
    * Get the current recording state
-   * @returns {Boolean} The current recording state
+   * @returns {boolean} The current recording state
    */
   get is_recording() {
     return this._is_recording;
@@ -476,7 +483,6 @@ class Engine {
 
   /**
    * Get the previous mouse position
-   *
    * @returns {Point} The previous mouse position
    * @readonly
    */
@@ -485,7 +491,8 @@ class Engine {
   }
 }
 
-/** Class for a moving average buffer.
+/**
+ * Class for a moving average buffer.
  * @private
  */
 class MovingAverage {
@@ -505,7 +512,7 @@ class MovingAverage {
 
   /**
    * Add a value to the buffer
-   * @param {number} value
+   * @param {number} value value to add
    */
   push(value) {
     const index = this._count % this._size;

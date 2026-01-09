@@ -14,7 +14,7 @@ class Point {
 
   /**
    * Return a copy of the point
-   * @returns {Point}
+   * @returns {Point} copy of the point
    */
   copy() {
     return new Point(this._x, this._y);
@@ -22,27 +22,27 @@ class Point {
 
   /**
    * Return the distance between two points
-   * @param {Point} p1
-   * @returns {number}
+   * @param {Point} other other point
+   * @returns {number} distance between the two points
    */
-  distance(p) {
-    return Math.sqrt((p.x - this._x) ** 2 + (p.y - this._y) ** 2);
+  distance(other) {
+    return Math.sqrt((other.x - this._x) ** 2 + (other.y - this._y) ** 2);
   }
 
   /**
    * Returns true if the point is equal to another point
-   * @param {Point} p
-   * @returns {number}
+   * @param {Point} other other point
+   * @returns {number} true if the points are equal
    */
-  equals(p) {
+  equals(other) {
     const epsilon = 0.0001;
     const float_eq = (a, b) => Math.abs(a - b) < epsilon;
-    return float_eq(this._x, p.x) && float_eq(this._y, p.y);
+    return float_eq(this._x, other.x) && float_eq(this._y, other.y);
   }
 
   /**
    * Returns the point as a string
-   * @returns {string}
+   * @returns {string} string representation of the point
    */
   toString() {
     return `(${this._x}, ${this._y})`;
@@ -50,7 +50,7 @@ class Point {
 
   /**
    * Returns the point x coordinate
-   * @returns {number}
+   * @returns {number} x coordinate
    */
   get x() {
     return this._x;
@@ -58,7 +58,7 @@ class Point {
 
   /**
    * Sets the point x coordinate
-   * @param {number} nx
+   * @param {number} nx new x coordinate
    */
   set x(nx) {
     this._x = nx;
@@ -66,7 +66,7 @@ class Point {
 
   /**
    * Returns the point y coordinate
-   * @returns {number}
+   * @returns {number} y coordinate
    */
   get y() {
     return this._y;
@@ -74,7 +74,7 @@ class Point {
 
   /**
    * Sets the point y coordinate
-   * @param {number} ny
+   * @param {number} ny new y coordinate
    */
   set y(ny) {
     this._y = ny;
