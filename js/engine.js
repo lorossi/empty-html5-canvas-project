@@ -212,43 +212,39 @@ class Engine {
   }
 
   /**
-   * Private callback for mouse click/touchscreen tap
+   * Handler for mouse click/touchscreen tap
    * @param {MouseEvent} e event
-   * @private
    */
-  _clickCallback(e) {
+  clickHandler(e) {
     const p = this._calculatePressCoords(e);
     this.click(p.x, p.y);
   }
 
   /**
-   * Callback for mouse down
+   * Handler for mouse down
    * @param {MouseEvent} e event
-   * @private
    */
-  _mouseDownCallback(e) {
+  mouseDownHandler(e) {
     this._mouse_pressed = true;
     const p = this._calculatePressCoords(e);
     this.mouseDown(p.x, p.y);
   }
 
   /**
-   * Callback for mouse up
+   * Handler for mouse up
    * @param {MouseEvent} e event
-   * @private
    */
-  _mouseUpCallback(e) {
+  mouseUpHandler(e) {
     this._mouse_pressed = false;
     const p = this._calculatePressCoords(e);
     this.mouseUp(p.x, p.y);
   }
 
   /**
-   * Callback for moved mouse
+   * Handler for moved mouse
    * @param {MouseEvent} e event
-   * @private
    */
-  _mouseMoveCallback(e) {
+  mouseMoveHandler(e) {
     const p = this._calculatePressCoords(e);
 
     // update mouse position
@@ -263,29 +259,26 @@ class Engine {
   }
 
   /**
-   * Callback for key pressed event
+   * Handler for key pressed event
    * @param {KeyboardEvent} e event
-   * @private
    */
-  _keyDownCallback(e) {
+  keyDownHandler(e) {
     this.keyDown(e.key, e.code);
   }
 
   /**
-   * Callback for key up event
+   * Handler for key up event
    * @param {KeyboardEvent} e event
-   * @private
    */
-  _keyUpCallback(e) {
+  keyUpHandler(e) {
     this.keyUp(e.key, e.code);
   }
 
   /**
-   * Callback for key press event
+   * Handler for key press event
    * @param {KeyboardEvent} e event
-   * @private
    */
-  _keyPressCallback(e) {
+  keyPressHandler(e) {
     this.keyPress(e.key, e.code);
   }
 
