@@ -55,7 +55,7 @@ Furthermore, four additional classes are included:
 - `Point` that supports simple 2D points
 - `SimplexNoise` that supports simplex-noise generation, up to 4 dimensions both with and without seed
 - `XOR128` that supports a simple seeded random number generator
-- `Palette` and `PaletteFactory` that support color palettes and random palette generation
+- `Palette`, `GradientPalette`, and `PaletteFactory` that support color palettes and random palette generation
 
 I recommend you to read the documentation of the classes to understand how they work and their methods.
 
