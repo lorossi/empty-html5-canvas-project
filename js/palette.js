@@ -44,6 +44,33 @@ class Palette {
   }
 
   /**
+   * Reverts the order of colors in the palette
+   * @returns {Palette} inverted palette
+   */
+  reverse() {
+    this._colors.reverse();
+    return this;
+  }
+
+  /**
+   * Rotate the colors in the palette by n positions
+   * @param {number} n number of positions to rotate
+   * @returns {Palette} rotated palette
+   */
+  rotate(n) {
+    const wrap = (n) => {
+      while (n < 0) n += this._colors.length;
+      return n % this._colors.length;
+    };
+
+    const steps = wrap(n);
+    this._colors = this._colors
+      .slice(steps)
+      .concat(this._colors.slice(0, steps));
+    return this;
+  }
+
+  /**
    * Return a copy of the palette
    * @returns {Palette} copy of the palette
    */
@@ -190,4 +217,4 @@ class PaletteFactory {
   }
 }
 
-export { Palette, PaletteFactory };
+export { Palette, GradientPalette, PaletteFactory };
