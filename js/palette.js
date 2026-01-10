@@ -137,6 +137,55 @@ class Palette {
   }
 }
 
+class GradientPalette extends Palette {
+  /**
+   * Create a gradient palette from an array of Color objects
+   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
+   * @param {Color} from starting color of the gradient
+   * @param {Color} to ending color of the gradient
+   * @param {number} steps number of steps in the gradient
+   * @param {EasingFunction|null} easing easing function to use for the interpolation. Defaults to null (linear)
+   */
+  constructor(from, to, steps, easing = null) {
+    const colors = [];
+    for (let i = 0; i < steps; i++) {
+      const t = i / (steps - 1);
+      colors.push(from.mix(to, t, easing));
+    }
+    super(colors);
+  }
+
+  /**
+   * Create a gradient palette from HEX color strings
+   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
+   * @param {string} from_hex starting HEX color of the gradient
+   * @param {string} to_hex ending HEX color of the gradient
+   * @param {number} steps number of steps in the gradient
+   * @param {EasingFunction|null} easing easing function to use for the interpolation. Defaults to null (linear)
+   * @returns {GradientPalette} gradient palette object
+   */
+  static fromHEXColors(from_hex, to_hex, steps, easing = null) {
+    const from = Color.fromHex(from_hex);
+    const to = Color.fromHex(to_hex);
+    return new GradientPalette(from, to, steps, easing);
+  }
+
+  /**
+   * Create a gradient palette from RGB color arrays
+   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
+   * @param {number[]} from_rgb starting RGB color of the gradient
+   * @param {number[]} to_rgb ending RGB color of the gradient
+   * @param {number} steps number of steps in the gradient
+   * @param {EasingFunction|null} easing easing function to use for the interpolation. Defaults to null (linear)
+   * @returns {GradientPalette} gradient palette object
+   */
+  static fromRGBColors(from_rgb, to_rgb, steps, easing = null) {
+    const from = Color.fromRGB(...from_rgb);
+    const to = Color.fromRGB(...to_rgb);
+    return new GradientPalette(from, to, steps, easing);
+  }
+}
+
 /* Class representing a factory for palettes */
 class PaletteFactory {
   /**
