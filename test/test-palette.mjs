@@ -1,4 +1,4 @@
-import { Color, Palette } from "../js/lib.js";
+import { Color, Palette, GradientPalette } from "../js/lib.js";
 import { SFC32, lerp, easeInOutPoly } from "./utils.mjs";
 import * as chai from "chai";
 
@@ -87,6 +87,55 @@ describe("Palette test", () => {
     chai.expect(shuffled_order).to.have.lengthOf(original_order.length);
     for (const color of shuffled_order) {
       chai.expect(original_order).to.include(color);
+    }
+  });
+
+  it("Should invert the order of colors in the palette", () => {
+    const colors = [
+      new Color(255, 0, 0),
+      new Color(0, 255, 0),
+      new Color(0, 0, 255),
+    ];
+    const palette = new Palette(colors);
+    const original_order = palette.colors.map((c) => c.hex);
+
+    palette.reverse();
+
+    const reversed_order = palette.colors.map((c) => c.hex);
+    for (let i = 0; i < original_order.length; i++) {
+      chai
+        .expect(reversed_order[i])
+        .to.equal(original_order[original_order.length - 1 - i]);
+    }
+  });
+
+  it("Should rotate the colors in the palette", () => {
+    const rotate = (array, n) => {
+      while (n < 0) n += array.length;
+
+      for (let i = 0; i < n; i++) {
+        array.push(array.shift());
+      }
+      return array;
+    };
+
+    const colors = [
+      new Color(255, 0, 0),
+      new Color(0, 255, 0),
+      new Color(0, 0, 255),
+    ];
+
+    const palette = new Palette(colors);
+    const original_order = colors.map((c) => c.hex);
+
+    for (let n = -10; n <= 10; n++) {
+      const rotated_palette = palette.copy().rotate(n);
+      const expected_order = rotate([...original_order], n);
+
+      const rotated_order = rotated_palette.colors.map((c) => c.hex);
+      for (let i = 0; i < original_order.length; i++) {
+        chai.expect(rotated_order[i]).to.equal(expected_order[i]);
+      }
     }
   });
 
@@ -231,5 +280,89 @@ describe("Palette randomness test", () => {
         }
       }
     }
+  });
+});
+
+describe("GradientPalette test", () => {
+  it("Should create a GradientPalette instance", () => {
+    const from = new Color(255, 0, 0);
+    const to = new Color(0, 0, 255);
+
+    for (let steps = 2; steps <= 10; steps++) {
+      const gradient_palette = new GradientPalette(
+        from,
+        to,
+        steps,
+        easeInOutPoly
+      );
+
+      chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
+      chai.expect(gradient_palette).to.be.instanceOf(Palette);
+      chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
+
+      // check first and last colors
+      const first_color = gradient_palette.getColor(0);
+      const last_color = gradient_palette.getColor(steps - 1);
+
+      chai.expect(first_color.equals(from)).to.be.true;
+      chai.expect(last_color.equals(to)).to.be.true;
+
+      // check intermediate colors
+      for (let i = 1; i < steps - 1; i++) {
+        const t = i / (steps - 1);
+        const expected_color = from.mix(to, t, easeInOutPoly);
+        const actual_color = gradient_palette.getColor(i);
+
+        chai.expect(actual_color.equals(expected_color)).to.be.true;
+      }
+    }
+  });
+
+  it("Should create a GradientPalette from HEX colors", () => {
+    const from_hex = "#FF0000";
+    const to_hex = "#0000FF";
+    const steps = 5;
+
+    const gradient_palette = GradientPalette.fromHEXColors(
+      from_hex,
+      to_hex,
+      steps,
+      easeInOutPoly
+    );
+
+    chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
+    chai.expect(gradient_palette).to.be.instanceOf(Palette);
+    chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
+
+    // check first and last colors
+    const first_color = gradient_palette.getColor(0);
+    const last_color = gradient_palette.getColor(steps - 1);
+
+    chai.expect(first_color.equals(Color.fromHex(from_hex))).to.be.true;
+    chai.expect(last_color.equals(Color.fromHex(to_hex))).to.be.true;
+  });
+
+  it("Should create a GradientPalette from RGB colors", () => {
+    const from_rgb = [255, 0, 0];
+    const to_rgb = [0, 0, 255];
+    const steps = 5;
+
+    const gradient_palette = GradientPalette.fromRGBColors(
+      from_rgb,
+      to_rgb,
+      steps,
+      easeInOutPoly
+    );
+
+    chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
+    chai.expect(gradient_palette).to.be.instanceOf(Palette);
+    chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
+
+    // check first and last colors
+    const first_color = gradient_palette.getColor(0);
+    const last_color = gradient_palette.getColor(steps - 1);
+
+    chai.expect(first_color.equals(Color.fromRGB(...from_rgb))).to.be.true;
+    chai.expect(last_color.equals(Color.fromRGB(...to_rgb))).to.be.true;
   });
 });
