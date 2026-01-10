@@ -6,6 +6,7 @@
 import {
   Engine,
   Color,
+  GradientPalette,
   Palette,
   PaletteFactory,
   Point,
