@@ -41,6 +41,39 @@ class Point {
   }
 
   /**
+   * Add another point to this point
+   * @param {Point} other other point
+   * @returns {Point} this point after addition
+   */
+  add(other) {
+    this._x += other.x;
+    this._y += other.y;
+    return this;
+  }
+
+  /**
+   * Subtract another point from this point
+   * @param {Point} other other point
+   * @returns {Point} this point after subtraction
+   */
+  subtract(other) {
+    this._x -= other.x;
+    this._y -= other.y;
+    return this;
+  }
+
+  /**
+   * Multiply this point by a scalar
+   * @param {number} scalar scalar value
+   * @returns {Point} this point after multiplication
+   */
+  multiply(scalar) {
+    this._x *= scalar;
+    this._y *= scalar;
+    return this;
+  }
+
+  /**
    * Returns the point as a string
    * @returns {string} string representation of the point
    */

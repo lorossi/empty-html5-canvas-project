@@ -9,8 +9,11 @@ describe("Point test", () => {
   });
 
   it("Should correctly provide toString method", () => {
-    const p = new Point(1, 1);
-    chai.expect(p.toString()).to.equal("(1, 1)");
+    const p1 = new Point(1, 1);
+    chai.expect(p1.toString()).to.equal("(1, 1)");
+
+    const p2 = new Point(-2.5, 3.14);
+    chai.expect(p2.toString()).to.equal("(-2.5, 3.14)");
   });
 
   it("Should correctly compare Point instances for equality", () => {
@@ -24,6 +27,30 @@ describe("Point test", () => {
 
     const p4 = new Point(1.1, 1.1);
     chai.expect(p1.equals(p4)).to.be.false;
+  });
+
+  it("Should correctly sum, subtract, and multiply Point instances", () => {
+    const p1 = new Point(1, 1);
+    const p2 = new Point(2, 2);
+
+    const pa = p1.add(p2);
+    chai.expect(p1.equals(new Point(3, 3))).to.be.true;
+    chai.expect(p1.equals(new Point(-3, 3))).to.be.false;
+    chai.expect(pa).to.equal(p1); // check for chaining
+    chai.expect(p2.equals(new Point(2, 2))).to.be.true; // check that p2 is unchanged
+
+    const p3 = new Point(3, 3);
+    const p4 = new Point(1, 1);
+    const ps = p3.subtract(p4);
+    chai.expect(p3.equals(new Point(2, 2))).to.be.true;
+    chai.expect(p3.equals(new Point(2, 3))).to.be.false;
+    chai.expect(ps).to.equal(p3);
+
+    const p5 = new Point(2, 3);
+    const pm = p5.multiply(2);
+    chai.expect(p5.equals(new Point(4, 6))).to.be.true;
+    chai.expect(p5.equals(new Point(4, 5))).to.be.false;
+    chai.expect(pm).to.equal(p5);
   });
 
   it("Should correctly copy Point instances", () => {
