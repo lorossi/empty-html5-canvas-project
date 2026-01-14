@@ -53,6 +53,20 @@ describe("Point test", () => {
     chai.expect(pm).to.equal(p5);
   });
 
+  it("Should correctly linearly interpolate between Point instances", () => {
+    const p1 = new Point(0, 0);
+    const p2 = new Point(10, 10);
+
+    const p_start = p1.copy().lerp(p2, 0);
+    chai.expect(p_start.equals(new Point(0, 0))).to.be.true;
+
+    const p_mid = p1.copy().lerp(p2, 0.5);
+    chai.expect(p_mid.equals(new Point(5, 5))).to.be.true;
+
+    const p_end = p1.copy().lerp(p2, 1);
+    chai.expect(p_end.equals(new Point(10, 10))).to.be.true;
+  });
+
   it("Should correctly copy Point instances", () => {
     const p1 = new Point(1, 1);
     const p2 = p1.copy();

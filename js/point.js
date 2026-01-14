@@ -82,6 +82,18 @@ class Point {
   }
 
   /**
+   * Linearly interpolate between this point and another point
+   * @param {Point} other other point
+   * @param {number} t interpolation factor [0, 1]
+   * @returns {Point} this point after interpolation
+   */
+  lerp(other, t) {
+    this._x = this._x + (other.x - this._x) * t;
+    this._y = this._y + (other.y - this._y) * t;
+    return this;
+  }
+
+  /**
    * Returns the point x coordinate
    * @returns {number} x coordinate
    */
