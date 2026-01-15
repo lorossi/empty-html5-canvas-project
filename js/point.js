@@ -1,3 +1,7 @@
+/**
+ * @file Point class representing a 2D point
+ */
+
 /** Class containing a simple 2D point */
 class Point {
   /**

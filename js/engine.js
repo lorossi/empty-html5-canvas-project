@@ -1,3 +1,8 @@
+/**
+ * @file Engine class controlling the main canvas loop
+ * @author Lorenzo Rossi
+ */
+
 import { Color } from "./color.js";
 import { Point } from "./point.js";
 import "./jszip.js";

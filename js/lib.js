@@ -7,6 +7,7 @@
  */
 
 export { Color } from "./color.js";
+export { CSS_COLOR_NAMES, SANZO_WADA_COLORS } from "./color-definitions.js";
 export { Engine } from "./engine.js";
 export { Palette, GradientPalette, PaletteFactory } from "./palette.js";
 export { Point } from "./point.js";

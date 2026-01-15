@@ -1,6 +1,6 @@
 /**
- * @file inject.js
- * @description This file is the entry point of the project. It is responsible for creating the canvas and the sketch object.
+ * @file Project entry point.
+ * @author Lorenzo Rossi
  */
 import { Sketch } from "./sketch.js";
 

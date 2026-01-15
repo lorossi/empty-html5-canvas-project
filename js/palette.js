@@ -1,3 +1,7 @@
+/**
+ * @file Palette classes for color palette management
+ */
+
 import { Color } from "./color.js";
 
 /* Class representing a color palette */

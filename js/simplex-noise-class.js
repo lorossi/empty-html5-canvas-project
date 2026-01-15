@@ -1,3 +1,7 @@
+/**
+ * @file SimplexNoise class for generating simplex noise
+ */
+
 import {
   createNoise2D,
   createNoise3D,
