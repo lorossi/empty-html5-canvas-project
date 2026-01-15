@@ -5,7 +5,7 @@
     "js/**/*.mjs"
   ],
   "exclude": [
-    "js/inject.js",
+    "js/main.js",
     "js/jszip.js",
     "js/lib.js",
     "js/simplex-noise.js",
