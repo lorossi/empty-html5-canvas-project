@@ -10,7 +10,7 @@
     "js/lib.js",
     "js/simplex-noise.js",
     "js/sketch.js",
-    "js/xor128.js"
+    "js/deps/**"
   ],
   "reporter": [
     "text",

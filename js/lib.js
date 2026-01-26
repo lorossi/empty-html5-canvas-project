@@ -12,6 +12,6 @@ export { Engine } from "./engine.js";
 export { Palette, GradientPalette, PaletteFactory } from "./palette.js";
 export { Point } from "./point.js";
 export { SimplexNoise } from "./simplex-noise-class.js";
-export { XOR128 } from "./xor128.js";
+export { XOR128 } from "./deps/xor128.js";
 
 import "./jszip.js";

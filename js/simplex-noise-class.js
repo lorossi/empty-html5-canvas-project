@@ -6,8 +6,8 @@ import {
   createNoise2D,
   createNoise3D,
   createNoise4D,
-} from "./simplex-noise.js";
-import { XOR128 } from "./xor128.js";
+} from "./deps/simplex-noise.js";
+import { XOR128 } from "./deps/xor128.js";
 
 /**
  * Class handling simplex noise.
