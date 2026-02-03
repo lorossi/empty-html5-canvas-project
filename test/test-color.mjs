@@ -197,6 +197,15 @@ describe("Color test", () => {
       const calculated = from.mix(to, t);
       chai.expect(color_equal(calculated, expected)).to.be.true;
       chai.expect(expected.equals(calculated)).to.be.true;
+      // test immutability      chai.expect(calculated).to.not.equal(from);
+      chai.expect(from.r).to.equal(255);
+      chai.expect(from.g).to.equal(0);
+      chai.expect(from.b).to.equal(0);
+      chai.expect(from.a).to.equal(1);
+      chai.expect(to.r).to.equal(0);
+      chai.expect(to.g).to.equal(255);
+      chai.expect(to.b).to.equal(0);
+      chai.expect(to.a).to.equal(0);
     }
 
     // test easing functions
@@ -207,6 +216,16 @@ describe("Color test", () => {
         const calculated = from.mix(to, t, easing);
         chai.expect(color_equal(calculated, expected)).to.be.true;
         chai.expect(expected.equals(calculated)).to.be.true;
+        // test immutability
+        chai.expect(calculated).to.not.equal(from);
+        chai.expect(from.r).to.equal(255);
+        chai.expect(from.g).to.equal(0);
+        chai.expect(from.b).to.equal(0);
+        chai.expect(from.a).to.equal(1);
+        chai.expect(to.r).to.equal(0);
+        chai.expect(to.g).to.equal(255);
+        chai.expect(to.b).to.equal(0);
+        chai.expect(to.a).to.equal(0);
       }
     }
   });
@@ -218,9 +237,21 @@ describe("Color test", () => {
 
     const lightened = black.lighten(1);
     chai.expect(lightened.equals(white)).to.be.true;
+    // test immutability
+    chai.expect(lightened).to.not.equal(black);
+    chai.expect(black.r).to.equal(0);
+    chai.expect(black.g).to.equal(0);
+    chai.expect(black.b).to.equal(0);
+    chai.expect(black.a).to.equal(1);
 
     const darkened = white.darken(1);
     chai.expect(darkened.equals(black)).to.be.true;
+    // test immutability
+    chai.expect(darkened).to.not.equal(white);
+    chai.expect(white.r).to.equal(255);
+    chai.expect(white.g).to.equal(255);
+    chai.expect(white.b).to.equal(255);
+    chai.expect(white.a).to.equal(1);
 
     // test lightening and darkening
     const mid = new Color(128, 128, 128, 1);
@@ -245,6 +276,12 @@ describe("Color test", () => {
         const d_expected = mid.mix(black, easing(t, 2));
         const d_calculated = mid.darken(t, easing);
         chai.expect(d_expected.equals(d_calculated)).to.be.true;
+        // test immutability
+        chai.expect(d_calculated).to.not.equal(mid);
+        chai.expect(mid.r).to.equal(128);
+        chai.expect(mid.g).to.equal(128);
+        chai.expect(mid.b).to.equal(128);
+        chai.expect(mid.a).to.equal(1);
       }
     }
   });
