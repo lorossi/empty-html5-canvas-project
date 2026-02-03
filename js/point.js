@@ -50,9 +50,9 @@ class Point {
    * @returns {Point} this point after addition
    */
   add(other) {
-    this._x += other.x;
-    this._y += other.y;
-    return this;
+    const x = this._x + other.x;
+    const y = this._y + other.y;
+    return new Point(x, y);
   }
 
   /**
@@ -61,9 +61,9 @@ class Point {
    * @returns {Point} this point after subtraction
    */
   subtract(other) {
-    this._x -= other.x;
-    this._y -= other.y;
-    return this;
+    const x = this._x - other.x;
+    const y = this._y - other.y;
+    return new Point(x, y);
   }
 
   /**
@@ -72,9 +72,21 @@ class Point {
    * @returns {Point} this point after multiplication
    */
   multiply(scalar) {
-    this._x *= scalar;
-    this._y *= scalar;
-    return this;
+    const x = this._x * scalar;
+    const y = this._y * scalar;
+    return new Point(x, y);
+  }
+
+  /**
+   * Divide this point by a scalar
+   * @param {number} scalar scalar value
+   * @returns {Point} this point after division
+   */
+  divide(scalar) {
+    if (scalar === 0) throw new Error("Cannot divide by zero");
+    const x = this._x / scalar;
+    const y = this._y / scalar;
+    return new Point(x, y);
   }
 
   /**
@@ -92,9 +104,9 @@ class Point {
    * @returns {Point} this point after interpolation
    */
   lerp(other, t) {
-    this._x = this._x + (other.x - this._x) * t;
-    this._y = this._y + (other.y - this._y) * t;
-    return this;
+    const x = this._x + (other.x - this._x) * t;
+    const y = this._y + (other.y - this._y) * t;
+    return new Point(x, y);
   }
 
   /**
