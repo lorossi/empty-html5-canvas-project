@@ -24,8 +24,7 @@ Documentation for the XOR128 random number generator is [here](https://lorossi.g
 Don't have time for that?
 Keep reading for the short version.
 
-The canvas size is $1000\,\textrm{px}$ by $1000\,\textrm{px}$.
-
+The canvas size is 1000x1000 pixels.
 All you have to do is write your code inside the `sketch.js` file. Inside you will find 3 methods:
 
 - `preload()` it's run only once. You should put there anything that you want to configure and never touch again
