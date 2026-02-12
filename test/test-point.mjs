@@ -3,7 +3,7 @@ import * as chai from "chai";
 
 describe("Point test", () => {
   describe("Constructor tests", () => {
-    it("Should correctly instantiate Point objects", () => {
+    it("Should instantiate Point objects", () => {
       chai.expect(() => new Point(0, 0)).to.not.throw();
       chai.expect(() => new Point()).to.throw();
       chai.expect(() => new Point(0, 0, 0)).to.throw();
@@ -18,7 +18,7 @@ describe("Point test", () => {
       chai.expect(() => Point.fromArray([1, 2, 3])).to.throw();
     });
 
-    it("Should correctly provide toString method", () => {
+    it("Should provide toString method", () => {
       const p1 = new Point(1, 1);
       chai.expect(p1.toString()).to.equal("(1, 1)");
 
@@ -28,7 +28,7 @@ describe("Point test", () => {
   });
 
   describe("Operations tests", () => {
-    it("Should correctly compare Point instances for equality", () => {
+    it("Should compare Point instances for equality", () => {
       const p1 = new Point(1, 1);
       const p2 = new Point(1, 1);
 
@@ -43,7 +43,7 @@ describe("Point test", () => {
       chai.expect(p1.equals(p4)).to.be.false;
     });
 
-    it("Should correctly sum, subtract, multiply, and divide Point instances", () => {
+    it("Should sum, subtract, multiply, and divide Point instances", () => {
       const p1 = new Point(1, 1);
       const p2 = new Point(2, 2);
       const pa = p1.add(p2);
@@ -87,7 +87,7 @@ describe("Point test", () => {
       chai.expect(() => p7.divide(0)).to.throw();
     });
 
-    it("Should correctly linearly interpolate between Point instances", () => {
+    it("Should linearly interpolate between Point instances", () => {
       const p1 = new Point(0, 0);
       const p2 = new Point(10, 10);
 
@@ -119,7 +119,7 @@ describe("Point test", () => {
       chai.expect(p_end.equals(new Point(10, 10))).to.be.true;
     });
 
-    it("Should correctly copy Point instances", () => {
+    it("Should copy Point instances", () => {
       const p1 = new Point(1, 1);
       const p2 = p1.copy();
       chai.expect(p1.equals(p2)).to.be.true;
@@ -133,7 +133,7 @@ describe("Point test", () => {
       chai.expect(p2.toArray()).to.deep.equal([2, 2]);
     });
 
-    it("Should correctly calculate Point distance", () => {
+    it("Should calculate Point distance", () => {
       const p1 = new Point(0, 0);
       const p2 = new Point(3, 4);
       chai.expect(p1.distance(p2)).to.equal(5);
@@ -141,7 +141,7 @@ describe("Point test", () => {
   });
 
   describe("Getters and setters tests", () => {
-    it("Should correctly provide getters and setters", () => {
+    it("Should provide getters and setters", () => {
       const p = new Point(0, 0);
       chai.expect(p.x).to.equal(0);
       chai.expect(p.y).to.equal(0);
@@ -154,7 +154,7 @@ describe("Point test", () => {
       chai.expect(p.toArray()).to.deep.equal([1, 1]);
     });
 
-    it("Should correctly handle randomized tests", () => {
+    it("Should handle randomized tests", () => {
       // instantiation
       for (let i = 0; i < 100; i++) {
         const x = Math.random() * 100;
