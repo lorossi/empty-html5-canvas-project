@@ -13,6 +13,7 @@ import { XOR128 } from "./deps/xor128.js";
  * Class handling simplex noise.
  * This class interfaces with the SimplexNoise library by Jonas Wagner.
  * The number generation is taken care of by my xor128 library.
+ * @class
  */
 class SimplexNoise {
   /**

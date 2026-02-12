@@ -1,4 +1,9 @@
 import { Point } from "./point.js";
+
+/**
+ * Utility helpers for math, easing, and index conversions.
+ * @class
+ */
 class Utils {
   /**
    *  Remaps a number from one range to another.

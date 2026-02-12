@@ -7,7 +7,11 @@ import { Color } from "./color.js";
 import { Point } from "./point.js";
 import "./jszip.js";
 
-/** Class containing the main engine running a canvas */
+/**
+ * Class representing the main engine controlling the canvas loop, mouse and keyboard events, and frame recording.
+ * The Engine class is designed to be extended by the user to create custom sketches. It provides a set of callback methods for handling events and drawing on the canvas, as well as utility methods for managing the canvas state and recording frames.
+ * @class
+ */
 class Engine {
   /**
    * Create the engine controlling a canvas

@@ -4,7 +4,10 @@
 
 import { Color } from "./color.js";
 
-/* Class representing a color palette */
+/**
+ * Class representing a color palette, with methods for shuffling, reversing, rotating, and retrieving colors. The Palette class allows you to create a palette from an array of Color objects or from an array of HEX or RGB color values. You can also get a random color from the palette or a smoothly interpolated color based on a value between 0 and 1.
+ * @class
+ */
 class Palette {
   /**
    * Create a palette from an array of Color objects

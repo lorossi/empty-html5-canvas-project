@@ -5,7 +5,10 @@
 
 import { CSS_COLOR_NAMES, SANZO_WADA_COLORS } from "./color-definitions.js";
 
-/** Class containing colors.*/
+/**
+ * Class representing a color, with methods for manipulation and conversion between different color formats.
+ * @class
+ */
 class Color {
   /**
    * Create a color by setting the value of its RGB channels.
