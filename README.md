@@ -56,6 +56,7 @@ Furthermore, four additional classes are included:
 - `SimplexNoise` that supports simplex-noise generation, up to 4 dimensions both with and without seed
 - `XOR128` that supports a simple seeded random number generator
 - `Palette`, `GradientPalette`, and `PaletteFactory` that support color palettes and random palette generation
+- `Utils` that contains some utility functions, such as `lerp`, `remap`, `wrap`, some easing functions, and some functions to convert between 1D array indices and 2D coordinates.
 
 I recommend you to read the documentation of the classes to understand how they work and their methods.
 
