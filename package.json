@@ -12,7 +12,7 @@
     "lint": "eslint js/**/*.js",
     "docs": "jsdoc js/*.js -d docs/",
     "bundle": "rollup -c",
-    "build": "mkdir -p dist/js && npm run bundle && cp index.html dist/ && cp -r css/ dist/ && cp js/sketch.js dist/js/sketch.js && cp js/main.js dist/js/main.js"
+    "build": "mkdir -p dist/js && npm run bundle && cp -r assets/* dist/ && cp js/sketch.js dist/js/sketch.js && cp js/main.js dist/js/main.js"
   },
   "repository": {
     "type": "git",
