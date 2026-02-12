@@ -5,7 +5,7 @@
 
 import { Color } from "./color.js";
 import { Point } from "./point.js";
-import "./jszip.js";
+import "./deps/jszip.js";
 
 /**
  * Class representing the main engine controlling the canvas loop, mouse and keyboard events, and frame recording.
