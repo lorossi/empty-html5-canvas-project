@@ -3,10 +3,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig([
   globalIgnores([
-    "js/jszip.js",
-    "js/simplex-noise.js",
-    "js/lib.js",
-    "js/xor128.js",
+    "js/deps/*.js", // Ignore dependencies
   ]),
   {
     languageOptions: {
@@ -22,5 +19,11 @@ export default defineConfig([
   },
   jsdoc({
     config: "flat/recommended",
+    rules: {
+      "jsdoc/check-types": "error", // Checks that types are valid JSDoc types
+      "jsdoc/no-undefined-types": "error", // Fails on unknown typedefs
+      "jsdoc/require-param-type": "error", // Requires type for @param
+      "jsdoc/require-returns-type": "error", // Requires type for @returns
+    },
   }),
 ]);
