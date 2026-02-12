@@ -11,6 +11,7 @@ import {
   PaletteFactory,
   Point,
   SimplexNoise,
+  Utils,
   XOR128,
 } from "./lib.js";
 
