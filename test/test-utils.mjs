@@ -1,7 +1,7 @@
 import * as chai from "chai";
 
 import { Utils } from "../js/utils.js";
-import { easeInPoly, easeInOutPoly, easeOutPoly } from "./utils.mjs";
+import { ease_in_poly, ease_in_out_poly, ease_out_poly } from "./utils.mjs";
 
 describe("Utils test", () => {
   describe("Easing functions", () => {
@@ -34,13 +34,13 @@ describe("Utils test", () => {
       for (let t = 0; t <= 1; t += 0.01) {
         chai
           .expect(Utils.ease_in_out_poly(t))
-          .to.be.approximately(easeInOutPoly(t), EPS);
+          .to.be.approximately(ease_in_out_poly(t), EPS);
         chai
           .expect(Utils.ease_in_poly(t))
-          .to.be.approximately(easeInPoly(t), EPS);
+          .to.be.approximately(ease_in_poly(t), EPS);
         chai
           .expect(Utils.ease_out_poly(t))
-          .to.be.approximately(easeOutPoly(t), EPS);
+          .to.be.approximately(ease_out_poly(t), EPS);
       }
     });
 
