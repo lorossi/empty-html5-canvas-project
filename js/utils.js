@@ -1,3 +1,4 @@
+import { Point } from "./point.js";
 class Utils {
   /**
    *  Remaps a number from one range to another.
@@ -142,6 +143,50 @@ class Utils {
     if (t < 0 || t > 1) throw new Error("Utils: input must be in range [0, 1]");
     if (t === 1) return 1;
     return 1 - 2 ** (-10 * t);
+  }
+
+  /**
+   * Converts a linear index to 2D coordinates.
+   * @param {number} i linear index
+   * @param {number} width row width
+   * @returns {[number, number]} tuple of [x, y]
+   */
+  static i_to_xy(i, width) {
+    const x = i % width;
+    const y = Math.floor(i / width);
+    return [x, y];
+  }
+
+  /**
+   * Converts 2D coordinates to a linear index.
+   * @param {number} x x coordinate
+   * @param {number} y y coordinate
+   * @param {number} width row width
+   * @returns {number} linear index
+   */
+  static xy_to_i(x, y, width) {
+    return y * width + x;
+  }
+
+  /**
+   * Converts a linear index to a Point instance.
+   * @param {number} i linear index
+   * @param {number} width row width
+   * @returns {Point} point at the computed coordinates
+   */
+  static i_to_point(i, width) {
+    const [x, y] = Utils.i_to_xy(i, width);
+    return new Point(x, y);
+  }
+
+  /**
+   * Converts a Point instance to a linear index.
+   * @param {Point} point point to convert
+   * @param {number} width row width
+   * @returns {number} linear index
+   */
+  static point_to_i(point, width) {
+    return Utils.xy_to_i(point.x, point.y, width);
   }
 }
 
