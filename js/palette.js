@@ -4,7 +4,12 @@
 
 import { Color } from "./color.js";
 
-/* Class representing a color palette */
+/** @import {RandomClass, EasingFunction} from "./doc_types.js" */
+
+/**
+ * Class representing a color palette, with methods for shuffling, reversing, rotating, and retrieving colors. The Palette class allows you to create a palette from an array of Color objects or from an array of HEX or RGB color values. You can also get a random color from the palette or a smoothly interpolated color based on a value between 0 and 1.
+ * @class
+ */
 class Palette {
   /**
    * Create a palette from an array of Color objects
@@ -34,7 +39,6 @@ class Palette {
 
   /**
    * Shuffle the colors in the palette
-   * @typedef {RandomClass} RandomClass An object with a random() method that returns a float between 0 and 1
    * @param {RandomClass} rand random number generator with a random() method. Defaults to Math
    * @returns {Palette} shuffled palette
    */
@@ -93,7 +97,6 @@ class Palette {
 
   /**
    * Get a random color from the palette
-   * @typedef {RandomClass} RandomClass An object with a random() method that returns a float between 0 and 1
    * @param {RandomClass} rand random number generator with a random() method. Defaults to Math
    * @returns {Color} random color from the palette
    */
@@ -104,7 +107,6 @@ class Palette {
 
   /**
    * Get a smoothly interpolated color from the palette
-   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
    * @param {number} t value between 0 and 1
    * @param {EasingFunction|null} easing easing function to use for the interpolation. Defaults to null (linear)
    * @returns {Color} smoothly interpolated color from the palette
@@ -144,7 +146,6 @@ class Palette {
 class GradientPalette extends Palette {
   /**
    * Create a gradient palette from an array of Color objects
-   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
    * @param {Color} from starting color of the gradient
    * @param {Color} to ending color of the gradient
    * @param {number} steps number of steps in the gradient
@@ -161,7 +162,6 @@ class GradientPalette extends Palette {
 
   /**
    * Create a gradient palette from HEX color strings
-   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
    * @param {string} from_hex starting HEX color of the gradient
    * @param {string} to_hex ending HEX color of the gradient
    * @param {number} steps number of steps in the gradient
@@ -176,7 +176,6 @@ class GradientPalette extends Palette {
 
   /**
    * Create a gradient palette from RGB color arrays
-   * @typedef {EasingFunction} EasingFunction Easing function that takes a value between 0 and 1 and returns a value between 0 and 1
    * @param {number[]} from_rgb starting RGB color of the gradient
    * @param {number[]} to_rgb ending RGB color of the gradient
    * @param {number} steps number of steps in the gradient
@@ -222,7 +221,6 @@ class PaletteFactory {
 
   /**
    * Get a random palette from the factory
-   * @typedef {RandomClass} RandomClass An object with a random() method that returns a float between 0 and 1
    * @param {RandomClass} rand random number generator with a random() method. Defaults to Math
    * @param {boolean} randomize whether to randomize the order of colors in the palette. Defaults to true
    * @returns {Palette} random palette

@@ -15,4 +15,4 @@ export { SimplexNoise } from "./simplex-noise-class.js";
 export { XOR128 } from "./deps/xor128.js";
 export { Utils } from "./utils.js";
 
-import "./jszip.js";
+import "./deps/jszip.js";

@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "c8 mocha --require ./test/setup-dom.mjs 'test/**/*.mjs'",
-    "lint": "eslint js/**/*.js",
-    "docs": "jsdoc js/*.js -d docs/",
+    "lint": "eslint js/**/*.js --no-warn-ignored",
+    "docs": "jsdoc js/*.js -d docs/ --pedantic",
     "bundle": "rollup -c",
     "build": "mkdir -p dist/js && npm run bundle && cp -r assets/* dist/ && cp js/sketch.js dist/js/sketch.js && cp js/main.js dist/js/main.js"
   },

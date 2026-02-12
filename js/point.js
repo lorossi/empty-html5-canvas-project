@@ -2,7 +2,10 @@
  * @file Point class representing a 2D point
  */
 
-/** Class containing a simple 2D point */
+/**
+ * Class representing a 2D point with x and y coordinates, and methods for common point operations such as distance calculation, addition, subtraction, multiplication, division, interpolation, and conversion to/from arrays. The Point class is designed to be immutable, with methods that return new Point instances instead of modifying the existing one.
+ * @class
+ */
 class Point {
   /**
    * Create a point by its coordinates

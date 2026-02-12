@@ -5,7 +5,13 @@
 
 import { CSS_COLOR_NAMES, SANZO_WADA_COLORS } from "./color-definitions.js";
 
-/** Class containing colors.*/
+/** @import {EasingFunction} from "./doc_types.js"
+ *
+ */
+/**
+ * Class representing a color, with methods for manipulation and conversion between different color formats.
+ * @class
+ */
 class Color {
   /**
    * Create a color by setting the value of its RGB channels.
@@ -55,7 +61,6 @@ class Color {
   /**
    * Mix two colors, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   * @typedef {function(number): number} easingFunction
    * @param {Color} other   The other color to mix with
    * @param {number} amount The amount of the other color in range [0, 1]
    * @param {easingFunction} [easing] An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
@@ -73,7 +78,6 @@ class Color {
   /**
    * Darken the color by a certain amount, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   * @typedef {function(number): number} easingFunction
    * @param {number} amount The amount to darken in range [0, 1]
    * @param {easingFunction} easing An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
    * @returns {Color} The darkened color
@@ -86,7 +90,6 @@ class Color {
   /**
    * Lighten the color by a certain amount, returning a new color.
    * Optionally, an easing function can be passed to control the mix.
-   * @typedef {function(number): number} easingFunction
    * @param {number} amount The amount to lighten in range [0, 1]
    * @param {easingFunction} easing An optional easing function that accepts a number in range [0, 1] and returns a number in range [0, 1]
    * @returns {Color} The lightened color
