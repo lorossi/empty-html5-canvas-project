@@ -149,7 +149,7 @@ class Utils {
    * Converts a linear index to 2D coordinates.
    * @param {number} i linear index
    * @param {number} width row width
-   * @returns {[number, number]} tuple of [x, y]
+   * @returns {number[]} tuple of [x, y]
    */
   static i_to_xy(i, width) {
     const x = i % width;
