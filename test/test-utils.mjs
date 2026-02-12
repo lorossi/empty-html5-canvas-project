@@ -1,6 +1,7 @@
 import * as chai from "chai";
 
 import { Utils } from "../js/utils.js";
+import { Point } from "../js/point.js";
 
 describe("Utils test", () => {
   describe("Easing functions", () => {
@@ -104,6 +105,44 @@ describe("Utils test", () => {
     it("Wrap should throw error for min >= max", () => {
       chai.expect(() => Utils.wrap(0, 1, 1)).to.throw();
       chai.expect(() => Utils.wrap(0, 2, 1)).to.throw();
+    });
+  });
+
+  describe("Grid functions", () => {
+    it("Should correctly convert between 1D index and 2D coordinates", () => {
+      const width = 5;
+      const height = 5;
+
+      let count = 0;
+      for (let y1 = 0; y1 < height; y1++) {
+        for (let x1 = 0; x1 < width; x1++) {
+          const index = Utils.xy_to_i(x1, y1, width);
+          const [x2, y2] = Utils.i_to_xy(index, width);
+
+          chai.expect(x2).to.equal(x1);
+          chai.expect(y2).to.equal(y1);
+          chai.expect(index).to.equal(count);
+          count++;
+        }
+      }
+    });
+
+    it("Should correctly convert between 1D index and 2D point", () => {
+      const width = 5;
+      const height = 5;
+
+      let count = 0;
+      for (let y1 = 0; y1 < height; y1++) {
+        for (let x1 = 0; x1 < width; x1++) {
+          const p1 = Utils.i_to_point(count, width);
+          const index = Utils.point_to_i(p1, width);
+
+          chai.expect(p1.x).to.equal(x1);
+          chai.expect(p1.y).to.equal(y1);
+          chai.expect(index).to.equal(count);
+          count++;
+        }
+      }
     });
   });
 });
