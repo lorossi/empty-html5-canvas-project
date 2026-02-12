@@ -252,72 +252,105 @@ describe("Palette test", () => {
       }
     });
   });
-});
 
-describe("Palette randomness test", () => {
-  it("Should produce deterministic random colors with same seed", () => {
-    const colors = [
-      new Color(255, 0, 0),
-      new Color(0, 255, 0),
-      new Color(0, 0, 255),
-      new Color(255, 255, 0),
-      new Color(0, 255, 255),
-      new Color(255, 0, 255),
-    ];
-    const palette = new Palette(colors);
+  describe("Palette randomness test", () => {
+    it("Should produce deterministic random colors with same seed", () => {
+      const colors = [
+        new Color(255, 0, 0),
+        new Color(0, 255, 0),
+        new Color(0, 0, 255),
+        new Color(255, 255, 0),
+        new Color(0, 255, 255),
+        new Color(255, 0, 255),
+      ];
+      const palette = new Palette(colors);
 
-    for (const seed of SEEDS) {
-      const rand1 = new SFC32(...seed);
-      const rand2 = new SFC32(...seed);
+      for (const seed of SEEDS) {
+        const rand1 = new SFC32(...seed);
+        const rand2 = new SFC32(...seed);
 
-      for (let i = 0; i < NUM; i++) {
-        const color1 = palette.getRandomColor(rand1);
-        const color2 = palette.getRandomColor(rand2);
-
-        chai.expect(color1.equals(color2)).to.be.true;
-      }
-    }
-  });
-
-  it("Should produce deterministic shuffles with same seed", () => {
-    const colors = [
-      new Color(255, 0, 0),
-      new Color(0, 255, 0),
-      new Color(0, 0, 255),
-      new Color(255, 255, 0),
-      new Color(0, 255, 255),
-      new Color(255, 0, 255),
-    ];
-    const original_palette = new Palette(colors);
-
-    for (const seed of SEEDS) {
-      const rand1 = new SFC32(...seed);
-      const rand2 = new SFC32(...seed);
-
-      for (let i = 0; i < NUM; i++) {
-        const palette1 = original_palette.copy().shuffle(rand1);
-        const palette2 = original_palette.copy().shuffle(rand2);
-
-        for (let i = 0; i < colors.length; i++) {
-          const color1 = palette1.getColor(i);
-          const color2 = palette2.getColor(i);
+        for (let i = 0; i < NUM; i++) {
+          const color1 = palette.getRandomColor(rand1);
+          const color2 = palette.getRandomColor(rand2);
 
           chai.expect(color1.equals(color2)).to.be.true;
         }
       }
-    }
+    });
+
+    it("Should produce deterministic shuffles with same seed", () => {
+      const colors = [
+        new Color(255, 0, 0),
+        new Color(0, 255, 0),
+        new Color(0, 0, 255),
+        new Color(255, 255, 0),
+        new Color(0, 255, 255),
+        new Color(255, 0, 255),
+      ];
+      const original_palette = new Palette(colors);
+
+      for (const seed of SEEDS) {
+        const rand1 = new SFC32(...seed);
+        const rand2 = new SFC32(...seed);
+
+        for (let i = 0; i < NUM; i++) {
+          const palette1 = original_palette.copy().shuffle(rand1);
+          const palette2 = original_palette.copy().shuffle(rand2);
+
+          for (let i = 0; i < colors.length; i++) {
+            const color1 = palette1.getColor(i);
+            const color2 = palette2.getColor(i);
+
+            chai.expect(color1.equals(color2)).to.be.true;
+          }
+        }
+      }
+    });
   });
-});
 
-describe("GradientPalette test", () => {
-  it("Should create a GradientPalette instance", () => {
-    const from = new Color(255, 0, 0);
-    const to = new Color(0, 0, 255);
+  describe("GradientPalette test", () => {
+    it("Should create a GradientPalette instance", () => {
+      const from = new Color(255, 0, 0);
+      const to = new Color(0, 0, 255);
 
-    for (let steps = 2; steps <= 10; steps++) {
-      const gradient_palette = new GradientPalette(
-        from,
-        to,
+      for (let steps = 2; steps <= 10; steps++) {
+        const gradient_palette = new GradientPalette(
+          from,
+          to,
+          steps,
+          ease_in_out_poly,
+        );
+
+        chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
+        chai.expect(gradient_palette).to.be.instanceOf(Palette);
+        chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
+
+        // check first and last colors
+        const first_color = gradient_palette.getColor(0);
+        const last_color = gradient_palette.getColor(steps - 1);
+
+        chai.expect(first_color.equals(from)).to.be.true;
+        chai.expect(last_color.equals(to)).to.be.true;
+
+        // check intermediate colors
+        for (let i = 1; i < steps - 1; i++) {
+          const t = i / (steps - 1);
+          const expected_color = from.mix(to, t, ease_in_out_poly);
+          const actual_color = gradient_palette.getColor(i);
+
+          chai.expect(actual_color.equals(expected_color)).to.be.true;
+        }
+      }
+    });
+
+    it("Should create a GradientPalette from HEX colors", () => {
+      const from_hex = "#FF0000";
+      const to_hex = "#0000FF";
+      const steps = 5;
+
+      const gradient_palette = GradientPalette.fromHEXColors(
+        from_hex,
+        to_hex,
         steps,
         ease_in_out_poly,
       );
@@ -330,65 +363,32 @@ describe("GradientPalette test", () => {
       const first_color = gradient_palette.getColor(0);
       const last_color = gradient_palette.getColor(steps - 1);
 
-      chai.expect(first_color.equals(from)).to.be.true;
-      chai.expect(last_color.equals(to)).to.be.true;
+      chai.expect(first_color.equals(Color.fromHex(from_hex))).to.be.true;
+      chai.expect(last_color.equals(Color.fromHex(to_hex))).to.be.true;
+    });
 
-      // check intermediate colors
-      for (let i = 1; i < steps - 1; i++) {
-        const t = i / (steps - 1);
-        const expected_color = from.mix(to, t, ease_in_out_poly);
-        const actual_color = gradient_palette.getColor(i);
+    it("Should create a GradientPalette from RGB colors", () => {
+      const from_rgb = [255, 0, 0];
+      const to_rgb = [0, 0, 255];
+      const steps = 5;
 
-        chai.expect(actual_color.equals(expected_color)).to.be.true;
-      }
-    }
-  });
+      const gradient_palette = GradientPalette.fromRGBColors(
+        from_rgb,
+        to_rgb,
+        steps,
+        ease_in_out_poly,
+      );
 
-  it("Should create a GradientPalette from HEX colors", () => {
-    const from_hex = "#FF0000";
-    const to_hex = "#0000FF";
-    const steps = 5;
+      chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
+      chai.expect(gradient_palette).to.be.instanceOf(Palette);
+      chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
 
-    const gradient_palette = GradientPalette.fromHEXColors(
-      from_hex,
-      to_hex,
-      steps,
-      ease_in_out_poly,
-    );
+      // check first and last colors
+      const first_color = gradient_palette.getColor(0);
+      const last_color = gradient_palette.getColor(steps - 1);
 
-    chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
-    chai.expect(gradient_palette).to.be.instanceOf(Palette);
-    chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
-
-    // check first and last colors
-    const first_color = gradient_palette.getColor(0);
-    const last_color = gradient_palette.getColor(steps - 1);
-
-    chai.expect(first_color.equals(Color.fromHex(from_hex))).to.be.true;
-    chai.expect(last_color.equals(Color.fromHex(to_hex))).to.be.true;
-  });
-
-  it("Should create a GradientPalette from RGB colors", () => {
-    const from_rgb = [255, 0, 0];
-    const to_rgb = [0, 0, 255];
-    const steps = 5;
-
-    const gradient_palette = GradientPalette.fromRGBColors(
-      from_rgb,
-      to_rgb,
-      steps,
-      ease_in_out_poly,
-    );
-
-    chai.expect(gradient_palette).to.be.instanceOf(GradientPalette);
-    chai.expect(gradient_palette).to.be.instanceOf(Palette);
-    chai.expect(gradient_palette.colors).to.have.lengthOf(steps);
-
-    // check first and last colors
-    const first_color = gradient_palette.getColor(0);
-    const last_color = gradient_palette.getColor(steps - 1);
-
-    chai.expect(first_color.equals(Color.fromRGB(...from_rgb))).to.be.true;
-    chai.expect(last_color.equals(Color.fromRGB(...to_rgb))).to.be.true;
+      chai.expect(first_color.equals(Color.fromRGB(...from_rgb))).to.be.true;
+      chai.expect(last_color.equals(Color.fromRGB(...to_rgb))).to.be.true;
+    });
   });
 });
