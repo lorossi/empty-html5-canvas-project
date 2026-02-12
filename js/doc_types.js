@@ -1,8 +1,4 @@
 /**
- * @file Doc types for JSDoc
- */
-
-/**
  * @typedef {object} RandomClass
  * @property {function(): number} random Returns a float in [0, 1)
  */
