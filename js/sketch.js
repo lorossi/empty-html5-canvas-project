@@ -2,9 +2,9 @@
   HTML canvas sketch. GitHub repo and some basic documentation: https://github.com/lorossi/empty-html5-canvas-project
   Made by Lorenzo Rossi. Website and contacts: https://lorenzoros.si/
 */
+import { Engine } from "./lib.js"; // This import is required for the Sketch class to work.
 
 import {
-  Engine,
   Color,
   GradientPalette,
   Palette,
@@ -13,7 +13,7 @@ import {
   SimplexNoise,
   Utils,
   XOR128,
-} from "./lib.js";
+} from "./lib.js"; // These imports are not required for the Sketch class to work, but they are exported here for convenience.
 
 class Sketch extends Engine {
   preload() {

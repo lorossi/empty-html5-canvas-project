@@ -17,12 +17,13 @@ const color_equal = (c1, c2, epsilon = 0.0001) => {
   );
 };
 
-const easeInPoly = (t, n = 2) => Math.pow(t, n);
-const easeOutPoly = (t, n = 2) => 1 - Math.pow(1 - t, n);
-const easeInOutPoly = (t, n = 2) => {
+const ease_in_poly = (t, n = 2) => Math.pow(t, n);
+const ease_out_poly = (t, n = 2) => 1 - Math.pow(1 - t, n);
+const ease_in_out_poly = (t, n = 2) => {
   if (t < 0.5) return 0.5 * Math.pow(2 * t, n);
   return 1 - 0.5 * Math.pow(2 * (1 - t), n);
 };
+
 const dec_to_hex = (dec) => {
   const hex = dec.toString(16).toUpperCase();
   return hex.length === 1 ? `0${hex}` : hex;
@@ -57,9 +58,9 @@ export {
   lerp,
   color_lerp,
   color_equal,
-  easeInPoly,
-  easeOutPoly,
-  easeInOutPoly,
+  ease_in_poly,
+  ease_out_poly,
+  ease_in_out_poly,
   dec_to_hex,
   SFC32,
 };

@@ -11,6 +11,11 @@ Just clone the repo or download the last release.
 Yes! I have a bunch of repositories that use this as a base, most notably my [random animations repo](https://github.com/lorossi/random-animations), where I create random animations using this engine.
 [All the animations (and some experiments) are hosted here](https://lorossi.github.io/random-animations).
 
+## How do I use it?
+
+Simply download the [latest release](https://github.com/lorossi/empty-html5-canvas-project/releases/latest).
+The main file you want to edit is `sketch.js`, where you can write your code and create your animation.
+
 ## Cool. Do you have some documentation?
 
 [Yes, here](https://lorossi.github.io/empty-html5-canvas-project/).
@@ -19,9 +24,7 @@ Documentation for the XOR128 random number generator is [here](https://lorossi.g
 Don't have time for that?
 Keep reading for the short version.
 
-The canvas size is 1000px by 1000px.
-This can be changed by tweaking the `canvas` item in the `index.html` file.
-
+The canvas size is 1000x1000 pixels.
 All you have to do is write your code inside the `sketch.js` file. Inside you will find 3 methods:
 
 - `preload()` it's run only once. You should put there anything that you want to configure and never touch again
@@ -38,9 +41,10 @@ and some internal functions:
 
 - `this.noLoop()` and `this.loop()` that will stop and restart the draw function
 - `this.background(color)` that will reset the background color of the canvas
+- `this.scaleFromCenter(sx, sy)` that will scale the canvas from its center, instead of the top left corner
 - `this.saveFrame(filename)` that will save the currently rendered frame as a `.png` image, with an optional filename
 - a lot of event handlers:
-  - `this.click(x, y)`, `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp()`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
+  - `this.click(x, y)`, `this.mouseDown(x, y)`, `this.mouseDragged(x, y)`, `this.mouseUp(x, y)`, `this.mouseMoved(x, y)`, regarding the mouse and the touch screen interactions
   - `this.keyPress(key, code)`, `this.keyDown(key, code)`, `this.keyUp(key, code)` regarding keyboard interactions
 
 as well as recording capabilities:
