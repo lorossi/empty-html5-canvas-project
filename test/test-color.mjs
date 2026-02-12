@@ -378,6 +378,63 @@ describe("Color test", () => {
     chai.expect(c.is_monochrome).to.be.false;
   });
 
+  it("Should correctly provide setters", () => {
+    const c1 = new Color(0, 0, 0);
+    c1.setR(64).setG(128).setB(255).setA(0.5);
+    chai.expect(c1.r).to.equal(64);
+    chai.expect(c1.g).to.equal(128);
+    chai.expect(c1.b).to.equal(255);
+    chai.expect(c1.a).to.equal(0.5);
+    chai.expect(c1.rgb).to.equal("rgb(64, 128, 255)");
+    chai.expect(c1.rgba).to.equal("rgba(64, 128, 255, 0.5)");
+    chai.expect(c1.hex).to.equal("#4080FF");
+    chai.expect(c1.hexa).to.equal("#4080FF7F");
+    chai.expect(c1.is_monochrome).to.be.false;
+
+    const c2 = new Color(0, 0, 0);
+    c2.setH(216).setS(100).setL(63).setA(0.5);
+    // rgb are slightly off, but it's expected due to rounding errors in hsl to rgb conversion
+    chai.expect(c2.r).to.equal(66);
+    chai.expect(c2.g).to.equal(141);
+    chai.expect(c2.b).to.equal(254);
+    chai.expect(c2.a).to.equal(0.5);
+    chai.expect(c2.rgb).to.equal("rgb(66, 141, 254)");
+    chai.expect(c2.rgba).to.equal("rgba(66, 141, 254, 0.5)");
+    chai.expect(c2.hex).to.equal("#428DFE");
+    chai.expect(c2.hexa).to.equal("#428DFE7F");
+    chai.expect(c2.is_monochrome).to.be.false;
+
+    const c3 = new Color(0, 0, 0);
+    c3.setR(127).setG(127).setB(127).setA(1);
+    chai.expect(c3.r).to.equal(127);
+    chai.expect(c3.g).to.equal(127);
+    chai.expect(c3.b).to.equal(127);
+    chai.expect(c3.a).to.equal(1);
+    chai.expect(c3.rgb).to.equal("rgb(127, 127, 127)");
+    chai.expect(c3.rgba).to.equal("rgba(127, 127, 127, 1)");
+    chai.expect(c3.hex).to.equal("#7F7F7F");
+    chai.expect(c3.hexa).to.equal("#7F7F7FFF");
+    chai.expect(c3.is_monochrome).to.be.true;
+
+    const c4 = new Color(0, 0, 0);
+    c4.setH(120).setS(80).setL(50).setA(0.25);
+    // rgb are slightly off, but it's expected due to rounding errors in hsl to rgb conversion
+    chai.expect(c4.r).to.equal(25);
+    chai.expect(c4.g).to.equal(229);
+    chai.expect(c4.b).to.equal(25);
+    chai.expect(c4.a).to.equal(0.25);
+    chai.expect(c4.h).to.equal(120);
+    chai.expect(c4.s).to.equal(80);
+    chai.expect(c4.l).to.equal(50);
+    chai.expect(c4.rgb).to.equal("rgb(25, 229, 25)");
+    chai.expect(c4.rgba).to.equal("rgba(25, 229, 25, 0.25)");
+    chai.expect(c4.hex).to.equal("#19E519");
+    chai.expect(c4.hexa).to.equal("#19E5193F");
+    chai.expect(c4.hsl).to.equal("hsl(120, 80%, 50%)");
+    chai.expect(c4.hsla).to.equal("hsla(120, 80%, 50%, 0.25)");
+    chai.expect(c4.is_monochrome).to.be.false;
+  });
+
   it("Should correctly handle Color names", () => {
     for (const [name, hex, rgb] of COLOR_NAMES) {
       const color = Color.fromCSS(name);

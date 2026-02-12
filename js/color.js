@@ -321,9 +321,9 @@ class Color {
   }
 
   get_hex() {
-    return `#${this._decToHex(this._r)}${this._decToHex(
-      this._g
-    )}${this._decToHex(this._b)}`;
+    const [rx, gx, bx] = [this._r, this._g, this._b].map(this._decToHex);
+
+    return `#${rx}${gx}${bx}`;
   }
 
   get hex() {
@@ -331,9 +331,10 @@ class Color {
   }
 
   get_hexa() {
-    return `#${this._decToHex(this._r)}${this._decToHex(
-      this._g
-    )}${this._decToHex(this._b)}${this._decToHex(this._a * 255)}`;
+    const [rx, gx, bx] = [this._r, this._g, this._b].map(this._decToHex);
+    const ax = this._decToHex(this._a * 255);
+
+    return `#${rx}${gx}${bx}${ax}`;
   }
 
   get hexa() {
@@ -387,6 +388,11 @@ class Color {
     this._calculateHsl();
   }
 
+  setR(r) {
+    this.r = r;
+    return this;
+  }
+
   get g() {
     return this._g;
   }
@@ -394,6 +400,11 @@ class Color {
   set g(x) {
     this._g = Math.floor(this._clamp(x, 0, 255));
     this._calculateHsl();
+  }
+
+  setG(g) {
+    this.g = g;
+    return this;
   }
 
   get b() {
@@ -405,12 +416,22 @@ class Color {
     this._calculateHsl();
   }
 
+  setB(b) {
+    this.b = b;
+    return this;
+  }
+
   get a() {
     return this._a;
   }
 
   set a(x) {
     this._a = this._clamp(x, 0, 1);
+  }
+
+  setA(a) {
+    this.a = a;
+    return this;
   }
 
   get h() {
@@ -422,6 +443,11 @@ class Color {
     this._calculateRgb();
   }
 
+  setH(h) {
+    this.h = h;
+    return this;
+  }
+
   get s() {
     return this._s;
   }
@@ -431,6 +457,11 @@ class Color {
     this._calculateRgb();
   }
 
+  setS(s) {
+    this.s = s;
+    return this;
+  }
+
   get l() {
     return this._l;
   }
@@ -438,6 +469,11 @@ class Color {
   set l(x) {
     this._l = Math.floor(this._clamp(x, 0, 100));
     this._calculateRgb();
+  }
+
+  setL(l) {
+    this.l = l;
+    return this;
   }
 
   get is_monochrome() {
