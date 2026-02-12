@@ -17,6 +17,16 @@ class Point {
   }
 
   /**
+   * Create a point from an array of two numbers
+   * @param {number[]} arr array of two numbers representing the point coordinates
+   * @returns {Point} point created from the array
+   */
+  static fromArray(arr) {
+    if (arr.length != 2) throw new Error("Array must have only two elements");
+    return new Point(arr[0], arr[1]);
+  }
+
+  /**
    * Return a copy of the point
    * @returns {Point} copy of the point
    */
@@ -36,10 +46,10 @@ class Point {
   /**
    * Returns true if the point is equal to another point
    * @param {Point} other other point
-   * @returns {number} true if the points are equal
+   * @param {number} epsilon tolerance for floating point comparison
+   * @returns {boolean} true if the points are equal
    */
-  equals(other) {
-    const epsilon = 0.0001;
+  equals(other, epsilon = 0.0001) {
     const float_eq = (a, b) => Math.abs(a - b) < epsilon;
     return float_eq(this._x, other.x) && float_eq(this._y, other.y);
   }
@@ -139,6 +149,14 @@ class Point {
    */
   set y(ny) {
     this._y = ny;
+  }
+
+  /**
+   * Returns the point as an array
+   * @returns {number[]} array representation of the point
+   */
+  toArray() {
+    return [this._x, this._y];
   }
 }
 
