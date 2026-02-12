@@ -13,5 +13,6 @@ export { Palette, GradientPalette, PaletteFactory } from "./palette.js";
 export { Point } from "./point.js";
 export { SimplexNoise } from "./simplex-noise-class.js";
 export { XOR128 } from "./deps/xor128.js";
+export { Utils } from "./utils.js";
 
 import "./jszip.js";

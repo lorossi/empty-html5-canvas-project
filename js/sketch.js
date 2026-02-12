@@ -11,6 +11,7 @@ import {
   PaletteFactory,
   Point,
   SimplexNoise,
+  Utils,
   XOR128,
 } from "./lib.js"; // These imports are not required for the Sketch class to work, but they are exported here for convenience.
 
