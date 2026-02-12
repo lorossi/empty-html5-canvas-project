@@ -1,7 +1,7 @@
 import * as chai from "chai";
 
 import { Utils } from "../js/utils.js";
-import { Point } from "../js/point.js";
+import { easeInPoly, easeInOutPoly, easeOutPoly } from "./utils.mjs";
 
 describe("Utils test", () => {
   describe("Easing functions", () => {
@@ -26,6 +26,22 @@ describe("Utils test", () => {
       chai.expect(Utils.ease_in_poly(1)).to.be.approximately(1, EPS);
       chai.expect(Utils.ease_out_poly(0)).to.be.approximately(0, EPS);
       chai.expect(Utils.ease_out_poly(1)).to.be.approximately(1, EPS);
+    });
+
+    it("Should return valid values against reference implementations", () => {
+      const EPS = 0.0001;
+
+      for (let t = 0; t <= 1; t += 0.01) {
+        chai
+          .expect(Utils.ease_in_out_poly(t))
+          .to.be.approximately(easeInOutPoly(t), EPS);
+        chai
+          .expect(Utils.ease_in_poly(t))
+          .to.be.approximately(easeInPoly(t), EPS);
+        chai
+          .expect(Utils.ease_out_poly(t))
+          .to.be.approximately(easeOutPoly(t), EPS);
+      }
     });
 
     it("Should return values in range [0, 1]", () => {

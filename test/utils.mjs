@@ -23,6 +23,7 @@ const ease_in_out_poly = (t, n = 2) => {
   if (t < 0.5) return 0.5 * Math.pow(2 * t, n);
   return 1 - 0.5 * Math.pow(2 * (1 - t), n);
 };
+
 const dec_to_hex = (dec) => {
   const hex = dec.toString(16).toUpperCase();
   return hex.length === 1 ? `0${hex}` : hex;
