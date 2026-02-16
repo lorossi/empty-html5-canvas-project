@@ -457,40 +457,85 @@ class Engine {
   /**
    * Get the count of frames since the start
    * @returns {number} The number of total frames
+   * @deprecated This method is deprecated and will be removed in future versions. Use the frame_count property instead.
    */
   get frameCount() {
     return this._frame_count;
   }
 
   /**
+   * Get the count of frames since the start
+   * @returns {number} The number of total frames
+   */
+  get frame_count() {
+    return this._frame_count;
+  }
+
+  /**
    * Get the current framerate as frames per second (fps)
    * @returns {number} The current fps
+   * @deprecated This method is deprecated and will be removed in future versions. Use the frame_rate property instead.
    */
   get frameRate() {
     return 1000 / this._dt_buffer.latest;
   }
 
   /**
+   * Get the current framerate as frames per second (fps)
+   * @returns {number} The current fps
+   */
+  get frame_rate() {
+    return 1000 / this._dt_buffer.latest;
+  }
+
+  /**
    * Get the average framerate as frames per second (fps)
    * @returns {number} The average fps
+   * @deprecated This method is deprecated and will be removed in future versions. Use the frame_rate_average property instead.
    */
   get frameRateAverage() {
     return 1000 / this._dt_buffer.average;
   }
 
   /**
+   * Get the average framerate as frames per second (fps)
+   * @returns {number} The average fps
+   */
+  get frame_rate_average() {
+    return 1000 / this._dt_buffer.average;
+  }
+
+  /**
    * Get the current framerate as milliseconds per frame (mspf)
    * @returns {number} The current mspf
+   * @deprecated This method is deprecated and will be removed in future versions. Use the delta_time property instead.
    */
   get deltaTime() {
     return this._dt_buffer.latest;
   }
 
   /**
+   * Get the current framerate as milliseconds per frame (mspf)
+   * @returns {number} The current mspf
+   */
+  get delta_time() {
+    return this._dt_buffer.latest;
+  }
+
+  /**
+   * Get the average framerate as milliseconds per frame (mspf)
+   * @returns {number} The average mspf
+   * @deprecated This method is deprecated and will be removed in future versions. Use the delta_time_average property instead.
+   */
+  get deltaTimeAverage() {
+    return this._dt_buffer.average;
+  }
+
+  /**
    * Get the average framerate as milliseconds per frame (mspf)
    * @returns {number} The average mspf
    */
-  get deltaTimeAverage() {
+  get delta_time_average() {
     return this._dt_buffer.average;
   }
 
@@ -538,8 +583,18 @@ class Engine {
    * Get the current mouse position
    * @returns {Point} The current mouse position
    * @readonly
+   * @deprecated This method is deprecated and will be removed in future versions. Use the mouse_position property instead.
    */
   get mousePosition() {
+    return this._mouse_coords.copy();
+  }
+
+  /**
+   * Get the current mouse position
+   * @returns {Point} The current mouse position
+   * @readonly
+   */
+  get mouse_position() {
     return this._mouse_coords.copy();
   }
 
@@ -547,16 +602,35 @@ class Engine {
    * Get the previous mouse position
    * @returns {Point} The previous mouse position
    * @readonly
+   * @deprecated This method is deprecated and will be removed in future versions. Use the prev_mouse_position property instead.
    */
   get prevMousePosition() {
     return this._p_mouse_coords.copy();
   }
 
   /**
+   * Get the previous mouse position
+   * @returns {Point} The previous mouse position
+   * @readonly
+   */
+  get prev_mouse_position() {
+    return this._p_mouse_coords.copy();
+  }
+
+  /**
+   * Get whether the mouse is currently inside the canvas
+   * @returns {boolean} Whether the mouse is currently inside the canvas
+   * @deprecated This method is deprecated and will be removed in future versions. Use the mouse_inside property instead.
+   */
+  get mouseInside() {
+    return this._mouse_inside;
+  }
+
+  /**
    * Get whether the mouse is currently inside the canvas
    * @returns {boolean} Whether the mouse is currently inside the canvas
    */
-  get mouseInside() {
+  get mouse_inside() {
     return this._mouse_inside;
   }
 }
