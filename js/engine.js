@@ -496,11 +496,27 @@ class Engine {
   }
 
   /**
+   * Set the drawing area width
+   * @param {number} value The new drawing area width
+   */
+  set width(value) {
+    this._canvas.width = value;
+  }
+
+  /**
    * Get the drawing area height
    * @returns {number} The drawing area height
    */
   get height() {
     return this._canvas.height;
+  }
+
+  /**
+   * Set the drawing area height
+   * @param {number} value The new drawing area height
+   */
+  set height(value) {
+    this._canvas.height = value;
   }
 
   /**
