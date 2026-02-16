@@ -21,6 +21,7 @@ class Engine {
     this._canvas = canvas;
 
     // init variables
+    this._mouse_inside = false;
     this._frame_count = 0;
     this._no_loop = false;
     this._is_recording = false;
@@ -225,6 +226,7 @@ class Engine {
    * @param {MouseEvent} e event
    */
   clickHandler(e) {
+    this._mouse_inside = true;
     const p = this._calculatePressCoords(e);
     this.click(p.x, p.y);
   }
@@ -234,6 +236,7 @@ class Engine {
    * @param {MouseEvent} e event
    */
   mouseDownHandler(e) {
+    this._mouse_inside = true;
     this._mouse_pressed = true;
     const p = this._calculatePressCoords(e);
     this.mouseDown(p.x, p.y);
@@ -245,6 +248,7 @@ class Engine {
    */
   mouseUpHandler(e) {
     this._mouse_pressed = false;
+    this._mouse_inside = true;
     const p = this._calculatePressCoords(e);
     this.mouseUp(p.x, p.y);
   }
@@ -254,6 +258,7 @@ class Engine {
    * @param {MouseEvent} e event
    */
   mouseMoveHandler(e) {
+    this._mouse_inside = true;
     const p = this._calculatePressCoords(e);
 
     // update mouse position
@@ -265,6 +270,24 @@ class Engine {
     } else {
       this.mouseDragged(p.x, p.y);
     }
+  }
+
+  /** Handler for move entered event
+   * @param {MouseEvent} e event
+   */
+  mouseEnterHandler(e) {
+    this._mouse_inside = true;
+    const p = this._calculatePressCoords(e);
+    this.mouseEnter(p.x, p.y);
+  }
+
+  /** Handler for move leave event
+   * @param {MouseEvent} e event
+   */
+  mouseLeaveHandler(e) {
+    this._mouse_inside = false;
+    const p = this._calculatePressCoords(e);
+    this.mouseLeave(p.x, p.y);
   }
 
   /**
@@ -326,6 +349,19 @@ class Engine {
    */
   mouseMoved(x, y) {}
 
+  /**
+   * Public callback for mouse and touchscreen entered
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
+   */
+  mouseEnter(x, y) {}
+
+  /**
+   * Public callback for mouse and touchscreen left
+   * @param {number} x coordinate of the click/tap location
+   * @param {number} y coordinate of the click/tap location
+   */
+  mouseLeave(x, y) {}
   /**
    * Public callback for key press
    * @param {string} key pressed key
@@ -491,6 +527,14 @@ class Engine {
    */
   get prevMousePosition() {
     return this._p_mouse_coords.copy();
+  }
+
+  /**
+   * Get whether the mouse is currently inside the canvas
+   * @returns {boolean} Whether the mouse is currently inside the canvas
+   */
+  get mouseInside() {
+    return this._mouse_inside;
   }
 }
 

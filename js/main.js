@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   canvas.addEventListener("mousedown", (e) => s.mouseDownHandler(e));
   canvas.addEventListener("mouseup", (e) => s.mouseUpHandler(e));
   canvas.addEventListener("mousemove", (e) => s.mouseMoveHandler(e));
+  canvas.addEventListener("mouseleave", (e) => s.mouseLeaveHandler(e));
+  canvas.addEventListener("mouseenter", (e) => s.mouseEnterHandler(e));
   // touchscreen event listeners
   canvas.addEventListener("touchstart", (e) => s.mouseDownHandler(e), {
     passive: true,
