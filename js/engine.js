@@ -665,7 +665,9 @@ class MovingAverage {
 
     this._count++;
     const size = Math.min(this._count, this._size);
-    this._average = this._sum / size;
+
+    if (size > 0) this._average = this._sum / size;
+    else this._average = 0;
   }
 
   /**
