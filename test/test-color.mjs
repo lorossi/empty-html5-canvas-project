@@ -68,6 +68,10 @@ describe("Color test", () => {
       chai.expect(white.h).to.equal(0);
       chai.expect(white.s).to.equal(0);
       chai.expect(white.l).to.equal(100);
+      chai.expect(white.c).to.equal(0);
+      chai.expect(white.m).to.equal(0);
+      chai.expect(white.y).to.equal(0);
+      chai.expect(white.k).to.equal(0);
       chai.expect(white.hex).to.equal("#FFFFFF");
       chai.expect(white.hexa).to.equal("#FFFFFFFF");
       chai.expect(white.get_hex()).to.equal("#FFFFFF");
@@ -89,12 +93,17 @@ describe("Color test", () => {
       chai.expect(black.h).to.equal(0);
       chai.expect(black.s).to.equal(0);
       chai.expect(black.l).to.equal(0);
+      chai.expect(white.c).to.equal(0);
+      chai.expect(white.m).to.equal(0);
+      chai.expect(white.y).to.equal(0);
+      chai.expect(white.k).to.equal(0);
       chai.expect(black.hex).to.equal("#000000");
       chai.expect(black.hexa).to.equal("#00000000");
       chai.expect(black.toString()).to.equal("#000000");
       chai.expect(black.is_monochrome).to.be.true;
       chai.expect(black.luminance).to.equal(0);
     });
+
     it("Should provide setters", () => {
       // Test setting r, g, b, a
       const c1 = new Color();
@@ -114,6 +123,10 @@ describe("Color test", () => {
       chai.expect(c1.h).to.equal(0);
       chai.expect(c1.s).to.equal(0);
       chai.expect(c1.l).to.equal(100);
+      chai.expect(c1.c).to.equal(0);
+      chai.expect(c1.m).to.equal(0);
+      chai.expect(c1.y).to.equal(0);
+      chai.expect(c1.k).to.equal(0);
       chai.expect(c1.hex).to.equal("#FFFFFF");
       chai.expect(c1.hexa).to.equal("#FFFFFFFF");
       chai.expect(c1.toString()).to.equal("#FFFFFF");
@@ -136,6 +149,10 @@ describe("Color test", () => {
       chai.expect(c2.h).to.equal(0);
       chai.expect(c2.s).to.equal(100);
       chai.expect(c2.l).to.equal(50);
+      chai.expect(c2.c).to.equal(0);
+      chai.expect(c2.m).to.equal(100);
+      chai.expect(c2.y).to.equal(100);
+      chai.expect(c2.k).to.equal(0);
       chai.expect(c2.hex).to.equal("#FF0000");
       chai.expect(c2.hexa).to.equal("#FF00007F");
       chai.expect(c2.toString()).to.equal("#FF0000");
@@ -154,6 +171,10 @@ describe("Color test", () => {
       chai.expect(c3.h).to.equal(0);
       chai.expect(c3.s).to.equal(0);
       chai.expect(c3.l).to.equal(100);
+      chai.expect(c3.c).to.equal(0);
+      chai.expect(c3.m).to.equal(0);
+      chai.expect(c3.y).to.equal(0);
+      chai.expect(c3.k).to.equal(0);
       chai.expect(c3.hex).to.equal("#FFFFFF");
       chai.expect(c3.hexa).to.equal("#FFFFFFFF");
       chai.expect(c3.toString()).to.equal("#FFFFFF");
@@ -170,9 +191,38 @@ describe("Color test", () => {
       chai.expect(c4.h).to.equal(0);
       chai.expect(c4.s).to.equal(0);
       chai.expect(c4.l).to.equal(100);
+      chai.expect(c4.c).to.equal(0);
+      chai.expect(c4.m).to.equal(0);
+      chai.expect(c4.y).to.equal(0);
       chai.expect(c4.hex).to.equal("#FFFFFF");
       chai.expect(c4.hexa).to.equal("#FFFFFF80");
       chai.expect(c4.toString()).to.equal("#FFFFFF");
+
+      // Test setting CMYKA
+      const c5 = new Color();
+      c5.c = 35;
+      c5.m = 0;
+      c5.y = 72;
+      c5.k = 0;
+      c5.a = 0.75;
+      chai.expect(c5.r).to.equal(165);
+      chai.expect(c5.g).to.equal(255);
+      chai.expect(c5.b).to.equal(71);
+      chai.expect(c5.a).to.equal(0.75);
+      chai.expect(c5.rgb).to.equal("rgb(165, 255, 71)");
+      chai.expect(c5.rgba).to.equal("rgba(165, 255, 71, 0.75)");
+      chai.expect(c5.hsl).to.equal("hsl(89, 100%, 63%)");
+      chai.expect(c5.hsla).to.equal("hsla(89, 100%, 63%, 0.75)");
+      chai.expect(c5.h).to.equal(89);
+      chai.expect(c5.s).to.equal(100);
+      chai.expect(c5.l).to.equal(63);
+      chai.expect(c5.c).to.equal(35);
+      chai.expect(c5.m).to.equal(0);
+      chai.expect(c5.y).to.equal(72);
+      chai.expect(c5.k).to.equal(0);
+      chai.expect(c5.hex).to.equal("#A5FF47");
+      chai.expect(c5.hexa).to.equal("#A5FF47BF");
+      chai.expect(c5.toString()).to.equal("#A5FF47");
     });
 
     it("Should provide getter functions", () => {
@@ -447,6 +497,14 @@ describe("Color test", () => {
       for (const name of invalid_names) {
         chai.expect(() => Color.fromCSS(name)).to.throw();
       }
+    });
+
+    it("Should provide fromCMYK method", () => {
+      const c5 = Color.fromCMYK(100, 19, 43, 0);
+      chai.expect(c5.r).to.equal(0);
+      chai.expect(c5.g).to.equal(206);
+      chai.expect(c5.b).to.equal(145);
+      chai.expect(c5.hex).to.equal("#00CE91");
     });
 
     it("Should provide Sanzo-Wada colors", () => {
