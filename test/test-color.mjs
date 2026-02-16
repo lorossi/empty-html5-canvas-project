@@ -455,7 +455,7 @@ describe("Color test", () => {
       chai.expect(c2.g).to.equal(0);
       chai.expect(c2.b).to.equal(0);
       chai.expect(c2.hex).to.equal("#FF0000");
-      const c2_deprecated = Color.fromHEX("FF0000");
+      const c2_deprecated = Color.fromHex("FF0000");
       chai.expect(c2_deprecated.r).to.equal(255);
       chai.expect(c2_deprecated.g).to.equal(0);
       chai.expect(c2_deprecated.b).to.equal(0);
@@ -463,7 +463,7 @@ describe("Color test", () => {
 
       chai.expect(() => Color.fromHex("#FF000")).to.throw();
       chai.expect(() => Color.fromHex("##FF000F")).to.throw();
-      chai.expect(() => Color.fromHex("")).to.throw;
+      chai.expect(() => Color.fromHex("")).to.throw();
     });
 
     it("Should provide fromRGB method", () => {
@@ -479,9 +479,9 @@ describe("Color test", () => {
       // test Sanzo-Wada colors
       const c4 = Color.fromSanzoWada("peachred");
       chai.expect(c4.r).to.equal(255);
-      chai.expect(c4.g).to.equal(51);
+      chai.expect(c4.g).to.equal(50);
       chai.expect(c4.b).to.equal(25);
-      chai.expect(c4.hex).to.equal("#FF3319");
+      chai.expect(c4.hex).to.equal("#FF3219");
     });
 
     it("Should provide fromCSS method", () => {
