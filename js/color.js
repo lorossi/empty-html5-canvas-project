@@ -201,10 +201,11 @@ class Color {
    * @returns {Color} The created Color instance
    */
   static fromCSS(name) {
-    if (CSS_COLOR_NAMES[name] == undefined) {
-      throw new Error("Color name not found");
+    const css_color = CSS_COLOR_NAMES[name.toLowerCase()];
+    if (css_color == undefined) {
+      throw new Error(`Color name not found: ${name}`);
     }
-    return new Color(...CSS_COLOR_NAMES[name]);
+    return new Color(...css_color);
   }
 
   /**
@@ -214,10 +215,11 @@ class Color {
    * @returns {Color} The created Color instance
    */
   static fromSanzoWada(name) {
-    if (SANZO_WADA_COLORS[name] == undefined) {
-      throw new Error("Color name not found");
+    const cmyk = SANZO_WADA_COLORS[name];
+    if (cmyk == undefined) {
+      throw new Error(`Color name not found: ${name}`);
     }
-    return new Color(...SANZO_WADA_COLORS[name]);
+    return Color.fromCMYK(...cmyk, 1);
   }
 
   /**
