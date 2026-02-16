@@ -388,6 +388,10 @@ class Engine {
    * @param {string | number} color Color can be a CSS< RGB, RGBA, HEX, HEAX, HSL, HSLA string, a Color object, or a monochrome value (number)
    */
   background(color) {
+    // store the current state of the context, so that the background doesn't affect it
+    const transform = this._ctx.getTransform();
+    this._ctx.resetTransform();
+
     // reset background
     this._ctx.save();
     // reset canvas
@@ -399,6 +403,9 @@ class Engine {
     else this._ctx.fillStyle = color;
     this._ctx.fillRect(0, 0, this._canvas.width, this._canvas.height);
     this._ctx.restore();
+
+    // restore the previous state of the context
+    this._ctx.setTransform(transform);
   }
 
   /**
