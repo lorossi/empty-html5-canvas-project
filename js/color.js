@@ -5,9 +5,10 @@
 
 import { CSS_COLOR_NAMES, SANZO_WADA_COLORS } from "./color-definitions.js";
 
-/** @import {EasingFunction} from "./doc_types.js"
- *
+/**
+ * @import {easingFunction} from "./doc_types.js"
  */
+
 /**
  * Class representing a color, with methods for manipulation and conversion between different color formats.
  * @class
@@ -30,7 +31,7 @@ class Color {
     this._b = b;
     this._a = a;
 
-    this._calculateHsl();
+    this._updateFromRGB();
   }
 
   /**
@@ -117,19 +118,30 @@ class Color {
    * @returns {Color} The created Color instance
    */
   static fromHSL(h, s, l, a) {
-    const dummy = new Color();
-    dummy.h = h;
-    dummy.s = s;
-    dummy.l = l;
-    dummy._calculateRgb();
-    return new Color(dummy._r, dummy._g, dummy._b, a);
+    const [r, g, b] = Color._HSLtoRGB(h, s, l);
+    return new Color(r, g, b, a);
+  }
+
+  /**
+   * Create a color from CMYK values
+   * @param {number} c Cyan channel value in range [0, 100]
+   * @param {number} m Magenta channel value in range [0, 100]
+   * @param {number} y Yellow channel value in range [0, 100]
+   * @param {number} k Black channel value in range [0, 100]
+   * @param {number} a Alpha channel value in range [0, 1]
+   * @static
+   * @returns {Color} The created Color instance
+   */
+  static fromCMYK(c, m, y, k, a) {
+    const [r, g, b] = Color._CMYKtoRGB(c, m, y, k);
+    return new Color(r, g, b, a);
   }
 
   /**
    * Create a color from RGB values
-   * @param {number} r Red channel value in range [0, 360]
-   * @param {number} g Green channel value in range [0, 360]
-   * @param {number} b Blue channel value in range [0, 360]
+   * @param {number} r Red channel value in range [0, 255]
+   * @param {number} g Green channel value in range [0, 255]
+   * @param {number} b Blue channel value in range [0, 255]
    * @param {number} a Alpha channel value in range [0, 1]
    * @static
    * @returns {Color} The created Color instance
@@ -210,15 +222,19 @@ class Color {
 
   /**
    * Converts a color from RGB to HSL
+   * @param {number} r Red channel value in range [0, 255]
+   * @param {number} g Green channel value in range [0, 255]
+   * @param {number} b Blue channel value in range [0, 255]
+   * @returns {Array} An array containing the HSL values, where H is in range [0, 360] and S and L are in range [0, 100]
    * @private
    */
-  _calculateHsl() {
-    const r = this._r / 255;
-    const g = this._g / 255;
-    const b = this._b / 255;
+  static _RGBtoHSL(r, g, b) {
+    const rr = r / 255;
+    const gg = g / 255;
+    const bb = b / 255;
 
-    let max = Math.max(r, g, b),
-      min = Math.min(r, g, b);
+    let max = Math.max(rr, gg, bb),
+      min = Math.min(rr, gg, bb);
     let h,
       s,
       l = (max + min) / 2;
@@ -229,33 +245,36 @@ class Color {
       let d = max - min;
       s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
       switch (max) {
-        case r:
-          h = (g - b) / d + (g < b ? 6 : 0);
+        case rr:
+          h = (gg - bb) / d + (gg < bb ? 6 : 0);
           break;
-        case g:
-          h = (b - r) / d + 2;
+        case gg:
+          h = (bb - rr) / d + 2;
           break;
-        case b:
-          h = (r - g) / d + 4;
+        case bb:
+          h = (rr - gg) / d + 4;
           break;
       }
       h /= 6;
     }
 
-    this._h = Math.floor(h * 360);
-    this._s = Math.floor(s * 100);
-    this._l = Math.floor(l * 100);
+    return [Math.floor(h * 360), Math.floor(s * 100), Math.floor(l * 100)];
   }
 
   /**
    * Converts a color from HSL to RGB
+   * @param {number} h Color hue in range [0, 360]
+   * @param {number} s Color saturation in range [0, 100]
+   * @param {number} l Color lighting in range [0, 100]
+   * @returns {Array} An array containing the RGB values in range [0, 255]
    * @private
    */
-  _calculateRgb() {
-    if (this._s == 0) {
-      this._r = this._l;
-      this._g = this._l;
-      this._b = this._l;
+  static _HSLtoRGB(h, s, l) {
+    let r, g, b;
+    if (s == 0) {
+      r = l;
+      g = l;
+      b = l;
     } else {
       const hueToRgb = (p, q, t) => {
         if (t < 0) t += 1;
@@ -266,17 +285,119 @@ class Color {
         return p;
       };
 
-      const l = this._l / 100;
-      const h = this._h / 360;
-      const s = this._s / 100;
+      l /= 100;
+      h /= 360;
+      s /= 100;
 
       let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       let p = 2 * l - q;
 
-      this._r = Math.floor(hueToRgb(p, q, h + 1 / 3) * 255);
-      this._g = Math.floor(hueToRgb(p, q, h) * 255);
-      this._b = Math.floor(hueToRgb(p, q, h - 1 / 3) * 255);
+      r = Math.floor(hueToRgb(p, q, h + 1 / 3) * 255);
+      g = Math.floor(hueToRgb(p, q, h) * 255);
+      b = Math.floor(hueToRgb(p, q, h - 1 / 3) * 255);
     }
+
+    return [r, g, b];
+  }
+
+  /**
+   * Converts a color from RGB to CMYK
+   * @param {number} r Red channel value in range [0, 255]
+   * @param {number} g Green channel value in range [0, 255]
+   * @param {number} b Blue channel value in range [0, 255]
+   * @returns {Array} An array containing the CMYK values in range [0, 100]
+   * @private
+   */
+  static _RGBtoCMYK(r, g, b) {
+    const rr = r / 255;
+    const gg = g / 255;
+    const bb = b / 255;
+
+    const k = (1 - Math.max(rr, gg, bb)) * 100;
+    let c, m, y;
+    if (k == 100) {
+      c = 0;
+      m = 0;
+      y = 0;
+    } else {
+      c = ((1 - rr - k) / (1 - k)) * 100;
+      m = ((1 - gg - k) / (1 - k)) * 100;
+      y = ((1 - bb - k) / (1 - k)) * 100;
+    }
+
+    return [Math.floor(c), Math.floor(m), Math.floor(y), Math.floor(k)];
+  }
+
+  /**
+   * Converts a color from CMYK to RGB
+   * @param {number} c Cyan channel value in range [0, 100]
+   * @param {number} m Magenta channel value in range [0, 100]
+   * @param {number} y Yellow channel value in range [0, 100]
+   * @param {number} k Black channel value in range [0, 100]
+   * @returns {Array} An array containing the RGB values in range [0, 255]
+   * @private
+   */
+  static _CMYKtoRGB(c, m, y, k) {
+    const cc = c / 100;
+    const mm = m / 100;
+    const yy = y / 100;
+    const kk = k / 100;
+
+    const r = Math.floor(255 * (1 - cc) * (1 - kk));
+    const g = Math.floor(255 * (1 - mm) * (1 - kk));
+    const b = Math.floor(255 * (1 - yy) * (1 - kk));
+
+    return [r, g, b];
+  }
+
+  /**
+   * Update the HSL and CMYK values based on the current RGB values
+   * @private
+   */
+  _updateFromRGB() {
+    const [h, s, l] = Color._RGBtoHSL(this._r, this._g, this._b);
+    this._h = h;
+    this._s = s;
+    this._l = l;
+
+    const [c, m, y, k] = Color._RGBtoCMYK(this._r, this._g, this._b);
+    this._c = c;
+    this._m = m;
+    this._y = y;
+    this._k = k;
+  }
+
+  /**
+   * Update the RGB and CMYK values based on the current HSL values
+   * @private
+   */
+  _updateFromHSL() {
+    const [r, g, b] = Color._HSLtoRGB(this._h, this._s, this._l);
+    this._r = r;
+    this._g = g;
+    this._b = b;
+
+    const [c, m, y, k] = Color._RGBtoCMYK(this._r, this._g, this._b);
+    this._c = c;
+    this._m = m;
+    this._y = y;
+    this._k = k;
+  }
+
+  /**
+   * Update the RGB and HSL values based on the current CMYK values
+   * @private
+   */
+  _updateFromCMYK() {
+    const [r, g, b] = Color._CMYKtoRGB(this._c, this._m, this._y, this._k);
+    this._r = r;
+    this._g = g;
+    this._b = b;
+
+    const [h, s, l] = Color._RGBtoHSL(this._r, this._g, this._b);
+    this._h = h;
+    this._s = s;
+    this._l = l;
   }
 
   /**
@@ -287,16 +408,6 @@ class Color {
    */
   _decToHex(dec) {
     return Math.floor(dec).toString(16).padStart(2, 0).toUpperCase();
-  }
-
-  /**
-   * Get the decimal representation of a hexadecimal number
-   * @param {number} hex The hexadecimal number
-   * @returns {number} The decimal representation
-   * @private
-   */
-  _hexToDec(hex) {
-    return parseInt(hex, 16);
   }
 
   /**
@@ -311,18 +422,6 @@ class Color {
     return Math.min(Math.max(min, value), max);
   }
 
-  set hex(hex) {
-    this._r = this._hexToDec(hex.slice(1, 3));
-    this._g = this._hexToDec(hex.slice(3, 5));
-    this._b = this._hexToDec(hex.slice(5, 7));
-
-    const a = parseInt(hex.slice(7, 9), 16);
-    if (isNaN(a)) this._a = 1;
-    else this._a = this._clamp(a / 255, 0, 1);
-
-    this._calculateHsl();
-  }
-
   get_hex() {
     const [rx, gx, bx] = [this._r, this._g, this._b].map(this._decToHex);
 
@@ -331,6 +430,15 @@ class Color {
 
   get hex() {
     return this.get_hex();
+  }
+
+  set hex(hex) {
+    const color = Color.fromHex(hex);
+    this._r = color._r;
+    this._g = color._g;
+    this._b = color._b;
+    this._a = color._a;
+    this._updateFromRGB();
   }
 
   get_hexa() {
@@ -388,11 +496,12 @@ class Color {
 
   set r(x) {
     this._r = Math.floor(this._clamp(x, 0, 255));
-    this._calculateHsl();
+    this._updateFromRGB();
   }
 
   setR(r) {
     this.r = r;
+    this._updateFromRGB();
     return this;
   }
 
@@ -402,11 +511,12 @@ class Color {
 
   set g(x) {
     this._g = Math.floor(this._clamp(x, 0, 255));
-    this._calculateHsl();
+    this._updateFromRGB();
   }
 
   setG(g) {
     this.g = g;
+    this._updateFromRGB();
     return this;
   }
 
@@ -416,11 +526,12 @@ class Color {
 
   set b(x) {
     this._b = Math.floor(this._clamp(x, 0, 255));
-    this._calculateHsl();
+    this._updateFromRGB();
   }
 
   setB(b) {
     this.b = b;
+    this._updateFromRGB();
     return this;
   }
 
@@ -443,11 +554,12 @@ class Color {
 
   set h(x) {
     this._h = Math.floor(this._clamp(x, 0, 360));
-    this._calculateRgb();
+    this._updateFromHSL();
   }
 
   setH(h) {
     this.h = h;
+    this._updateFromHSL();
     return this;
   }
 
@@ -457,11 +569,12 @@ class Color {
 
   set s(x) {
     this._s = Math.floor(this._clamp(x, 0, 100));
-    this._calculateRgb();
+    this._updateFromHSL();
   }
 
   setS(s) {
     this.s = s;
+    this._updateFromHSL();
     return this;
   }
 
@@ -471,11 +584,72 @@ class Color {
 
   set l(x) {
     this._l = Math.floor(this._clamp(x, 0, 100));
-    this._calculateRgb();
+    this._updateFromHSL();
   }
 
   setL(l) {
     this.l = l;
+    this._updateFromHSL();
+    return this;
+  }
+
+  get c() {
+    return this._c;
+  }
+
+  set c(x) {
+    this._c = Math.floor(this._clamp(x, 0, 100));
+    this._updateFromCMYK();
+  }
+
+  setC(c) {
+    this.c = c;
+    this._updateFromCMYK();
+    return this;
+  }
+
+  get m() {
+    return this._m;
+  }
+
+  set m(x) {
+    this._m = Math.floor(this._clamp(x, 0, 100));
+    this._updateFromCMYK();
+  }
+
+  setM(m) {
+    this.m = m;
+    this._updateFromCMYK();
+    return this;
+  }
+
+  get y() {
+    return this._y;
+  }
+
+  set y(x) {
+    this._y = Math.floor(this._clamp(x, 0, 100));
+    this._updateFromCMYK();
+  }
+
+  setY(y) {
+    this.y = y;
+    this._updateFromCMYK();
+    return this;
+  }
+
+  get k() {
+    return this._k;
+  }
+
+  set k(x) {
+    this._k = Math.floor(this._clamp(x, 0, 100));
+    this._updateFromCMYK();
+  }
+
+  setK(k) {
+    this.k = k;
+    this._updateFromCMYK();
     return this;
   }
 
