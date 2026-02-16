@@ -455,7 +455,7 @@ describe("Color test", () => {
       chai.expect(c2.g).to.equal(0);
       chai.expect(c2.b).to.equal(0);
       chai.expect(c2.hex).to.equal("#FF0000");
-      const c2_deprecated = Color.fromHex("FF0000");
+      const c2_deprecated = Color.fromHEX("FF0000");
       chai.expect(c2_deprecated.r).to.equal(255);
       chai.expect(c2_deprecated.g).to.equal(0);
       chai.expect(c2_deprecated.b).to.equal(0);
