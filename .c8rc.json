@@ -10,7 +10,8 @@
     "js/lib.js",
     "js/simplex-noise.js",
     "js/sketch.js",
-    "js/deps/**"
+    "js/deps/**",
+    "js/doc_types.js"
   ],
   "reporter": [
     "text",
