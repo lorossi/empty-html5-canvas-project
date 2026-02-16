@@ -38,6 +38,32 @@ class Palette {
   }
 
   /**
+   * Create a palette from an array of HSL color arrays
+   * @param {number[][]} colors array of HSL color arrays
+   * @returns {Palette} palette object
+   */
+  static fromHSLArray(colors) {
+    return new Palette(colors.map((c) => Color.fromHSL(...c)));
+  }
+
+  /**
+   * Create a palette from an array of CMYK color arrays
+   * @param {number[][]} colors array of CMYK color arrays
+   * @returns {Palette} palette object
+   */
+  static fromCMYKArray(colors) {
+    return new Palette(colors.map((c) => Color.fromCMYK(...c)));
+  }
+
+  /**
+   * Create a palette from an array of Sanzo Wada color arrays
+   * @param {string[][]} colors array of Sanzo Wada color arrays
+   * @returns {Palette} palette object
+   */
+  static fromSanzoWadaArray(colors) {
+    return new Palette(colors.map((c) => Color.fromSanzoWada(c)));
+  }
+  /**
    * Shuffle the colors in the palette
    * @param {RandomClass} rand random number generator with a random() method. Defaults to Math
    * @returns {Palette} shuffled palette
@@ -216,6 +242,36 @@ class PaletteFactory {
    */
   static fromRGBArray(rgb_palettes) {
     const palettes = rgb_palettes.map((p) => Palette.fromRGBArray(p));
+    return new PaletteFactory(palettes);
+  }
+
+  /**
+   * Create a palette factory from an array of HSL palettes
+   * @param {Array.<Array.<number[]>>} hsl_palettes array of palettes, each palette is an array of HSL color arrays
+   * @returns {PaletteFactory} palette factory object
+   */
+  static fromHSLArray(hsl_palettes) {
+    const palettes = hsl_palettes.map((p) => Palette.fromHSLArray(p));
+    return new PaletteFactory(palettes);
+  }
+
+  /**
+   * Create a palette factory from an array of CMYK palettes
+   * @param {Array.<Array.<number[]>>} cmyk_palettes array of palettes, each palette is an array of CMYK color arrays
+   * @returns {PaletteFactory} palette factory object
+   */
+  static fromCMYKArray(cmyk_palettes) {
+    const palettes = cmyk_palettes.map((p) => Palette.fromCMYKArray(p));
+    return new PaletteFactory(palettes);
+  }
+
+  /**
+   * Create a palette factory from an array of Sanzo Wada colors
+   * @param {Array.<Array.<string[]>>} sanzo_palettes array of palettes, each palette is an array of Sanzo Wada color arrays
+   * @returns {PaletteFactory} palette factory object
+   */
+  static fromSanzoWadaArray(sanzo_palettes) {
+    const palettes = sanzo_palettes.map((p) => Palette.fromSanzoWadaArray(p));
     return new PaletteFactory(palettes);
   }
 

@@ -1,5 +1,5 @@
 import { Color, Palette, PaletteFactory } from "../js/lib.js";
-import { SFC32, lerp, ease_in_out_poly } from "./utils.mjs";
+import { SFC32 } from "./utils.mjs";
 import * as chai from "chai";
 
 const SEEDS = [
@@ -16,6 +16,7 @@ const HEX_PALETTES = [
   ["#9B59B6", "#E67E22", "#34495E"],
   ["#2C3E50", "#F39C12", "#D35400"],
 ];
+
 const RGB_PALETTES = [
   [
     [255, 87, 51],
@@ -38,6 +39,37 @@ const RGB_PALETTES = [
     [52, 73, 94],
   ],
 ];
+
+const CMYK_PALETTES = [
+  [
+    [0, 66, 80, 0],
+    [80, 0, 80, 0],
+    [80, 80, 0, 0],
+  ],
+  [
+    [0, 19, 94, 5],
+    [6, 60, 0, 15],
+    [81, 0, 71, 5],
+  ],
+  [
+    [0, 70, 74, 9],
+    [76, 30, 0, 14],
+    [83, 0, 71, 7],
+  ],
+  [
+    [0, 42, 0, 39],
+    [0, 66, 86, 4],
+    [0, 0, 0, 64],
+  ],
+];
+
+const SANZO_WADA_PALETTES = [
+  ["sepia", "blue", "yellow"],
+  ["green", "purpledrab", "violetblue"],
+  ["red", "blue", "salviablue"],
+  ["deepgrayisholive", "lightbrownisholive", "olivegreen", "citrine"],
+];
+
 const PALETTES = [
   new Palette([
     new Color(255, 87, 51),
@@ -60,6 +92,7 @@ const PALETTES = [
     new Color(52, 73, 94),
   ]),
 ];
+
 const palette_equal = (p1, p2) => {
   if (p1.length !== p2.length) return false;
   for (let i = 0; i < p1.length; i++) {
@@ -67,6 +100,7 @@ const palette_equal = (p1, p2) => {
   }
   return true;
 };
+
 const palette_unshuffled_equal = (p1, p2) => {
   if (p1.length !== p2.length) return false;
   const colors1 = p1.colors.map((c) => c.hex).sort();
@@ -117,11 +151,37 @@ describe("Palette Factory test", () => {
           .true;
       }
     });
+
+    it("Should create a PaletteFactory from CMYK palettes", () => {
+      const factory = PaletteFactory.fromCMYKArray(CMYK_PALETTES);
+
+      chai.expect(factory).to.be.instanceOf(PaletteFactory);
+      chai.expect(factory.length).to.equal(CMYK_PALETTES.length);
+
+      for (let i = 0; i < CMYK_PALETTES.length; i++) {
+        const expected_palette = Palette.fromCMYKArray(CMYK_PALETTES[i]);
+        chai.expect(palette_equal(factory.palettes[i], expected_palette)).to.be
+          .true;
+      }
+    });
+
+    it("Should create a PaletteFactory from Sanzo Wada palettes", () => {
+      const factory = PaletteFactory.fromSanzoWadaArray(SANZO_WADA_PALETTES);
+
+      chai.expect(factory).to.be.instanceOf(PaletteFactory);
+      chai.expect(factory.length).to.equal(SANZO_WADA_PALETTES.length);
+
+      for (let i = 0; i < SANZO_WADA_PALETTES.length; i++) {
+        const expected_palette = Palette.fromSanzoWadaArray(
+          SANZO_WADA_PALETTES[i],
+        );
+        chai.expect(palette_equal(factory.palettes[i], expected_palette)).to.be
+          .true;
+      }
+    });
   });
 
   describe("Palette retrieval tests", () => {
-    const factory = new PaletteFactory(PALETTES);
-
     it("Should get palettes by index", () => {
       const factory = new PaletteFactory(PALETTES);
 
