@@ -215,7 +215,9 @@ class Color {
    * @returns {Color} The created Color instance
    */
   static fromSanzoWada(name) {
-    const cmyk = SANZO_WADA_COLORS[name];
+    // convert to lowercase, and remove spaces and special characters
+    const clean_name = name.toLowerCase().replace(/[\s-_']/g, "");
+    const cmyk = SANZO_WADA_COLORS[clean_name];
     if (cmyk == undefined) {
       throw new Error(`Color name not found: ${name}`);
     }
