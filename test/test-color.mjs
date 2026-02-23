@@ -484,6 +484,15 @@ describe("Color test", () => {
       chai.expect(c4.hex).to.equal("#FF3219");
     });
 
+    it("Should provide fromSanzoWada method with special characters", () => {
+      // test Sanzo-Wada colors
+      const c4 = Color.fromSanzoWada("Vandar Poel's Blue");
+      chai.expect(c4.r).to.equal(0);
+      chai.expect(c4.g).to.equal(61);
+      chai.expect(c4.b).to.equal(130);
+      chai.expect(c4.hex).to.equal("#003D82");
+    });
+
     it("Should provide fromCSS method", () => {
       for (const [name, hex, rgb] of COLOR_NAMES) {
         const color = Color.fromCSS(name);
