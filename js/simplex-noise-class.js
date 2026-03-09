@@ -2,6 +2,8 @@
  * @file SimplexNoise class for generating simplex noise
  */
 
+/** @import {RandomClass} from "./doc_types.js" */
+
 import {
   createNoise2D,
   createNoise3D,
@@ -18,34 +20,43 @@ import { XOR128 } from "./deps/xor128.js";
 class SimplexNoise {
   /**
    * Create a noise object
-   * @param {number|string|Array} [seed] The seed for the noise (optional)
+   * @param {number|string|Array|RandomClass|null} [seed] The seed or random generator (optional)
    */
   constructor(seed = null) {
     // initialize the random function with the seed
     // it needs to be passed to the noise function
     // If no seed is passed, a random seed is generated
-    let state;
+    let rand_f = null;
 
-    if (Array.isArray(seed)) {
-      if (seed.length < 4)
-        throw new Error("Array seed must have at least 4 elements");
-
-      state = seed.slice(0, 4);
-    } else if (typeof seed === "number") {
-      const s = new SplitMix32(seed);
-      state = [s.next(), s.next(), s.next(), s.next()];
-    } else if (typeof seed === "string") {
-      const s = SplitMix32.fromString(seed);
-      state = [s.next(), s.next(), s.next(), s.next()];
-    } else if (seed === null) {
-      state = new Array(4)
-        .fill(0)
-        .map(() => Math.floor(Math.random() * 0xffffffff));
+    if (this._is_random_function(seed)) {
+      // If the seed is a random function, use it directly
+      rand_f = seed;
     } else {
-      throw new Error("Seed must be a number, string, array or null");
-    }
+      // Otherwise, create a new random function based on the seed
+      let state = null;
 
-    const rand_f = new XOR128(state);
+      if (Array.isArray(seed)) {
+        if (seed.length < 4)
+          throw new Error("Array seed must have at least 4 elements");
+
+        state = seed.slice(0, 4);
+      } else if (typeof seed === "number") {
+        const s = new SplitMix32(seed);
+        state = [s.next(), s.next(), s.next(), s.next()];
+      } else if (typeof seed === "string") {
+        const s = SplitMix32.fromString(seed);
+        state = [s.next(), s.next(), s.next(), s.next()];
+      } else if (seed === null) {
+        state = new Array(4)
+          .fill(0)
+          .map(() => Math.floor(Math.random() * 0xffffffff));
+      } else {
+        throw new Error(
+          "Seed must be a number, string, array, object with random() or null",
+        );
+      }
+      rand_f = new XOR128(state);
+    }
 
     // initialize the noise function with the random function
     this._noise = {
@@ -58,6 +69,20 @@ class SimplexNoise {
     this._octaves = 1;
     this._falloff = 0.5;
     this._max_value = this._calculateMaxValue();
+  }
+
+  /**
+   * Check if the object is a random function or an object with a random() method
+   * @param {object} obj The object to check
+   * @returns {boolean} True if the object is a random function, false otherwise
+   * @private
+   */
+  _is_random_function(obj) {
+    return (
+      obj &&
+      (typeof obj === "function" || typeof obj === "object") &&
+      typeof obj.random === "function"
+    );
   }
 
   /**
