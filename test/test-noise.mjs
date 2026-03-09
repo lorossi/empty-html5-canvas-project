@@ -115,3 +115,50 @@ describe("SimplexNoise test", () => {
     });
   });
 });
+
+class MyRandom {
+  constructor(seed) {
+    this.seed = seed;
+  }
+
+  random() {
+    const t = (this.seed += 0x6d2b79f5) * Math.PI * 2;
+    return (Math.sin(t) + 1) / 2;
+  }
+}
+
+describe("SimplexNoise from random class test", () => {
+  it("Should accept a random class as seed", () => {
+    const noise = new SimplexNoise(new MyRandom(123));
+    const n = noise.noise(0, 0);
+    chai.expect(n).to.be.at.least(-1).and.at.most(1);
+  });
+
+  it("Should produce deterministic output with same random class seed", () => {
+    const rand1 = new MyRandom(123);
+    const rand2 = new MyRandom(123);
+
+    const noise1 = new SimplexNoise(rand1);
+    const noise2 = new SimplexNoise(rand2);
+    const bounds = 10;
+
+    for (let x = 0; x <= bounds; x++) {
+      for (let y = 0; y <= bounds; y++) {
+        const n1 = noise1.noise(x, y);
+        const n2 = noise2.noise(x, y);
+        chai.expect(n1).to.equal(n2);
+        chai.expect(n1).to.be.at.least(-1).and.at.most(1);
+
+        const n3 = noise1.noise(x, y, x);
+        const n4 = noise2.noise(x, y, x);
+        chai.expect(n3).to.equal(n4);
+        chai.expect(n3).to.be.at.least(-1).and.at.most(1);
+
+        const n5 = noise1.noise(x, y, x, y);
+        const n6 = noise2.noise(x, y, x, y);
+        chai.expect(n5).to.equal(n6);
+        chai.expect(n5).to.be.at.least(-1).and.at.most(1);
+      }
+    }
+  });
+});
